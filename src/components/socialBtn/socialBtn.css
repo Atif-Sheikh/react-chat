@@ -20,6 +20,10 @@
     margin-top: 20px;
     cursor: pointer;
   }
+
+  .socialIcon:hover {
+    background-color: #384561;
+  }
   
   .socialIconTitle {
     margin-left: 10px;

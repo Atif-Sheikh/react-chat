@@ -10,7 +10,7 @@ import './inputField.css';
 const InputField = ({label}) => (
     <FormControl>
         <FormLabel className="formLabel">{label}</FormLabel>
-        <Input placeholder="" />
+        <Input className="textField" placeholder="" />
     </FormControl>
 );
 

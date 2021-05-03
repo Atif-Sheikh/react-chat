@@ -1,23 +1,23 @@
 import React from 'react';
 import {
     Stack,
-  } from "@chakra-ui/react";
+} from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 
 import InputField from '../inputField/inputField';
-import './loginForm.css';
+import './inputForm.css';
 
-const LoginForm = () => {
+const InputForm = ({ type }) => {
     return (
         <div className="formContainer">
             <Stack spacing={3}>
-                <InputField label="First name" />
+                {type === 'signup' && <InputField label="First name" />}
                 <InputField label="Email" />
                 <InputField label="Password" />
-                <Button className="createAccount" colorScheme="blue">Create my account</Button>
+                <Button className="createAccount" colorScheme="blue">{type === 'signup' ? "Create my account" : "Login"}</Button>
             </Stack>
         </div>
     )
 }
 
-export default LoginForm;
+export default InputForm;
