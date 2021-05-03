@@ -2,9 +2,9 @@ import React from 'react';
 
 import './socialBtn.css';
 
-const SocialBtn = ({ Icon, title, iconStyle }) => {
+const SocialBtn = ({ Icon, title, iconStyle, onPress = () => {}, id = "" }) => {
     return (
-        <div className="socialIcon">
+        <div onClick={onPress} className="socialIcon" id={id}>
             <Icon style={iconStyle} />
             <p className="socialIconTitle">{title}</p>
         </div>
