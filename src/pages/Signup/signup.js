@@ -18,11 +18,11 @@ const Login = () => {
         try {
             let result = await googleLogin()
             console.log(result, ">>>><>><")
-            var credential = result.credential;
+            // var credential = result.credential;
 
-            var token = credential.accessToken;
-            // The signed-in user info.
-            var user = result.user;
+            // var token = credential.accessToken;
+            // // The signed-in user info.
+            // var user = result.user;
 
         } catch (err) {
             console.error(err);

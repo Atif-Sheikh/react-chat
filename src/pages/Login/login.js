@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiTwotonePhone } from 'react-icons/ai';
 import firebase from "firebase/app";
@@ -15,11 +15,11 @@ const Login = () => {
         try {
             let result = await googleLogin()
             console.log(result, ">>>><>><")
-            var credential = result.credential;
+            // var credential = result.credential;
 
-            var token = credential.accessToken;
+            // var token = credential.accessToken;
             // The signed-in user info.
-            var user = result.user;
+            // var user = result.user;
 
         } catch (err) {
             console.error(err);
