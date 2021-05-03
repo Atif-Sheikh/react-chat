@@ -8,13 +8,14 @@
   }
   
   .loginCard {
-    min-width: 400px;
-    width: 40%;
+    min-width: 300px;
+    width: 35%;
     min-height: 80vh;
     background-color: #2e3648;
     border-radius: 12px;
     padding: 20px;
     text-align: center;
+    padding-bottom: 30px;
   }
   
   .getStarted {
