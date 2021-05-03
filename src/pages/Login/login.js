@@ -16,8 +16,8 @@ const Login = () => {
                     Enter your info to get started
                 </h2>
 
-                <SocialBtn Icon={FcGoogle} title="Sign up with Google" iconStyle={iconStyles} />
-                <SocialBtn Icon={AiTwotonePhone} title="Sign up with Phone" iconStyle={iconStyles} />
+                <SocialBtn Icon={FcGoogle} title="Login with Google" iconStyle={iconStyles} />
+                <SocialBtn Icon={AiTwotonePhone} title="Login with Phone" iconStyle={iconStyles} />
                 
                 <InputForm type="login" />
             </div>
