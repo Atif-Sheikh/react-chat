@@ -35,7 +35,7 @@ const Login = () => {
             <div className="alreadyAccount">
                 <span>Already have an account? </span>
                 <Link to="/login">
-                    <span className="loginToChakra">Log in to Chakra</span>
+                    <span className="loginToChakra">Log in</span>
                 </Link>
             </div>
         </div>
