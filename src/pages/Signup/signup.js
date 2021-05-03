@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
+import { AiTwotonePhone } from 'react-icons/ai';
 import { Divider } from "@chakra-ui/react"
 import { Link } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
 
 import SocialBtn from '../../components/socialBtn/socialBtn';
 import SignupForm from '../../components/inputForm/inputForm';
@@ -21,7 +21,7 @@ const Login = () => {
                 </h2>
 
                 <SocialBtn Icon={FcGoogle} title="Sign up with Google" iconStyle={iconStyles} />
-                <SocialBtn Icon={FaFacebook} title="Sign up with Facebook" iconStyle={iconStyles} />
+                <SocialBtn Icon={AiTwotonePhone} title="Sign up with Phone" iconStyle={iconStyles} />
 
                 <div className="dividerContainer">
                     <Divider className="horDivider" orientation="horizontal" />
@@ -35,7 +35,7 @@ const Login = () => {
             <div className="alreadyAccount">
                 <span>Already have an account? </span>
                 <Link to="/login">
-                    <span className="loginToChakra">Log in to Chakra</span>
+                    <span className="loginToChakra">Log in</span>
                 </Link>
             </div>
         </div>
