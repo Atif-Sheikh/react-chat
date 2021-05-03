@@ -1,7 +1,5 @@
 import firebase from "firebase/app";
 
-// or using ES6 imports:
-import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 
 // Add the Firebase products that you want to use

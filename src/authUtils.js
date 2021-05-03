@@ -1,5 +1,4 @@
 import firebase from "firebase/app";
-import * as firebaseui from 'firebaseui';
 import 'firebase/auth';
 
 export const googleLogin = () => {
