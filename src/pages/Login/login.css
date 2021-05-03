@@ -1,0 +1,41 @@
+.loginContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a202c;
+  }
+  
+  .loginCard {
+    min-width: 400px;
+    width: 40%;
+    min-height: 80vh;
+    background-color: #2e3648;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .getStarted {
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;  
+  }
+
+  .horDivider {
+      width: 30%;
+    }
+    
+    .dividerContainer {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .dividerContainer span {
+      color: #fff;
+      margin: 0 20px;
+      font-weight: bold;
+  }

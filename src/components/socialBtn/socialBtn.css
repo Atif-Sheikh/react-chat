@@ -1,0 +1,26 @@
+
+.socialIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 250ms ease 0s;
+    user-select: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    outline: none;
+    width: auto;
+    line-height: 1.2;
+    border-radius: 5px;
+    font-weight: bold;
+    height: 40px;
+    min-width: 100px;
+    font-size: 16px;
+    border: 1px solid #505765;
+    color: #fff;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  
+  .socialIconTitle {
+    margin-left: 10px;
+  }
