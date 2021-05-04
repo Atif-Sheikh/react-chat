@@ -2,17 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import rootReducer from './reducers/rootReducer';
+
+const store = createStore(rootReducer);
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider>
-      <Router>
-        <App />
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <App />
+        </Router>
+      </Provider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')
