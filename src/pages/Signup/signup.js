@@ -20,6 +20,7 @@ import {
     HStack,
     useToast,
 } from "@chakra-ui/react";
+import { useSelector, useDispatch } from 'react-redux';
 
 import SocialBtn from '../../components/socialBtn/socialBtn';
 import SignupForm from '../../components/inputForm/inputForm';
@@ -34,6 +35,7 @@ const Signup = ({history}) => {
     const [OTPloading, setOTPloading] = useState(false);
     const [number, setNumber] = useState('');
     const [otpConfirm, setOTPConfirm] = useState(null);
+    const dispatch = useDispatch();
 
     const toast = useToast();
     let iconStyles = { color: "#6482c0", fontSize: "1.5em" };
@@ -41,15 +43,27 @@ const Signup = ({history}) => {
     const handleGoogleSignup = async () => {
         try {
             let result = await googleLogin()
-            console.log(result, ">>>><>><")
-            // var credential = result.credential;
 
-            // var token = credential.accessToken;
-            // // The signed-in user info.
-            // var user = result.user;
+            var user = {
+                isNewUser: result.additionalUserInfo.isNewUser,
+                ...result.additionalUserInfo.profile,
+                ...result.user,
+            };
+
+            if(result.additionalUserInfo.isNewUser){
+                firebase.database().ref(`/users/${result.user.uid}`).set({
+                    name: result.user.displayName,
+                    email: result.user.email,
+                    uid: result.user.uid,
+                    img: result.user.photoURL, 
+                });
+            }
+
+            dispatch({ type: "UPDATE_USER", payload: user });
+            history.push('/dashboard');
 
         } catch (err) {
-            console.error(err);
+            console.log(err);
         }
     };
 

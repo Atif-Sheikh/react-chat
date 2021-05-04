@@ -1,30 +1,18 @@
 //Reducer for character information Initialize State
 const initState = {
-    name: "Sunny Xue",
-    occupation: "Ninja",
-    age: 16
+    user: null
 };
 
 //Define Actions
 const userReducer = (state = initState, action) => {
     switch (action.type) {
             //Change character name
-        case 'CHANGE_NAME':
+        case 'UPDATE_USER':
             return {
                 ...state,
-                name: action.payload
+                user: action.payload
             }
 
-        case 'CHANGE_OCCUPATION':
-            return {
-                ...state,
-                occupation: action.payload
-            }
-        case 'CHANGE_AGE':
-            return {
-                ...state,
-                age: action.payload
-            }
         default:
             return state
     }

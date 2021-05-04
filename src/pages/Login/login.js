@@ -18,32 +18,48 @@ import {
     HStack,
     useToast,
 } from "@chakra-ui/react";
+import { useSelector, useDispatch } from 'react-redux';
 
 import InputForm from '../../components/inputForm/inputForm';
 import SocialBtn from '../../components/socialBtn/socialBtn';
 import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 
-const Login = ({history}) => {
+
+const Login = ({ history }) => {
     const [verifier, setVerifier] = useState(null);
     const [phoneModal, setPhoneModal] = useState(false);
     const [showOtp, setShowOtp] = useState(false);
     const [OTPloading, setOTPloading] = useState(false);
     const [number, setNumber] = useState('');
     const [otpConfirm, setOTPConfirm] = useState(null);
+    const dispatch = useDispatch();
 
+    const user = useSelector(state => state.user);
     const toast = useToast();
 
     let iconStyles = { color: "#6482c0", fontSize: "1.5em" };
 
     const handleGoogleLogin = async () => {
         try {
-            let result = await googleLogin()
-            console.log(result, ">>>><>><")
-            // var credential = result.credential;
+            let result = await googleLogin();
 
-            // var token = credential.accessToken;
-            // The signed-in user info.
-            // var user = result.user;
+            var user = {
+                isNewUser: result.additionalUserInfo.isNewUser,
+                ...result.additionalUserInfo.profile,
+                ...result.user,
+            };
+
+            if(result.additionalUserInfo.isNewUser){
+                firebase.database().ref(`/users/${result.user.uid}`).set({
+                    name: result.user.displayName,
+                    email: result.user.email,
+                    uid: result.user.uid,
+                    img: result.user.photoURL, 
+                });
+            }
+
+            dispatch({ type: "UPDATE_USER", payload: user });
+            history.push('/dashboard');
 
         } catch (err) {
             toast({
@@ -97,8 +113,8 @@ const Login = ({history}) => {
             let result = await otpConfirm
                 .confirm(otpNumber);
 
-            if(result?.user) {
-
+            if (result?.user) {
+                console.log(result, "RESULT");
             }
         } catch (err) {
             toast({
