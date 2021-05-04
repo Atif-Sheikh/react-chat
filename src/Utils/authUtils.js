@@ -9,7 +9,7 @@ export const googleLogin = () => {
         .signInWithPopup(provider);
 };
 
-export const phoneLogin = (number) => {
-    const appVerifier = window.appVerifier;
-    return firebase.auth().signInWithPhoneNumber(number, appVerifier);
+export const phoneLogin = (number, appVerifier) => {
+    const _appVerifier = appVerifier;
+    return firebase.auth().signInWithPhoneNumber(number, _appVerifier);
 };
