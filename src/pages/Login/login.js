@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AiTwotonePhone } from 'react-icons/ai';
@@ -18,7 +19,7 @@ import {
     HStack,
     useToast,
 } from "@chakra-ui/react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import InputForm from '../../components/inputForm/inputForm';
 import SocialBtn from '../../components/socialBtn/socialBtn';
