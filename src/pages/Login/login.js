@@ -34,7 +34,6 @@ const Login = ({ history }) => {
     const [otpConfirm, setOTPConfirm] = useState(null);
     const dispatch = useDispatch();
 
-    const user = useSelector(state => state.user);
     const toast = useToast();
 
     let iconStyles = { color: "#6482c0", fontSize: "1.5em" };

@@ -20,7 +20,7 @@ import {
     HStack,
     useToast,
 } from "@chakra-ui/react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import SocialBtn from '../../components/socialBtn/socialBtn';
 import SignupForm from '../../components/inputForm/inputForm';
