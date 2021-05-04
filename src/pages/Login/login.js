@@ -17,7 +17,7 @@ import {
     PinInputField,
     HStack,
     useToast,
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
 
 import InputForm from '../../components/inputForm/inputForm';
 import SocialBtn from '../../components/socialBtn/socialBtn';
