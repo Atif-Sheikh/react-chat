@@ -1,14 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AiTwotonePhone } from 'react-icons/ai';
 import firebase from "firebase/app";
 import { FcGoogle } from 'react-icons/fc';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Button,
+    Input,
+    PinInput,
+    PinInputField,
+    HStack,
+    useToast,
+} from "@chakra-ui/react"
 
 import InputForm from '../../components/inputForm/inputForm';
 import SocialBtn from '../../components/socialBtn/socialBtn';
-import { googleLogin, phoneLogin } from '../../authUtils';
+import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 
 const Login = () => {
+    const [verifier, setVerifier] = useState(null);
+    const [phoneModal, setPhoneModal] = useState(false);
+    const [showOtp, setShowOtp] = useState(false);
+    const [OTPloading, setOTPloading] = useState(false);
+    const [number, setNumber] = useState('');
+    const [otpConfirm, setOTPConfirm] = useState(null);
+
+    const toast = useToast();
+
     let iconStyles = { color: "#6482c0", fontSize: "1.5em" };
 
     const handleGoogleLogin = async () => {
@@ -22,23 +46,116 @@ const Login = () => {
             // var user = result.user;
 
         } catch (err) {
-            console.error(err);
+            toast({
+                title: err?.code,
+                description: err.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
         }
     };
 
+    useEffect(() => {
+        const _verifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
+            size: "invisible",
+        });
+        if (!verifier) {
+            _verifier.verify().then(() => {
+                console.log(_verifier, "YEEE")
+                setVerifier(_verifier)
+            });
+        }
+        return () => {
+            // _verifier.clear();
+        }
+    }, []);
+
     const handlePhoneLogin = async () => {
         try {
-            window.appVerifier = new firebase.auth.RecaptchaVerifier(
-                "recaptcha-container",
-                {
-                  size: "invisible"
-                 }
-              );
-            let result = await phoneLogin('+923002410353');
-            console.log(result, "<<>>>")
-        }catch(err) {
-            console.error(err);
+            if (!number.trim()) return;
+
+            setOTPloading(true);
+            let result = await phoneLogin(`+${number}`, verifier);
+
+            setOTPloading(false);
+            setShowOtp(true);
+            setOTPConfirm(result);
+        } catch (err) {
+            setOTPloading(false);
+            toast({
+                title: err?.code,
+                description: err.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
         }
+    };
+
+    const handleOTP = async (otpNumber) => {
+        try {
+            let result = await otpConfirm
+                .confirm(otpNumber);
+
+            if(result?.user) {
+
+            }
+        } catch (err) {
+            toast({
+                title: err?.code,
+                description: err.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
+    const handleModalClose = () => {
+        setPhoneModal(false);
+        setOTPloading(false);
+        setOTPConfirm(false);
+        setNumber('');
+    };
+
+    function PhoneNumberModal() {
+        return (
+            <Modal isOpen={phoneModal} onClose={handleModalClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Phone number verification</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Input value={number} disabled={showOtp} onChange={({ target: { value } }) => setNumber(value)} type="number" placeholder="Enter Phone Number" />
+                        <Button onClick={handlePhoneLogin} width="100%" mt={5} isLoading={OTPloading} colorScheme="blue">Send OTP</Button>
+
+                        {
+                            showOtp ?
+                                <HStack marginTop={5} justifyContent="center" className="OPTFieldContainer">
+                                    <PinInput onComplete={handleOTP} otp>
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                    </PinInput>
+                                </HStack>
+                                :
+                                null
+                        }
+
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme="blue" onClick={handleModalClose}>
+                            Close
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        );
     };
 
     return (
@@ -49,7 +166,7 @@ const Login = () => {
                 </h2>
 
                 <SocialBtn id="login-button" onPress={handleGoogleLogin} Icon={FcGoogle} title="Login with Google" iconStyle={iconStyles} />
-                <SocialBtn onPress={handlePhoneLogin} Icon={AiTwotonePhone} title="Login with Phone" iconStyle={iconStyles} />
+                <SocialBtn onPress={() => setPhoneModal(true)} Icon={AiTwotonePhone} title="Login with Phone" iconStyle={iconStyles} />
 
                 <InputForm type="login" />
             </div>
@@ -60,6 +177,7 @@ const Login = () => {
                 </Link>
             </div>
             <div id="recaptcha-container" />
+            {phoneModal && PhoneNumberModal()}
         </div>
     )
 }

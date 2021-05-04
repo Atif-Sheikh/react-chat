@@ -7,7 +7,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 import SocialBtn from '../../components/socialBtn/socialBtn';
 import SignupForm from '../../components/inputForm/inputForm';
-import { googleLogin } from '../../authUtils';
+import { googleLogin } from '../../Utils/authUtils';
 
 import './signup.css';
 
