@@ -27,7 +27,7 @@ import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 
 import './signup.css';
 
-const Signup = () => {
+const Signup = ({history}) => {
     const [verifier, setVerifier] = useState(null);
     const [phoneModal, setPhoneModal] = useState(false);
     const [showOtp, setShowOtp] = useState(false);
@@ -59,7 +59,6 @@ const Signup = () => {
         });
         if (!verifier) {
             _verifier.verify().then(() => {
-                console.log(_verifier, "YEEE")
                 setVerifier(_verifier)
             });
         }
@@ -67,6 +66,10 @@ const Signup = () => {
             _verifier.clear();
         }
     }, []);
+
+    const handleOnClick = () => {
+        history.push('/dashboard');
+    };
 
     const handlePhoneLogin = async () => {
         try {
@@ -172,7 +175,7 @@ const Signup = () => {
                     <Divider className="horDivider" orientation="horizontal" />
                 </div>
 
-                <SignupForm type="signup" />
+                <SignupForm onClickBtn={handleOnClick} type="signup" />
 
             </div>
             <div className="alreadyAccount">

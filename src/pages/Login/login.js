@@ -23,7 +23,7 @@ import InputForm from '../../components/inputForm/inputForm';
 import SocialBtn from '../../components/socialBtn/socialBtn';
 import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 
-const Login = () => {
+const Login = ({history}) => {
     const [verifier, setVerifier] = useState(null);
     const [phoneModal, setPhoneModal] = useState(false);
     const [showOtp, setShowOtp] = useState(false);
@@ -62,12 +62,11 @@ const Login = () => {
         });
         if (!verifier) {
             _verifier.verify().then(() => {
-                console.log(_verifier, "YEEE")
                 setVerifier(_verifier)
             });
         }
         return () => {
-            // _verifier.clear();
+            _verifier.clear();
         }
     }, []);
 
@@ -110,6 +109,10 @@ const Login = () => {
                 isClosable: true,
             });
         }
+    };
+
+    const handleOnClick = () => {
+        history.push('/dashboard');
     };
 
     const handleModalClose = () => {
@@ -168,7 +171,7 @@ const Login = () => {
                 <SocialBtn id="login-button" onPress={handleGoogleLogin} Icon={FcGoogle} title="Login with Google" iconStyle={iconStyles} />
                 <SocialBtn onPress={() => setPhoneModal(true)} Icon={AiTwotonePhone} title="Login with Phone" iconStyle={iconStyles} />
 
-                <InputForm type="login" />
+                <InputForm onClickBtn={handleOnClick} type="login" />
             </div>
             <div className="alreadyAccount">
                 <span>Don't have an account?</span>

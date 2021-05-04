@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import Signup from './pages/Signup/signup';
 import Login from './pages/Login/login';
+import Dashboard from './pages/Dashboard/dashboard';
 
 import './firebase';
 import './App.css';
@@ -13,6 +14,7 @@ function App() {
       <Switch>
         <Route path="/" exact component={Signup} />
         <Route path="/login" exact component={Login} />
+        <Route path="/dashboard" exact component={Dashboard} />
       </Switch>
     </div>
   );
