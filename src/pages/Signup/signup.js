@@ -29,7 +29,7 @@ import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 
 import './signup.css';
 
-const Signup = ({history}) => {
+const Signup = ({ history }) => {
     const [verifier, setVerifier] = useState(null);
     const [phoneModal, setPhoneModal] = useState(false);
     const [showOtp, setShowOtp] = useState(false);
@@ -51,12 +51,12 @@ const Signup = ({history}) => {
                 ...result.user,
             };
 
-            if(result.additionalUserInfo.isNewUser){
+            if (result.additionalUserInfo.isNewUser) {
                 firebase.database().ref(`/users/${result.user.uid}`).set({
                     name: result.user.displayName,
                     email: result.user.email,
                     uid: result.user.uid,
-                    img: result.user.photoURL, 
+                    img: result.user.photoURL,
                 });
             }
 
@@ -82,8 +82,35 @@ const Signup = ({history}) => {
         }
     }, []);
 
-    const handleOnClick = () => {
-        history.push('/dashboard');
+    const handleOnClick = async ({ name, email, password }) => {
+        try {
+            if (name.trim() && email.trim() && password.trim()) {
+                let userCreation = await firebase.auth().createUserWithEmailAndPassword(email, password);
+
+                if (userCreation?.user) {
+                    let user = {
+                        name: name,
+                        email: email,
+                        uid: userCreation.user.uid,
+                        img: userCreation.user.photoURL || "",
+                    };
+
+                    await firebase.database().ref(`/users/${userCreation.user.uid}`).set(user);
+                    dispatch({ type: "UPDATE_USER", payload: user });
+                    history.push('/dashboard');
+                }
+            }
+        } catch (err) {
+            toast({
+                position: "top",
+                title: err?.code,
+                description: err.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            console.log(err, "ERORR");
+        }
     };
 
     const handlePhoneLogin = async () => {
@@ -99,6 +126,7 @@ const Signup = ({history}) => {
         } catch (err) {
             setOTPloading(false);
             toast({
+                position: "top",
                 title: err?.code,
                 description: err.message,
                 status: "error",
@@ -113,8 +141,18 @@ const Signup = ({history}) => {
             let result = await otpConfirm
                 .confirm(otpNumber);
 
-            if(result?.user) {
-
+            if (result?.user) {
+                if (result.additionalUserInfo.isNewUser) {
+                    firebase.database().ref(`/users/${result.user.uid}`).set({
+                        name: result.user.displayName || "New User",
+                        email: result.user.email || "N/A",
+                        uid: result.user.uid,
+                        img: result.user.photoURL || "",
+                        number: result.user.phoneNumber,
+                    });
+                }
+                dispatch({ type: "UPDATE_USER", payload: result?.user });
+                history.push('/dashboard');
             }
         } catch (err) {
             toast({

@@ -49,12 +49,12 @@ const Login = ({ history }) => {
                 ...result.user,
             };
 
-            if(result.additionalUserInfo.isNewUser){
+            if (result.additionalUserInfo.isNewUser) {
                 firebase.database().ref(`/users/${result.user.uid}`).set({
                     name: result.user.displayName,
                     email: result.user.email,
                     uid: result.user.uid,
-                    img: result.user.photoURL, 
+                    img: result.user.photoURL,
                 });
             }
 
@@ -63,6 +63,7 @@ const Login = ({ history }) => {
 
         } catch (err) {
             toast({
+                position: "top",
                 title: err?.code,
                 description: err.message,
                 status: "error",
@@ -114,10 +115,21 @@ const Login = ({ history }) => {
                 .confirm(otpNumber);
 
             if (result?.user) {
-                console.log(result, "RESULT");
+                if (result.additionalUserInfo.isNewUser) {
+                    firebase.database().ref(`/users/${result.user.uid}`).set({
+                        name: result.user.displayName || "New User",
+                        email: result.user.email || "N/A",
+                        uid: result.user.uid,
+                        img: result.user.photoURL || "",
+                        number: result.user.phoneNumber,
+                    });
+                }
+                dispatch({ type: "UPDATE_USER", payload: result?.user });
+                history.push('/dashboard');
             }
         } catch (err) {
             toast({
+                position: "top",
                 title: err?.code,
                 description: err.message,
                 status: "error",
