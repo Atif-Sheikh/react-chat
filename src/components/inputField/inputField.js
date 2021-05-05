@@ -7,10 +7,10 @@ import {
 
 import './inputField.css';
 
-const InputField = ({label}) => (
+const InputField = ({label, onChangeHandler, value}) => (
     <FormControl>
         <FormLabel className="formLabel">{label}</FormLabel>
-        <Input className="textField" placeholder="" />
+        <Input onChange={onChangeHandler} value={value} className="textField" placeholder="" />
     </FormControl>
 );
 
