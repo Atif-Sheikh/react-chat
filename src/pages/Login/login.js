@@ -145,7 +145,7 @@ const Login = ({ history }) => {
                 let loggedIn = await firebase.auth().signInWithEmailAndPassword(email, password);
                 if (loggedIn?.user) {
                     let dbUser = await firebase.database().ref(`/users/${loggedIn.user.uid}`).once("value");
-                    dispatch({ type: "UPDATE_USER", payload: dbUser });
+                    dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
                     history.push('/dashboard');
                 }
             }
