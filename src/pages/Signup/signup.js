@@ -109,7 +109,6 @@ const Signup = ({ history }) => {
                 duration: 3000,
                 isClosable: true,
             });
-            console.log(err, "ERORR");
         }
     };
 

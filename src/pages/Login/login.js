@@ -139,8 +139,26 @@ const Login = ({ history }) => {
         }
     };
 
-    const handleOnClick = () => {
-        history.push('/dashboard');
+    const handleOnClick = async ({ email, password }) => {
+        try {
+            if (email.trim() && password.trim()) {
+                let loggedIn = await firebase.auth().signInWithEmailAndPassword(email, password);
+                if (loggedIn?.user) {
+                    let dbUser = await firebase.database().ref(`/users/${loggedIn.user.uid}`).once("value");
+                    dispatch({ type: "UPDATE_USER", payload: dbUser });
+                    history.push('/dashboard');
+                }
+            }
+        } catch (err) {
+            toast({
+                position: "top",
+                title: err?.code,
+                description: err.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
     };
 
     const handleModalClose = () => {
