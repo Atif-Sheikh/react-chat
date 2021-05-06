@@ -24,6 +24,7 @@ import { useDispatch } from 'react-redux';
 import InputForm from '../../components/inputForm/inputForm';
 import SocialBtn from '../../components/socialBtn/socialBtn';
 import { googleLogin, phoneLogin } from '../../Utils/authUtils';
+import PhoneNumberField from '../../components/phoneInput/phoneInput';
 
 
 const Login = ({ history }) => {
@@ -92,6 +93,7 @@ const Login = ({ history }) => {
         try {
             if (!number.trim()) return;
 
+            console.log( number, ">>>>")
             setOTPloading(true);
             let result = await phoneLogin(`+${number}`, verifier);
 
@@ -99,6 +101,7 @@ const Login = ({ history }) => {
             setShowOtp(true);
             setOTPConfirm(result);
         } catch (err) {
+            console.log(err, ">>>>>>")
             setOTPloading(false);
             toast({
                 title: err?.code,
@@ -180,7 +183,7 @@ const Login = ({ history }) => {
                     <ModalHeader>Phone number verification</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Input value={number} disabled={showOtp} onChange={({ target: { value } }) => setNumber(value)} type="number" placeholder="Enter Phone Number" />
+                        <PhoneNumberField value={number} disabled={showOtp} onChange={(value) => setNumber(value)} />
                         <Button onClick={handlePhoneLogin} width="100%" mt={5} isLoading={OTPloading} colorScheme="blue">Send OTP</Button>
 
                         {

@@ -1,0 +1,19 @@
+
+
+.react-tel-input .country-list {
+    width: 1048%;
+}
+
+.react-tel-input .country-list input {
+    width: 95%;
+}
+
+.react-tel-input .country-list .country {
+    padding-left: 20px;
+}
+
+@media screen and (max-width: 440px) {
+    .react-tel-input .country-list {
+        width: calc(900%);
+    }
+  }
