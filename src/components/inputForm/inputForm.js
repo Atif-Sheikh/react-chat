@@ -21,7 +21,7 @@ const InputForm = ({ type, onClickBtn, isLoading = false }) => {
             <Stack spacing={3}>
                 {type === 'signup' && <InputField value={name} onChangeHandler={({ target: { value } }) => setName(value)} label="First name" />}
                 <InputField value={email} onChangeHandler={({ target: { value } }) => setEmail(value)} label="Email" />
-                <InputField value={password} onChangeHandler={({ target: { value } }) => setPassword(value)} label="Password" />
+                <InputField value={password} onChangeHandler={({ target: { value } }) => setPassword(value)} label="Password" type="password" />
                 <Button isLoading={isLoading} onClick={handleClick} className="createAccount" colorScheme="blue">{type === 'signup' ? "Create my account" : "Login"}</Button>
             </Stack>
         </div>
