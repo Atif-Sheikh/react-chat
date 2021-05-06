@@ -93,7 +93,6 @@ const Login = ({ history }) => {
         try {
             if (!number.trim()) return;
 
-            console.log( number, ">>>>")
             setOTPloading(true);
             let result = await phoneLogin(`+${number}`, verifier);
 
@@ -101,9 +100,9 @@ const Login = ({ history }) => {
             setShowOtp(true);
             setOTPConfirm(result);
         } catch (err) {
-            console.log(err, ">>>>>>")
             setOTPloading(false);
             toast({
+                position: "top",
                 title: err?.code,
                 description: err.message,
                 status: "error",
