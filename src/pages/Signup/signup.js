@@ -177,7 +177,7 @@ const Signup = ({ history }) => {
 
     function PhoneNumberModal() {
         return (
-            <Modal isOpen={phoneModal} onClose={handleModalClose}>
+            <Modal isOpen={phoneModal} onClose={handleModalClose} isCentered>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Phone number verification</ModalHeader>
