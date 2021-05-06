@@ -13,7 +13,6 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    Input,
     PinInput,
     PinInputField,
     HStack,
