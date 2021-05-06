@@ -33,6 +33,7 @@ const Login = ({ history }) => {
     const [OTPloading, setOTPloading] = useState(false);
     const [number, setNumber] = useState('');
     const [otpConfirm, setOTPConfirm] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
 
     const toast = useToast();
@@ -142,12 +143,14 @@ const Login = ({ history }) => {
     const handleOnClick = async ({ email, password }) => {
         try {
             if (email.trim() && password.trim()) {
+                setIsLoading(true);
                 let loggedIn = await firebase.auth().signInWithEmailAndPassword(email, password);
                 if (loggedIn?.user) {
                     let dbUser = await firebase.database().ref(`/users/${loggedIn.user.uid}`).once("value");
                     dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
                     history.push('/dashboard');
                 }
+                setIsLoading(false);
             }
         } catch (err) {
             toast({
@@ -158,6 +161,7 @@ const Login = ({ history }) => {
                 duration: 3000,
                 isClosable: true,
             });
+            setIsLoading(false);
         }
     };
 
@@ -217,7 +221,7 @@ const Login = ({ history }) => {
                 <SocialBtn id="login-button" onPress={handleGoogleLogin} Icon={FcGoogle} title="Login with Google" iconStyle={iconStyles} />
                 <SocialBtn onPress={() => setPhoneModal(true)} Icon={AiTwotonePhone} title="Login with Phone" iconStyle={iconStyles} />
 
-                <InputForm onClickBtn={handleOnClick} type="login" />
+                <InputForm isLoading={isLoading} onClickBtn={handleOnClick} type="login" />
             </div>
             <div className="alreadyAccount">
                 <span>Don't have an account?</span>

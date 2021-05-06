@@ -36,6 +36,7 @@ const Signup = ({ history }) => {
     const [OTPloading, setOTPloading] = useState(false);
     const [number, setNumber] = useState('');
     const [otpConfirm, setOTPConfirm] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
 
     const toast = useToast();
@@ -85,6 +86,7 @@ const Signup = ({ history }) => {
     const handleOnClick = async ({ name, email, password }) => {
         try {
             if (name.trim() && email.trim() && password.trim()) {
+                setIsLoading(true);
                 let userCreation = await firebase.auth().createUserWithEmailAndPassword(email, password);
 
                 if (userCreation?.user) {
@@ -99,6 +101,7 @@ const Signup = ({ history }) => {
                     dispatch({ type: "UPDATE_USER", payload: user });
                     history.push('/dashboard');
                 }
+                setIsLoading(false);
             }
         } catch (err) {
             toast({
@@ -109,6 +112,7 @@ const Signup = ({ history }) => {
                 duration: 3000,
                 isClosable: true,
             });
+            setIsLoading(false);
         }
     };
 
@@ -227,7 +231,7 @@ const Signup = ({ history }) => {
                     <Divider className="horDivider" orientation="horizontal" />
                 </div>
 
-                <SignupForm onClickBtn={handleOnClick} type="signup" />
+                <SignupForm isLoading={isLoading} onClickBtn={handleOnClick} type="signup" />
 
             </div>
             <div className="alreadyAccount">
