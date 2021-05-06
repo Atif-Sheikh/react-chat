@@ -28,6 +28,7 @@ import SignupForm from '../../components/inputForm/inputForm';
 import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 
 import './signup.css';
+import PhoneNumberField from '../../components/phoneInput/phoneInput';
 
 const Signup = ({ history }) => {
     const [verifier, setVerifier] = useState(null);
@@ -183,7 +184,7 @@ const Signup = ({ history }) => {
                     <ModalHeader>Phone number verification</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Input value={number} disabled={showOtp} onChange={({ target: { value } }) => setNumber(value)} type="number" placeholder="Enter Phone Number" />
+                        <PhoneNumberField value={number} disabled={showOtp} onChange={(value) => setNumber(value)} />
                         <Button onClick={handlePhoneLogin} width="100%" mt={5} isLoading={OTPloading} colorScheme="blue">Send OTP</Button>
 
                         {

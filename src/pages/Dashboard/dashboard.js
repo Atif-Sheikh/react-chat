@@ -71,6 +71,17 @@ const Dashboard = () => {
                             <Avatar src={iconUrl} name="Patrik" status="invisible" />
                         </Conversation>
 
+                        <Conversation name="Patrik" lastSenderName="Patrik" info="Yes i can do it for you">
+                            <Avatar src={iconUrl} name="Patrik" status="invisible" />
+                        </Conversation>
+                        
+                        <Conversation name="Patrik" lastSenderName="Patrik" info="Yes i can do it for you">
+                            <Avatar src={iconUrl} name="Patrik" status="invisible" />
+                        </Conversation>
+
+                        <Conversation name="Patrik" lastSenderName="Patrik" info="Yes i can do it for you">
+                            <Avatar src={iconUrl} name="Patrik" status="invisible" />
+                        </Conversation>
                     </ConversationList>
                 </Sidebar>
 
