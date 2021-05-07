@@ -1,6 +1,7 @@
 //Reducer for character information Initialize State
 const initState = {
-    user: null
+    user: null,
+    allUsers: null,
 };
 
 //Define Actions
@@ -10,8 +11,14 @@ const userReducer = (state = initState, action) => {
         case 'UPDATE_USER':
             return {
                 ...state,
-                user: action.payload
-            }
+                user: action.payload,
+            };
+
+        case 'ALL_USERS':
+            return {
+                ...state,
+                allUsers: action.payload,
+            };
 
         default:
             return state
