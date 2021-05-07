@@ -28,6 +28,7 @@ import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 
 import './signup.css';
 import PhoneNumberField from '../../components/phoneInput/phoneInput';
+import Loader from '../../components/Loader/loader';
 
 const Signup = ({ history }) => {
     const [verifier, setVerifier] = useState(null);
@@ -37,6 +38,7 @@ const Signup = ({ history }) => {
     const [number, setNumber] = useState('');
     const [otpConfirm, setOTPConfirm] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [userLoader, setUserLoader] = useState(false);
     const dispatch = useDispatch();
 
     const toast = useToast();
@@ -70,11 +72,8 @@ const Signup = ({ history }) => {
     };
 
     useEffect(() => {
-        const userListener = firebase.auth().onAuthStateChanged(user => {
-            if(user?.uid) {
-                setUser(user.uid);
-            }
-        });
+        setUserLoader(true);
+        setUser();
 
         const _verifier = new firebase.auth.RecaptchaVerifier("recaptcha-container-signup", {
             size: "invisible",
@@ -86,16 +85,20 @@ const Signup = ({ history }) => {
         }
         return () => {
             _verifier.clear();
-            userListener();
+            setUser();
         }
     }, []);
 
-    const setUser = async (uid) => {
+    const setUser = async () => {
         try {
-            let dbUser = await firebase.database().ref(`/users/${uid}`).once("value");
-            dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
-            history.push('/dashboard');
-        }catch(err) {
+            firebase.auth().onAuthStateChanged(async user => {
+                let dbUser = await firebase.database().ref(`/users/${user.uid}`).once("value");
+                setUserLoader(false);
+                dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
+                history.push('/dashboard');
+            });
+        } catch (err) {
+            setUserLoader(false);
             console.log(err, "ERROR");
         }
     };
@@ -234,31 +237,38 @@ const Signup = ({ history }) => {
 
     return (
         <div className="loginContainer">
-            <div className="loginCard">
-                <h2 className="getStarted">
-                    Enter your info to get started
-                </h2>
+            {
+                userLoader ?
+                    <Loader />
+                    :
+                    <>
+                        <div className="loginCard">
+                            <h2 className="getStarted">
+                                Enter your info to get started
+                        </h2>
 
-                <SocialBtn onPress={handleGoogleSignup} Icon={FcGoogle} title="Sign up with Google" iconStyle={iconStyles} />
-                <SocialBtn onPress={() => setPhoneModal(true)} Icon={AiTwotonePhone} title="Sign up with Phone" iconStyle={iconStyles} />
+                            <SocialBtn onPress={handleGoogleSignup} Icon={FcGoogle} title="Sign up with Google" iconStyle={iconStyles} />
+                            <SocialBtn onPress={() => setPhoneModal(true)} Icon={AiTwotonePhone} title="Sign up with Phone" iconStyle={iconStyles} />
 
-                <div className="dividerContainer">
-                    <Divider className="horDivider" orientation="horizontal" />
-                    <span>OR</span>
-                    <Divider className="horDivider" orientation="horizontal" />
-                </div>
+                            <div className="dividerContainer">
+                                <Divider className="horDivider" orientation="horizontal" />
+                                <span>OR</span>
+                                <Divider className="horDivider" orientation="horizontal" />
+                            </div>
 
-                <SignupForm isLoading={isLoading} onClickBtn={handleOnClick} type="signup" />
+                            <SignupForm isLoading={isLoading} onClickBtn={handleOnClick} type="signup" />
 
-            </div>
-            <div className="alreadyAccount">
-                <span>Already have an account? </span>
-                <Link to="/login">
-                    <span className="loginToChakra">Log in</span>
-                </Link>
-            </div>
-            <div id="recaptcha-container-signup" />
-            {phoneModal && PhoneNumberModal()}
+                        </div>
+                        <div className="alreadyAccount">
+                            <span>Already have an account? </span>
+                            <Link to="/login">
+                                <span className="loginToChakra">Log in</span>
+                            </Link>
+                        </div>
+                        <div id="recaptcha-container-signup" />
+                        {phoneModal && PhoneNumberModal()}
+                    </>
+            }
         </div>
     )
 }
