@@ -1,33 +1,68 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
-  MainContainer,
-  ChatContainer,
-  MessageList,
-  Message,
-  MessageInput,
-  Sidebar,
-  Search,
-  Avatar,
-  ConversationHeader,
-  VoiceCallButton,
-  VideoCallButton,
-  InfoButton,
-  TypingIndicator,
-  MessageSeparator,
-  ExpansionPanel,
+    MainContainer,
+    ChatContainer,
+    MessageList,
+    Message,
+    MessageInput,
+    Sidebar,
+    Search,
+    Avatar,
+    ConversationHeader,
+    VoiceCallButton,
+    VideoCallButton,
+    InfoButton,
+    TypingIndicator,
+    MessageSeparator,
+    ExpansionPanel,
 } from "@chatscope/chat-ui-kit-react";
+import firebase from "firebase/app";
+import { useDispatch } from 'react-redux';
+
 import Conversations from '../../components/ConversationList/conversationList';
 
 const Dashboard = () => {
     const data = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
     // if (!data?.user) return null;
     const { user } = data;
     console.log(user, ">>>>");
-
     const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
+
+    useEffect(() => {
+        updateOnlineStatus();
+        setUser();
+        return () => {
+            updateOnlineStatus();
+        }
+    }, []);
+
+    const setUser = async () => {
+        try {
+            firebase.auth().onAuthStateChanged(async user => {
+                let dbUser = await firebase.database().ref(`/users/${user.uid}`).once("value");
+                dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
+            });
+        } catch (err) {
+            console.log(err, "ERROR");
+        }
+    };
+
+    const updateOnlineStatus = () => {
+        if (user) {
+            firebase.database().ref('.info/connected').on('value', snapshot => {
+                console.log(snapshot.val(), ">>>")
+                if (snapshot) {
+                    firebase.database().ref(`/users/${user.uid}`).update({ status: 'available' });
+                } else {
+                    firebase.database().ref(`/users/${user.uid}`).update({ status: 'unavailable' });
+                }
+            });
+        }
+    };
 
     return (
         <div style={{
@@ -149,7 +184,7 @@ const Dashboard = () => {
                             <Avatar src={iconUrl} name="Zoe" />
                         </Message>
                     </MessageList>
-                    <MessageInput placeholder="Type message here" value={""} onChange={val => {}} onSend={() => {}} />
+                    <MessageInput placeholder="Type message here" value={""} onChange={val => { }} onSend={() => { }} />
                 </ChatContainer>
 
                 <Sidebar position="right">

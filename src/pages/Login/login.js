@@ -58,6 +58,7 @@ const Login = ({ history }) => {
                     email: result.user.email,
                     uid: result.user.uid,
                     img: result.user.photoURL,
+                    status: 'available',
                 });
             }
 
@@ -145,6 +146,7 @@ const Login = ({ history }) => {
                         uid: result.user.uid,
                         img: result.user.photoURL || "",
                         number: result.user.phoneNumber,
+                        status: 'available',
                     });
                 }
                 dispatch({ type: "UPDATE_USER", payload: result?.user });
