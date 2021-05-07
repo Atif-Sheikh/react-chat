@@ -70,6 +70,12 @@ const Signup = ({ history }) => {
     };
 
     useEffect(() => {
+        const userListener = firebase.auth().onAuthStateChanged(user => {
+            if(user?.uid) {
+                setUser(user.uid);
+            }
+        });
+
         const _verifier = new firebase.auth.RecaptchaVerifier("recaptcha-container-signup", {
             size: "invisible",
         });
@@ -80,8 +86,19 @@ const Signup = ({ history }) => {
         }
         return () => {
             _verifier.clear();
+            userListener();
         }
     }, []);
+
+    const setUser = async (uid) => {
+        try {
+            let dbUser = await firebase.database().ref(`/users/${uid}`).once("value");
+            dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
+            history.push('/dashboard');
+        }catch(err) {
+            console.log(err, "ERROR");
+        }
+    };
 
     const handleOnClick = async ({ name, email, password }) => {
         try {

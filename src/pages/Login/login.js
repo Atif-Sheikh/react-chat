@@ -75,6 +75,12 @@ const Login = ({ history }) => {
     };
 
     useEffect(() => {
+        const userListener = firebase.auth().onAuthStateChanged(user => {
+            if(user?.uid) {
+                setUser(user.uid);
+            }
+        });
+
         const _verifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
             size: "invisible",
         });
@@ -83,10 +89,22 @@ const Login = ({ history }) => {
                 setVerifier(_verifier)
             });
         }
+
         return () => {
             _verifier.clear();
+            userListener();
         }
     }, []);
+
+    const setUser = async (uid) => {
+        try {
+            let dbUser = await firebase.database().ref(`/users/${uid}`).once("value");
+            dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
+            history.push('/dashboard');
+        }catch(err) {
+            console.log(err, "ERROR");
+        }
+    };
 
     const handlePhoneLogin = async () => {
         try {
@@ -147,9 +165,7 @@ const Login = ({ history }) => {
                 setIsLoading(true);
                 let loggedIn = await firebase.auth().signInWithEmailAndPassword(email, password);
                 if (loggedIn?.user) {
-                    let dbUser = await firebase.database().ref(`/users/${loggedIn.user.uid}`).once("value");
-                    dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
-                    history.push('/dashboard');
+                    setUser(loggedIn.user.uid);
                 }
                 setIsLoading(false);
             }
