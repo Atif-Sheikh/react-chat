@@ -15,7 +15,6 @@ import {
     useRouteMatch,
 } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
-import { GrGroup } from 'react-icons/gr';
 
 import Conversations from '../../components/ConversationList/conversationList';
 import EmptyContainer from '../../components/EmptyContainer.js/emptyContainer';
@@ -24,6 +23,7 @@ import GroupRoom from '../../components/GroupRoom/groupRoom';
 import AddGroup from '../../components/AddGroup/addGroup';
 import UserProfile from '../../components/UserProfile/userProfile';
 import SearchField from '../../components/SearchField/searchField';
+import ChatSection from '../../components/ChatSelection/chatSelection';
 
 const Dashboard = ({ history }) => {
     const [openGroup, setOpenGroup] = useState(false);
@@ -81,9 +81,7 @@ const Dashboard = ({ history }) => {
                 <Sidebar position="left" scrollable={false}>
                     <UserProfile />
                     <SearchField />
-                    <Button rightIcon={<GrGroup color="#2c7a7b" />} colorScheme="teal" variant="outline" width="94%" alignSelf="center" onClick={() => setOpenGroup(true)}>
-                        Add Group
-                    </Button>
+                    <ChatSection handleOpenModal={() => setOpenGroup(true)} />
                     <Conversations />
                 </Sidebar>
 
@@ -134,8 +132,8 @@ const Dashboard = ({ history }) => {
                     </ExpansionPanel>
                 </Sidebar>
             </MainContainer>
-            {openGroup && <AddGroup isOpen={openGroup} handleModalClose={() => setOpenGroup(false)} />}
-        </div>
+            { openGroup && <AddGroup isOpen={openGroup} handleModalClose={() => setOpenGroup(false)} />}
+        </div >
     )
 }
 

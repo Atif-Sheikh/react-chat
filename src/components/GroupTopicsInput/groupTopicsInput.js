@@ -15,7 +15,7 @@ const GroupTopicsInput = ({ topics, handleChange, currentTopic, handleChangeInpu
                 inputValue={currentTopic}
                 onChangeInput={handleChange}
                 inputProps={{
-                    placeHolder: ''
+                    placeholder: ''
                 }}
             />
         </>
