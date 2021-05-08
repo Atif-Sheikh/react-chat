@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
     ChatContainer,
@@ -9,7 +10,6 @@ import {
     VoiceCallButton,
     VideoCallButton,
     InfoButton,
-    TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import {
     useParams
