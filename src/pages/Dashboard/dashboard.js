@@ -23,6 +23,8 @@ import EmptyContainer from '../../components/EmptyContainer.js/emptyContainer';
 import ChatRoom from '../../components/ChatContainer/chatContainer';
 import GroupRoom from '../../components/GroupRoom/groupRoom';
 import AddGroup from '../../components/AddGroup/addGroup';
+import UserProfile from '../../components/UserProfile/userProfile';
+import SearchField from '../../components/SearchField/searchField';
 
 const Dashboard = ({ history }) => {
     const [openGroup, setOpenGroup] = useState(false);
@@ -73,12 +75,13 @@ const Dashboard = ({ history }) => {
 
     return (
         <div style={{
-            height: "600px",
+            height: "100vh",
             position: "relative"
         }}>
             <MainContainer responsive>
                 <Sidebar position="left" scrollable={false}>
-                    <Search placeholder="Search..." />
+                    <UserProfile />
+                    <SearchField />
                     <Button rightIcon={<GrGroup color="#2c7a7b" />} colorScheme="teal" variant="outline" width="94%" alignSelf="center" onClick={() => setOpenGroup(true)}>
                         Add Group
                     </Button>
@@ -101,7 +104,7 @@ const Dashboard = ({ history }) => {
                 </Switch>
 
                 <Sidebar position="right">
-                    <ExpansionPanel open title="INFO">
+                    <ExpansionPanel title="INFO">
                         <Button colorScheme="blue" onClick={handleLogout}>
                             Logout
                         </Button>
