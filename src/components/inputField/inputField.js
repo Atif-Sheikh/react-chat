@@ -3,14 +3,14 @@ import {
     FormControl,
     FormLabel,
     Input,
-  } from "@chakra-ui/react";
+} from "@chakra-ui/react";
 
 import './inputField.css';
 
-const InputField = ({label, onChangeHandler, value, type="text"}) => (
+const InputField = ({ label, onChangeHandler, value, type = "text", labelClass = 'formLabel', textFieldClass = 'textField' }) => (
     <FormControl>
-        <FormLabel className="formLabel">{label}</FormLabel>
-        <Input type={type} onChange={onChangeHandler} value={value} className="textField" placeholder="" />
+        <FormLabel className={labelClass}>{label}</FormLabel>
+        <Input type={type} onChange={onChangeHandler} value={value} className={textFieldClass} placeholder="" />
     </FormControl>
 );
 

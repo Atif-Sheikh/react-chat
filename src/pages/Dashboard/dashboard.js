@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
@@ -16,13 +16,16 @@ import {
     useRouteMatch,
 } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
+import { GrGroup } from 'react-icons/gr';
 
 import Conversations from '../../components/ConversationList/conversationList';
 import EmptyContainer from '../../components/EmptyContainer.js/emptyContainer';
 import ChatRoom from '../../components/ChatContainer/chatContainer';
 import GroupRoom from '../../components/GroupRoom/groupRoom';
+import AddGroup from '../../components/AddGroup/addGroup';
 
 const Dashboard = ({ history }) => {
+    const [openGroup, setOpenGroup] = useState(false);
     let { path } = useRouteMatch();
     const data = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -76,6 +79,9 @@ const Dashboard = ({ history }) => {
             <MainContainer responsive>
                 <Sidebar position="left" scrollable={false}>
                     <Search placeholder="Search..." />
+                    <Button rightIcon={<GrGroup color="#2c7a7b" />} colorScheme="teal" variant="outline" width="94%" alignSelf="center" onClick={() => setOpenGroup(true)}>
+                        Add Group
+                    </Button>
                     <Conversations />
                 </Sidebar>
 
@@ -126,6 +132,7 @@ const Dashboard = ({ history }) => {
                     </ExpansionPanel>
                 </Sidebar>
             </MainContainer>
+            {openGroup && <AddGroup isOpen={openGroup} handleModalClose={() => setOpenGroup(false)} />}
         </div>
     )
 }
