@@ -5,7 +5,6 @@ import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
     MainContainer,
     Sidebar,
-    Search,
     ExpansionPanel,
 } from "@chatscope/chat-ui-kit-react";
 import firebase from "firebase/app";
