@@ -1,9 +1,15 @@
 
 
+.cs-conversation {
+    width: 95%;
+}
+
 .activeRightNav .cs-conversation {
     background-color: #f3f8fc;
+    border-radius: 8px;
 }
 
 .cs-conversation:hover {
     background-color: #e7e7e7;
+    border-radius: 8px;
 }

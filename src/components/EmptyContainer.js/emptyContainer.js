@@ -1,17 +1,13 @@
 import React from 'react';
-import {
-    ChatContainer,
-    MessageList,
-    ConversationHeader,
-} from "@chatscope/chat-ui-kit-react";
 
-const EmptyContainer = () => {
+import './emptyContainer.css';
+
+const EmptyContainer = ({ children }) => {
     
     return (
-        <ChatContainer>
-            <ConversationHeader />
-            <MessageList />
-        </ChatContainer>
+        <div className="chatContainer">
+            {children}
+        </div>
     )
 }
 
