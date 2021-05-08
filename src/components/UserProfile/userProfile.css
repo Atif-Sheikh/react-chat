@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 10px;
+    padding: 4px 10px;
 }
 
 .userStatus {
@@ -31,4 +31,43 @@
     font-size: 22px;
     padding: 5px 0;
     font-weight: 500;
+}
+
+.leftChevContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 90%;
+    height: 40px;
+}
+
+.leftChevContainer .chevRightIcon {
+    background-color: #F1F3F5;
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.leftChevContainer .chevRightIcon:hover {
+    background-color: #dcdfe4;
+}
+
+.leftChevContainer .chevRightIcon svg {
+    color: #b9b9b9;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.chatHeading {
+    color: #0B1941;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.chatHeaderDivider {
+    width: 85%;
+    margin: 20px 0 20px 0;
+    background-color: #E8EAEB;
+    height: 1.2px;
 }
