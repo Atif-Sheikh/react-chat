@@ -8,18 +8,18 @@ import {
     NavLink,
     useRouteMatch
 } from "react-router-dom";
-import {
-    useParams
-} from "react-router-dom";
-import firebase from "firebase/app";
+// import {
+//     useParams
+// } from "react-router-dom";
+// import firebase from "firebase/app";
 
 const GroupRoom = () => {
-    const { roomID } = useParams();
+    // const { roomID } = useParams();
     const { url } = useRouteMatch();
 
-    const user = firebase.auth().currentUser; //useSelector(state => state.user);
+    // const user = firebase.auth().currentUser; //useSelector(state => state.user);
 
-    const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
+    // const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
     console.log(url, ">>>")
     return (
         <ChatContainer>
