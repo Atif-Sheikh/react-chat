@@ -16,7 +16,6 @@ import {
 } from "react-router-dom";
 import firebase from "firebase/app";
 import Loader from '../Loader/loader';
-import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 
 const ChatRoom = () => {
     const [user, setUser] = useState(null);
