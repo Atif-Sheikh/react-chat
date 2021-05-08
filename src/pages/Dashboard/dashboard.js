@@ -19,6 +19,7 @@ import { Button } from "@chakra-ui/react";
 import Conversations from '../../components/ConversationList/conversationList';
 import EmptyContainer from '../../components/EmptyContainer.js/emptyContainer';
 import ChatRoom from '../../components/ChatContainer/chatContainer';
+import GroupRoom from '../../components/GroupRoom/groupRoom';
 
 const Dashboard = ({ history }) => {
     let { path } = useRouteMatch();
@@ -81,8 +82,14 @@ const Dashboard = ({ history }) => {
                     <Route exact path={path}>
                         <EmptyContainer />
                     </Route>
-                    <Route path={`${path}/:chatID`}>
+                    <Route exact path={`${path}/:chatID`}>
                         <ChatRoom />
+                    </Route>
+                    <Route exact path={`${path}/room/:roomID`}>
+                        <GroupRoom />
+                    </Route>
+                    <Route path={`${path}/room/:roomID/:topic`}>
+                        <EmptyContainer />
                     </Route>
                 </Switch>
 
