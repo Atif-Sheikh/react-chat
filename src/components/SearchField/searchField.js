@@ -6,7 +6,7 @@ import './searchField.css';
 const SearchField = () => {
     return (
         <div className="customSearchField">
-            <input type="text" />
+            <input placeholder="Search" type="text" />
             <AiOutlineSearch />
         </div>
     );

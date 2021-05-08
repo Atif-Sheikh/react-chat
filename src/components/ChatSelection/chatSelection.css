@@ -1,0 +1,39 @@
+
+
+.selectionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px;
+}
+
+.selectionContainer .lastChats {
+    color: #8D9299;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.iconsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 50px;
+}
+
+.iconsContainer .addGroupIcon {
+    color: #8FF1E1;
+    background-color: #F7F9FB;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.iconsContainer .addGroupIcon:hover {
+    background-color: #f7f9fb56;
+}
+
+.iconsContainer .verticalDots {
+    color: #C6CBD2;
+    cursor: pointer;
+}
