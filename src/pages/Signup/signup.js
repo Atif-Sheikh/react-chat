@@ -92,10 +92,14 @@ const Signup = ({ history }) => {
     const setUser = async () => {
         try {
             firebase.auth().onAuthStateChanged(async user => {
-                let dbUser = await firebase.database().ref(`/users/${user.uid}`).once("value");
-                setUserLoader(false);
-                dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
-                history.push('/dashboard');
+                if(user?.uid) {
+                    let dbUser = await firebase.database().ref(`/users/${user?.uid}`).once("value");
+                    setUserLoader(false);
+                    dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
+                    history.push('/dashboard');
+                }else {
+                    setUserLoader(false);
+                }
             });
         } catch (err) {
             setUserLoader(false);
