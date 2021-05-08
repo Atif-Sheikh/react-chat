@@ -3,34 +3,30 @@ import { useSelector } from 'react-redux';
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
     MainContainer,
-    ChatContainer,
-    MessageList,
-    Message,
-    MessageInput,
     Sidebar,
     Search,
-    Avatar,
-    ConversationHeader,
-    VoiceCallButton,
-    VideoCallButton,
-    InfoButton,
-    TypingIndicator,
-    MessageSeparator,
     ExpansionPanel,
 } from "@chatscope/chat-ui-kit-react";
 import firebase from "firebase/app";
 import { useDispatch } from 'react-redux';
+import {
+    Switch,
+    Route,
+    useRouteMatch,
+} from "react-router-dom";
+import { Button } from "@chakra-ui/react";
 
 import Conversations from '../../components/ConversationList/conversationList';
+import EmptyContainer from '../../components/EmptyContainer.js/emptyContainer';
+import ChatRoom from '../../components/ChatContainer/chatContainer';
 
-const Dashboard = () => {
+const Dashboard = ({ history }) => {
+    let { path } = useRouteMatch();
     const data = useSelector(state => state.user);
     const dispatch = useDispatch();
 
     // if (!data?.user) return null;
     const { user } = data;
-    console.log(user, ">>>>");
-    const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
     useEffect(() => {
         updateOnlineStatus();
@@ -43,18 +39,24 @@ const Dashboard = () => {
     const setUser = async () => {
         try {
             firebase.auth().onAuthStateChanged(async user => {
-                let dbUser = await firebase.database().ref(`/users/${user.uid}`).once("value");
-                dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
+                if (user?.uid) {
+                    let dbUser = await firebase.database().ref(`/users/${user.uid}`).once("value");
+                    dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
+                }
             });
         } catch (err) {
             console.log(err, "ERROR");
         }
     };
 
+    const handleLogout = async () => {
+        await firebase.auth().signOut();
+        history.push('/');
+    };
+
     const updateOnlineStatus = () => {
         if (user) {
             firebase.database().ref('.info/connected').on('value', snapshot => {
-                console.log(snapshot.val(), ">>>")
                 if (snapshot) {
                     firebase.database().ref(`/users/${user.uid}`).update({ status: 'available' });
                 } else {
@@ -75,124 +77,20 @@ const Dashboard = () => {
                     <Conversations />
                 </Sidebar>
 
-                <ChatContainer>
-                    <ConversationHeader>
-                        <ConversationHeader.Back />
-                        <Avatar src={iconUrl} name="Zoe" />
-                        <ConversationHeader.Content userName="Zoe" info="Active 10 mins ago" />
-                        <ConversationHeader.Actions>
-                            <VoiceCallButton />
-                            <VideoCallButton />
-                            <InfoButton />
-                        </ConversationHeader.Actions>
-                    </ConversationHeader>
-                    <MessageList typingIndicator={<TypingIndicator content="Zoe is typing" />}>
-
-                        <MessageSeparator content="Saturday, 30 November 2019" />
-
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Zoe",
-                            direction: "incoming",
-                            position: "single"
-                        }}>
-                            <Avatar src={iconUrl} name="Zoe" />
-                        </Message>
-
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Patrik",
-                            direction: "outgoing",
-                            position: "single"
-                        }} avatarSpacer />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Zoe",
-                            direction: "incoming",
-                            position: "first"
-                        }} avatarSpacer />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Zoe",
-                            direction: "incoming",
-                            position: "normal"
-                        }} avatarSpacer />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Zoe",
-                            direction: "incoming",
-                            position: "normal"
-                        }} avatarSpacer />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Zoe",
-                            direction: "incoming",
-                            position: "last"
-                        }}>
-                            <Avatar src={iconUrl} name="Zoe" />
-                        </Message>
-
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Patrik",
-                            direction: "outgoing",
-                            position: "first"
-                        }} />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Patrik",
-                            direction: "outgoing",
-                            position: "normal"
-                        }} />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Patrik",
-                            direction: "outgoing",
-                            position: "normal"
-                        }} />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Patrik",
-                            direction: "outgoing",
-                            position: "last"
-                        }} />
-
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Zoe",
-                            direction: "incoming",
-                            position: "first"
-                        }} avatarSpacer />
-                        <Message model={{
-                            message: "Hello my friend",
-                            sentTime: "15 mins ago",
-                            sender: "Zoe",
-                            direction: "incoming",
-                            position: "last"
-                        }}>
-                            <Avatar src={iconUrl} name="Zoe" />
-                        </Message>
-                    </MessageList>
-                    <MessageInput placeholder="Type message here" value={""} onChange={val => { }} onSend={() => { }} />
-                </ChatContainer>
+                <Switch>
+                    <Route exact path={path}>
+                        <EmptyContainer />
+                    </Route>
+                    <Route path={`${path}/:chatID`}>
+                        <ChatRoom />
+                    </Route>
+                </Switch>
 
                 <Sidebar position="right">
                     <ExpansionPanel open title="INFO">
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
+                        <Button colorScheme="blue" onClick={handleLogout}>
+                            Logout
+                        </Button>
                     </ExpansionPanel>
                     <ExpansionPanel title="LOCALIZATION">
                         <p>Lorem ipsum</p>
