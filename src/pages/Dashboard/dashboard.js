@@ -25,6 +25,8 @@ import UserProfile from '../../components/UserProfile/userProfile';
 import SearchField from '../../components/SearchField/searchField';
 import ChatSection from '../../components/ChatSelection/chatSelection';
 
+import './dashboard.css';
+
 const Dashboard = ({ history }) => {
     const [openGroup, setOpenGroup] = useState(false);
     let { path } = useRouteMatch();

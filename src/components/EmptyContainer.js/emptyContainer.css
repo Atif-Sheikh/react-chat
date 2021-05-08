@@ -1,0 +1,11 @@
+
+
+.chatContainer {
+    background-color: #EFF2F5;
+    order: 1;
+    z-index: 1;
+    flex-grow: 1;
+    flex-basis: 65%;
+    margin: 10px 10px;
+    border-radius: 10px;
+}

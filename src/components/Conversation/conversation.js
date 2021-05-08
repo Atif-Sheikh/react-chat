@@ -16,9 +16,9 @@ const ChatItem = ({ usr: { name, lastMessage, lastSender, status, img, uid } }) 
     let { url } = useRouteMatch();
 
     return (
-        <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/${uid}`, state: { name, lastMessage, lastSender, status, img, uid } }}>
-            <Conversation name={name} lastSenderName={lastSender} info={lastMessage}>
-                <Avatar src={img ? img : iconUrl} name={"name"} status={status} />
+        <NavLink className="chatConversation" activeClassName="activeRightNav" to={{ pathname: `${url}/${uid}`, state: { name, lastMessage, lastSender, status, img, uid } }}>
+            <Conversation name={name} lastActivityTime="43 min" info="Hi">
+                <Avatar src={img ? img : iconUrl} name={"name"} />
             </Conversation>
         </NavLink>
     );
