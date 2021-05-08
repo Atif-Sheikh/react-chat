@@ -1,14 +1,16 @@
 import React from 'react';
 import { Spinner } from "@chakra-ui/react";
 
-const Loader = () => {
+import './loader.css'
+
+const Loader = ({color="blue.500"}) => {
     return (
-        <div>
+        <div className='loaderContainer'>
             <Spinner
                 thickness="4px"
                 speed="0.65s"
                 emptyColor="gray.200"
-                color="blue.500"
+                color={color}
                 size="xl"
             />
         </div>
