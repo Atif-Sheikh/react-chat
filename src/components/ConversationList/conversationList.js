@@ -4,11 +4,21 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import firebase from "firebase/app";
 import { useDispatch, useSelector } from 'react-redux';
+import {
+    Conversation,
+    Avatar,
+} from "@chatscope/chat-ui-kit-react";
+import {
+    NavLink,
+    useRouteMatch
+} from "react-router-dom";
 
 import ChatItem from '../Conversation/conversation';
 
+const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 const Conversations = () => {
     const dispatch = useDispatch();
+    const { url } = useRouteMatch();
     const usersList = useSelector(state => state.user.allUsers);
     const currentUser = useSelector(state => state.user.user);
     const [users, setUsers] = useState(null);
@@ -37,6 +47,17 @@ const Conversations = () => {
                     <ChatItem key={ind} usr={usr} />
                 ))
             }
+
+            <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/room/${1}` }}>
+                <Conversation name="Group1" lastSenderName="Emily" info="Yes i can do it for you">
+                    <Avatar src={iconUrl} name="Emily" />
+                </Conversation>
+            </NavLink>
+            <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/room/${2}` }}>
+                <Conversation name="Group2" lastSenderName="Zoe" info="Yes i can do it for you">
+                    <Avatar src={iconUrl} name="Zoe" />
+                </Conversation>
+            </NavLink>
         </ConversationList>
     )
 }
