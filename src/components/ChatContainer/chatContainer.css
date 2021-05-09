@@ -33,3 +33,13 @@
     height: 1.2px;
     margin-bottom: 10px;
 }
+
+.chatListContainer .sender .cs-message__content {
+    background-color: #D6D9E7;
+    color: #545A70;
+}
+
+.chatListContainer .receiver .cs-message__content {
+    color: #636879;
+    background-color: #fff;
+}

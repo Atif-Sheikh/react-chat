@@ -109,14 +109,14 @@ const ChatRoom = () => {
                         allMsgs.map((msg, ind) => {
                             if (msg.direction === 'incoming') {
                                 return (
-                                    <Message key={ind.toString()} model={msg}>
+                                    <Message className="receiver" key={ind.toString()} model={msg}>
                                         <Avatar src={msg.img} name="Zoe" />
                                     </Message>
                                 )
                             }
 
                             return (
-                                <Message model={msg} key={ind.toString()} />
+                                <Message className="sender" model={msg} key={ind.toString()} />
                             )
                         })
                 }
