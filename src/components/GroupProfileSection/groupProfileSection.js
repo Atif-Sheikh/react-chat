@@ -22,13 +22,13 @@ const GroupProfileSection = () => {
     return (
         <div className="profileContainer">
             <div className="leftChevContainer">
-                <div className="chevRightIcon">
+                <div className="chevRightIcon" onClick={() => handleSideDrawer(!isRightPanelOpen)}>
                     {
                         isRightPanelOpen
                             ?
-                            <BiChevronRight onClick={() => handleSideDrawer(!isRightPanelOpen)} />
+                            <BiChevronRight />
                             :
-                            <BiChevronLeft onClick={() => handleSideDrawer(!isRightPanelOpen)} />
+                            <BiChevronLeft />
                     }
                 </div>
                 {
