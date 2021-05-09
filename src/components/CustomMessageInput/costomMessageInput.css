@@ -1,0 +1,53 @@
+
+
+.messageContainer {
+    display: flex;
+    width: 94%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 10px 10px;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.messageContainer .messageInput {
+    width: 80%;
+    height: 40px;
+    outline: none;
+}
+
+.messageContainer .messageInputIcons {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+}
+
+.messageInputIcons .sendMessage {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #00AE94;
+    cursor: pointer;
+}
+
+.messageInputIcon {
+    color: #DADFE5;
+    cursor: pointer;
+}
+
+.messageInputIcon:hover {
+    color: #bdc3c9;
+}
+
+.messageInputIcons .sendMessage:hover {
+    background-color: #039781;
+}
+
+.messageInputIcons .sendMessage svg {
+    color: #fff;
+}
+

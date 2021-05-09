@@ -1,0 +1,60 @@
+
+
+.chatHeaderContainer {
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    min-height: 55px;
+    justify-content: space-between;
+}
+
+.chatUsersName {
+    flex: 3;
+    color: #1B294D;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.messageBtn {
+    display: flex;
+    padding-top: 10px;
+    align-items: center;
+    justify-content: center;
+    color: #419588;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 4px 10px;
+    background: #C6EBE5;
+    max-width: 105px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.messageBtn:hover {
+    background: #aaddd4;
+}
+
+.messageAndParticipants {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 2;
+}
+
+.messageAndParticipants .participants {
+    display: flex;
+    padding-top: 10px;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 4px 10px;
+    max-width: 105px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.messageAndParticipants .participants:hover {
+    background-color: rgb(125, 207, 255);
+}
