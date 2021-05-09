@@ -71,3 +71,15 @@
     background-color: #E8EAEB;
     height: 1.2px;
 }
+
+.profileSettingsIcon {
+    position: absolute;
+    right: 5%;
+    top: 11%;
+    color: #DAE0E7;
+    cursor: pointer;
+}
+
+.profileSettingsIcon:hover {
+    color: #c9cbce;
+}
