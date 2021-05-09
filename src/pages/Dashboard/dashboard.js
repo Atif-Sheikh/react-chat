@@ -30,6 +30,7 @@ const Dashboard = ({ history }) => {
     const [openGroup, setOpenGroup] = useState(false);
     let { path } = useRouteMatch();
     const data = useSelector(state => state.user);
+    const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
     const dispatch = useDispatch();
 
     // if (!data?.user) return null;
@@ -72,7 +73,7 @@ const Dashboard = ({ history }) => {
         <div style={{
             height: "100vh",
             position: "relative"
-        }}>
+        }} className={isRightPanelOpen ? 'rightOpen' : 'rightClose'}>
             <MainContainer responsive>
                 <Sidebar position="left" scrollable={false}>
                     <UserProfile history={history} />

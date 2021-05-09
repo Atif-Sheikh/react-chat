@@ -9,9 +9,29 @@
     border-right: none;
 }
 
-.cs-main-container>.cs-sidebar.cs-sidebar--right {
+.rightOpen .cs-main-container>.cs-sidebar.cs-sidebar--right {
     flex-basis: 30%;
     min-width: 150px;
     max-width: 320px;
     border-left: none;
+    animation: grow0 1.5s forwards;
+    transition: color, background-color, max-width 1s linear;
 }
+
+.rightClose .cs-main-container>.cs-sidebar.cs-sidebar--right {
+    flex-basis: 5%;
+    min-width: 65px;
+    max-width: 320px;
+    border-left: none;
+    animation: grow0 1.5s forwards;
+    transition: color, background-color, max-width 1s linear;
+}
+
+@keyframes grow0 {
+    from {
+      width: 10%;
+    }
+    to {
+      width: 100%;
+    }
+  }
