@@ -73,7 +73,8 @@ const ChatRoom = () => {
         }
     }, [user]);
 
-    const handleSendMsg = async () => {
+    const handleSendMsg = async (e) => {
+        e.preventDefault();
         if (currentMsg && currentUser) {
             let path = currentUser.uid + chatID;
             path = path.split('').sort().join('');
