@@ -5,15 +5,26 @@
     border-radius: 12px;
     align-items: flex-end;
     justify-content: space-between;
+    cursor: pointer;
+}
+
+.fileThumbnailContainer:hover {
+    opacity: 0.7;
 }
 
 .fileThumbnailContainer .fileNameCount {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fileThumbnailContainer .fileName {
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0;
 }
 
 .fileCount {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
 }

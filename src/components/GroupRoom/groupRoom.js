@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
-    useRouteMatch
+    useRouteMatch,
+    NavLink,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
 
@@ -22,7 +23,15 @@ const GroupRoom = () => {
             <CustomChatHeader />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
-
+                <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/ramadan` }}>
+                    <h1>Ramadan</h1>
+                </NavLink>
+                <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/namaz` }}>
+                    <h1>Namaz</h1>
+                </NavLink>
+                <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/taraweeh` }}>
+                    <h1>Tarweeh</h1>
+                </NavLink>
             </div>
             <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={({ target: { value } }) => setCurrentMsg(value)} onSend={() => { }} />
         </EmptyContainer>

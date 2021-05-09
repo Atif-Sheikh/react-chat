@@ -32,11 +32,12 @@
     justify-content: flex-start;
     width: 90%;
     height: 40px;
+    margin-top: 20px;
 }
 
 .leftChevContainer .chevRightIcon {
     background-color: #F1F3F5;
-    padding: 10px;
+    padding: 7px;
     border-radius: 10px;
     margin-right: 10px;
     cursor: pointer;
@@ -68,7 +69,7 @@
 .profileSettingsIcon {
     position: absolute;
     right: 5%;
-    top: 11%;
+    top: 14%;
     color: #DAE0E7;
     cursor: pointer;
 }
@@ -83,4 +84,24 @@
     margin-top: 15px;
     align-items: center;
     justify-content: space-around;
+}
+
+.fileTypeSection {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.fileTypeSection .fileType {
+    color: #828992;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.fileTypeSection svg {
+    color: #828992;
+    cursor: pointer;
 }

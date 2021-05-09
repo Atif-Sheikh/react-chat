@@ -6,9 +6,9 @@ const FileThumbnail = ({ Icon, title, count, color, textColor }) => {
     return (
         <div className="fileThumbnailContainer" style={{ backgroundColor: color }}>
             {Icon}
-            <div>
-                <div className="fileNameCount" style={{color: textColor }}>{title}</div>
-                <div className="fileCount" style={{color: textColor }}>{count}</div>
+            <div className="fileNameCount">
+                <span className="fileName" style={{color: textColor }}>{title}</span>
+                <span className="fileCount" style={{color: textColor }}>{count}</span>
             </div>
         </div>
     );
