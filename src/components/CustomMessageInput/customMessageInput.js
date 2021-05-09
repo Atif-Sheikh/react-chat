@@ -7,16 +7,18 @@ import './costomMessageInput.css';
 
 const CustomMessageInput = ({ placeholder, onChangeHandler, onSend, value }) => {
     return (
-        <div className="messageContainer">
-            <input className="messageInput" placeholder={placeholder} value={value} onChange={onChangeHandler} />
-            <div className="messageInputIcons">
-                <ImSmile2 className="messageInputIcon" />
-                <HiOutlinePaperClip className="messageInputIcon" />
-                <div onClick={onSend} className="sendMessage">
-                    <RiSendPlaneFill />
+        <form onSubmit={onSend}>
+            <div className="messageContainer">
+                <input className="messageInput" placeholder={placeholder} value={value} onChange={onChangeHandler} />
+                <div className="messageInputIcons">
+                    <ImSmile2 className="messageInputIcon" />
+                    <HiOutlinePaperClip className="messageInputIcon" />
+                    <button type="submit" className="sendMessage">
+                        <RiSendPlaneFill />
+                    </button>
                 </div>
             </div>
-        </div>
+        </form>
     )
 }
 
