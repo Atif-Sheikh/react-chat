@@ -1,21 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
-    ChatContainer,
-    MessageList,
     Message,
-    MessageInput,
     Avatar,
-    ConversationHeader,
-    VoiceCallButton,
-    VideoCallButton,
-    InfoButton,
 } from "@chatscope/chat-ui-kit-react";
 import {
     useParams
 } from "react-router-dom";
 import firebase from "firebase/app";
+import { Divider } from '@chakra-ui/react';
+
 import Loader from '../Loader/loader';
+import CustomMessageInput from '../CustomMessageInput/customMessageInput';
+import EmptyContainer from '../EmptyContainer.js/emptyContainer';
+import CustomChatHeader from '../CustomChatHeader/customChatHeader';
+
+import './chatContainer.css';
 
 const ChatRoom = () => {
     const [user, setUser] = useState(null);
@@ -85,25 +85,16 @@ const ChatRoom = () => {
                 reciverId: currentUser.uid,
                 time: Date.now(),
             });
-
             setCurrentMsg('');
         }
     };
-    
-    return (
-        <ChatContainer>
 
-            <ConversationHeader>
-                <ConversationHeader.Back />
-                <Avatar src={user?.img ? user.img : iconUrl} name="Zoe" />
-                <ConversationHeader.Content userName={user?.name} info={user?.status} />
-                <ConversationHeader.Actions>
-                    <VoiceCallButton />
-                    <VideoCallButton />
-                    <InfoButton />
-                </ConversationHeader.Actions>
-            </ConversationHeader>
-            <MessageList>
+    return (
+        <EmptyContainer>
+
+            <CustomChatHeader user={user} />
+            <Divider className="chatListDivider" orientation="horizontal" />
+            <div className="chatListContainer">
                 {/* // Typing indicator for future use */}
                 {/* typingIndicator={<TypingIndicator content="Zoe is typing" />} */}
                 {/* <MessageSeparator content="Saturday, 30 November 2019" /> */}
@@ -111,29 +102,29 @@ const ChatRoom = () => {
                 {
                     loader
                         ?
-                        <MessageList.Content className="loaderContainer">
+                        <div className="loaderContainer">
                             <Loader />
-                        </MessageList.Content>
+                        </div>
                         :
                         allMsgs.map((msg, ind) => {
                             if (msg.direction === 'incoming') {
                                 return (
-                                    <Message key={ind.toString()} model={msg}>
+                                    <Message className="receiver" key={ind.toString()} model={msg}>
                                         <Avatar src={msg.img} name="Zoe" />
                                     </Message>
                                 )
                             }
 
                             return (
-                                <Message model={msg} key={ind.toString()} />
+                                <Message className="sender" model={msg} key={ind.toString()} />
                             )
                         })
                 }
 
 
-            </MessageList>
-            <MessageInput placeholder="Type message here" value={currentMsg} onChange={val => setCurrentMsg(val)} onSend={handleSendMsg} />
-        </ChatContainer>
+            </div>
+            <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={({ target: { value } }) => setCurrentMsg(value)} onSend={handleSendMsg} />
+        </EmptyContainer>
     )
 }
 

@@ -8,27 +8,20 @@
     padding: 4px 10px;
 }
 
-.userStatus {
+.membersCount {
     display: flex;
     padding-top: 10px;
     align-items: center;
     justify-content: center;
-    color: #419588;
-    font-weight: 500;
-    font-size: 15px;
+    color: #A1A6AC;
+    font-weight: 600;
+    font-size: 13px;
     padding: 4px 10px;
-    background: #C6EBE5;
-    max-width: 105px;
     border-radius: 10px;
 }
 
-.userStatus svg {
-    margin-top: 3px;
-    margin-left: 5px;
-}
-
-.userProfileName {
-    font-size: 22px;
+.groupName {
+    font-size: 17px;
     padding: 5px 0;
     font-weight: 500;
 }
@@ -82,4 +75,12 @@
 
 .profileSettingsIcon:hover {
     color: #c9cbce;
+}
+
+.filesCollage {
+    width: 100%;
+    display: flex;
+    margin-top: 15px;
+    align-items: center;
+    justify-content: space-around;
 }

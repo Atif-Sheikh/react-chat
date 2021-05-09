@@ -1,0 +1,19 @@
+
+.fileThumbnailContainer {
+    display: flex;
+    padding: 15px;
+    border-radius: 12px;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.fileThumbnailContainer .fileNameCount {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.fileCount {
+    font-size: 17px;
+    font-weight: 700;
+}
