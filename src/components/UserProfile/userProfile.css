@@ -15,16 +15,17 @@
     justify-content: center;
     color: #419588;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 13px;
     padding: 4px 10px;
     background: #C6EBE5;
     max-width: 105px;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .userStatus svg {
     margin-top: 3px;
     margin-left: 5px;
+    font-weight: bold;
 }
 
 .userProfileName {

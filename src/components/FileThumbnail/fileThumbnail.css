@@ -8,12 +8,18 @@
 }
 
 .fileThumbnailContainer .fileNameCount {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fileThumbnailContainer .fileName {
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0;
 }
 
 .fileCount {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
 }
