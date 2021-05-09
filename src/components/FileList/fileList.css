@@ -1,0 +1,36 @@
+
+
+.fileListContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.fileListContainer:hover {
+    opacity: 0.7;
+}
+
+.titleDescription {
+    padding-left: 20px;
+    flex: 2;
+}
+
+.fileListContainer .fileIcon {
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.fileListContainer .fileName {
+    font-size: 14px;
+    color: #0F1E42;
+    font-weight: 700;
+}
+
+.fileListContainer .fileDetails {
+    color: #B4B8C0;
+    font-size: 12px;
+    font-weight: 600;
+}

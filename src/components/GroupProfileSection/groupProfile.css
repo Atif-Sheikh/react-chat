@@ -85,3 +85,23 @@
     align-items: center;
     justify-content: space-around;
 }
+
+.fileTypeSection {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.fileTypeSection .fileType {
+    color: #828992;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.fileTypeSection svg {
+    color: #828992;
+    cursor: pointer;
+}
