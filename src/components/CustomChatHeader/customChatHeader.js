@@ -6,7 +6,7 @@ const CustomChatHeader = ({ user }) => {
     return (
         <div className="chatHeaderContainer">
             <h2 className="chatUsersName">
-                {user?.name}
+                {user?.name || "N/A"}
             </h2>
             <div className="messageAndParticipants">
                 <div className="messageBtn">Messages</div>

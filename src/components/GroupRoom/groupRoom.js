@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-    ChatContainer,
-    MessageList,
-    ConversationHeader,
-} from "@chatscope/chat-ui-kit-react";
-import {
-    NavLink,
     useRouteMatch
 } from "react-router-dom";
-// import {
-//     useParams
-// } from "react-router-dom";
-// import firebase from "firebase/app";
+import { Divider } from '@chakra-ui/react';
+
+import EmptyContainer from '../EmptyContainer.js/emptyContainer';
+import CustomChatHeader from '../CustomChatHeader/customChatHeader';
+import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 
 const GroupRoom = () => {
-    // const { roomID } = useParams();
+    const [currentMsg, setCurrentMsg] = useState('');
     const { url } = useRouteMatch();
 
     // const user = firebase.auth().currentUser; //useSelector(state => state.user);
@@ -22,25 +17,16 @@ const GroupRoom = () => {
     // const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
     console.log(url, ">>>")
     return (
-        <ChatContainer>
+        <EmptyContainer>
 
-            <ConversationHeader>
-            </ConversationHeader>
-            <MessageList>
-            <MessageList.Content className="loaderContainer">
-                <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/ramadan` }}>
-                    <h1>Ramadan</h1>
-                </NavLink>
-                <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/namaz` }}>
-                    <h1>Namaz</h1>
-                </NavLink>
-                <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/taraweeh` }}>
-                  <h1>Tarweeh</h1>
-                </NavLink>
-            </MessageList.Content>
-            </MessageList>
-        </ChatContainer >
-    )
-}
+            <CustomChatHeader />
+            <Divider className="chatListDivider" orientation="horizontal" />
+            <div className="chatListContainer">
+
+            </div>
+            <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={({ target: { value } }) => setCurrentMsg(value)} onSend={() => { }} />
+        </EmptyContainer>
+    );
+};
 
 export default GroupRoom;

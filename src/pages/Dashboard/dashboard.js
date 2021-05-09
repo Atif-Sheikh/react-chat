@@ -5,7 +5,6 @@ import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
     MainContainer,
     Sidebar,
-    ExpansionPanel,
 } from "@chatscope/chat-ui-kit-react";
 import firebase from "firebase/app";
 import { useDispatch } from 'react-redux';
@@ -14,7 +13,6 @@ import {
     Route,
     useRouteMatch,
 } from "react-router-dom";
-import { Button } from "@chakra-ui/react";
 
 import Conversations from '../../components/ConversationList/conversationList';
 import EmptyContainer from '../../components/EmptyContainer.js/emptyContainer';
@@ -24,6 +22,7 @@ import AddGroup from '../../components/AddGroup/addGroup';
 import UserProfile from '../../components/UserProfile/userProfile';
 import SearchField from '../../components/SearchField/searchField';
 import ChatSection from '../../components/ChatSelection/chatSelection';
+import GroupProfileSection from '../../components/GroupProfileSection/groupProfileSection';
 
 import './dashboard.css';
 
@@ -57,11 +56,6 @@ const Dashboard = ({ history }) => {
         }
     };
 
-    const handleLogout = async () => {
-        await firebase.auth().signOut();
-        history.push('/');
-    };
-
     const updateOnlineStatus = () => {
         if (user) {
             firebase.database().ref('.info/connected').on('value', snapshot => {
@@ -81,7 +75,7 @@ const Dashboard = ({ history }) => {
         }}>
             <MainContainer responsive>
                 <Sidebar position="left" scrollable={false}>
-                    <UserProfile />
+                    <UserProfile history={history} />
                     <SearchField />
                     <ChatSection handleOpenModal={() => setOpenGroup(true)} />
                     <Conversations />
@@ -103,35 +97,15 @@ const Dashboard = ({ history }) => {
                 </Switch>
 
                 <Sidebar position="right">
-                    <ExpansionPanel title="INFO">
-                        <Button colorScheme="blue" onClick={handleLogout}>
-                            Logout
-                        </Button>
-                    </ExpansionPanel>
-                    <ExpansionPanel title="LOCALIZATION">
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                    </ExpansionPanel>
-                    <ExpansionPanel title="MEDIA">
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                    </ExpansionPanel>
-                    <ExpansionPanel title="SURVEY">
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                    </ExpansionPanel>
-                    <ExpansionPanel title="OPTIONS">
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                        <p>Lorem ipsum</p>
-                    </ExpansionPanel>
+                    <Switch>
+                        <Route exact path={`${path}/:chatID`}>
+                            {/* // Todo: It will change to specific user  */}
+                            <GroupProfileSection />
+                        </Route>
+                        <Route exact path={`${path}/room/:roomID`}>
+                            <GroupProfileSection />
+                        </Route>
+                    </Switch>
                 </Sidebar>
             </MainContainer>
             { openGroup && <AddGroup isOpen={openGroup} handleModalClose={() => setOpenGroup(false)} />}

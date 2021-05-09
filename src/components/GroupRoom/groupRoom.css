@@ -1,0 +1,45 @@
+
+
+.cs-message-list {
+    background-color: #EFF2F5;
+}
+
+.chatListContainer {
+    overscroll-behavior-y: none;
+    overflow-anchor: auto;
+    touch-action: none;
+    position: relative;
+    height: 80%;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 0 0.8em 0 0.8em;
+    word-wrap: break-word;
+}
+
+.chatContainer .cs-conversation-header {
+    background-color: transparent;
+}
+
+.chatContainer .cs-conversation-header__user-name {
+    background-color: transparent;
+}
+
+.chatContainer .cs-conversation-header__info {
+    background-color: transparent;
+}
+
+.chatListDivider {
+    background-color: #E8EAEB;
+    height: 1.2px;
+    margin-bottom: 10px;
+}
+
+.chatListContainer .sender .cs-message__content {
+    background-color: #D6D9E7;
+    color: #545A70;
+}
+
+.chatListContainer .receiver .cs-message__content {
+    color: #636879;
+    background-color: #fff;
+}
