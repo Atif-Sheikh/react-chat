@@ -2,6 +2,8 @@
 const initState = {
     user: null,
     allUsers: null,
+
+    userGroups: null,
 };
 
 //Define Actions
@@ -19,6 +21,12 @@ const userReducer = (state = initState, action) => {
                 ...state,
                 allUsers: action.payload,
             };
+
+        case 'ALL_GROUPS':
+            return {
+                ...state,
+                userGroups: action.payload,
+            }
 
         case 'LOGOUT':
             return {

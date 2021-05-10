@@ -32,6 +32,10 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
                 creatorID: currentUser.uid,
                 creatorName: currentUser.displayName || 'New User',
             });
+            await firebase.database().ref(`/groups/${groupName}/members/${currentUser.uid}`).set({
+                memberName: currentUser.displayName || 'New User',
+                uid: currentUser.uid,
+            });
             handleModalClose();
             toast({
                 position: "top",
