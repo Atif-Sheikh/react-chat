@@ -53,7 +53,6 @@ const Conversations = () => {
     const getGroupsList = async () => {
         if (currentUser) {
             firebase.database().ref('/groups').on('value', (snap) => {
-                console.log(snap.val());    
                 let filtered = snap.val() ? Object.values(snap.val()) : [];
                 let joinedGroups = [];
                 filtered.forEach(group => {
