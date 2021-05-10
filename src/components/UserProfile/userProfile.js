@@ -14,7 +14,7 @@ const UserProfile = ({ history }) => {
 
     const handleLogout = async () => {
         await firebase.auth().signOut();
-        history.push('/');
+        history.replace('/login');
     };
 
     return (
