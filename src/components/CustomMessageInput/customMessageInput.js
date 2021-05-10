@@ -13,7 +13,7 @@ const CustomMessageInput = ({ placeholder, onChangeHandler, onSend, value }) => 
                 <div className="messageInputIcons">
                     <ImSmile2 className="messageInputIcon" />
                     <HiOutlinePaperClip className="messageInputIcon" />
-                    <button type="submit" className="sendMessage">
+                    <button type="submit" className={Boolean(value.trim()) ? "sendMessage" : "sendMessageDisabled"}>
                         <RiSendPlaneFill />
                     </button>
                 </div>
