@@ -18,7 +18,7 @@ const ChatItem = ({ usr: { name, lastMessage, lastSender, status, img, uid } }) 
     return (
         <NavLink className="chatConversation" activeClassName="activeRightNav" to={{ pathname: `${url}/${uid}`, state: { name, lastMessage, lastSender, status, img, uid } }}>
             <Conversation name={name} lastActivityTime="43 min" info="Hi">
-                <Avatar src={img ? img : iconUrl} name={"name"} />
+                <Avatar src={img ? `${img}` : iconUrl} name={name} />
             </Conversation>
         </NavLink>
     );
