@@ -11,7 +11,8 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import {
     NavLink,
-    useRouteMatch
+    useRouteMatch,
+    useHistory,
 } from "react-router-dom";
 
 import ChatItem from '../Conversation/conversation';
@@ -23,6 +24,7 @@ const Conversations = () => {
     const usersList = useSelector(state => state.user.allUsers);
     const currentUser = useSelector(state => state.user.user);
     const [users, setUsers] = useState(null);
+    const history = useHistory();
 
     useEffect(() => {
         getUserList();
@@ -39,6 +41,12 @@ const Conversations = () => {
         let users = await firebase.database().ref('/users').once('value');
         let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr.uid, status: usr.status || 'unavailable', img: usr.img || '' })) : [];
         dispatch({ type: "ALL_USERS", payload: filteredUsers });
+        if (filteredUsers?.length) {
+            history.push({
+                pathname: `${url}/${filteredUsers[0].uid}`,
+                state: filteredUsers[0],
+            });
+        }
     };
 
     return (

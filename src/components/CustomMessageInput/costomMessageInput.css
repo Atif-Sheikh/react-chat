@@ -24,6 +24,16 @@
     height: 40px;
 }
 
+.messageInputIcons .sendMessageDisabled {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #00ae9486;
+    cursor: pointer;
+}
+
 .messageInputIcons .sendMessage {
     padding: 12px;
     display: flex;
@@ -47,7 +57,7 @@
     background-color: #039781;
 }
 
-.messageInputIcons .sendMessage svg {
+.messageInputIcons svg {
     color: #fff;
 }
 
