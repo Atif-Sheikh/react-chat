@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, AvatarBadge } from "@chakra-ui/react";
 import { BsChevronDown } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { BiChevronLeft } from 'react-icons/bi';
 import { Divider } from "@chakra-ui/react";
 import { AiTwotoneSetting } from 'react-icons/ai';
@@ -11,10 +11,20 @@ import './userProfile.css';
 
 const UserProfile = ({ history }) => {
     const { user } = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
     const handleLogout = async () => {
-        await firebase.auth().signOut();
-        history.replace('/login');
+        try {
+            await firebase.auth().signOut().then(() => {
+                dispatch({ type: "LOGOUT", payload: null });
+                history.replace('/login');
+            })
+                .catch(err => {
+                    throw err;
+                });
+        } catch (err) {
+            console.log(err)
+        }
     };
 
     return (
