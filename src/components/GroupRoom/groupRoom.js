@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
     useRouteMatch,
     NavLink,
+    useParams,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
 
@@ -12,15 +13,14 @@ import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 const GroupRoom = () => {
     const [currentMsg, setCurrentMsg] = useState('');
     const { url } = useRouteMatch();
+    const { roomID } = useParams();
 
     // const user = firebase.auth().currentUser; //useSelector(state => state.user);
-
     // const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
-    console.log(url, ">>>")
     return (
         <EmptyContainer>
 
-            <CustomChatHeader />
+            <CustomChatHeader user={{ name: roomID }} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/ramadan` }}>
