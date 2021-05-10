@@ -41,7 +41,7 @@ const Conversations = () => {
         let users = await firebase.database().ref('/users').once('value');
         let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr.uid, status: usr.status || 'unavailable', img: usr.img || '' })) : [];
         dispatch({ type: "ALL_USERS", payload: filteredUsers });
-        if (filteredUsers?.length) {
+        if (filteredUsers?.length && currentUser) {
             history.push({
                 pathname: `${url}/${filteredUsers[0].uid}`,
                 state: filteredUsers[0],
