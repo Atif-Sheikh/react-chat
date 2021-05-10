@@ -22,15 +22,12 @@ const Conversations = () => {
     const dispatch = useDispatch();
     const { url } = useRouteMatch();
     const usersList = useSelector(state => state.user.allUsers);
-    const currentUser = useSelector(state => state.user.user);
+    const currentUser = firebase.auth().currentUser;
     const [users, setUsers] = useState(null);
     const history = useHistory();
 
     useEffect(() => {
         getUserList();
-        return () => {
-            getUserList();
-        }
     }, []);
 
     useEffect(() => {
@@ -38,14 +35,16 @@ const Conversations = () => {
     }, [currentUser, currentUser?.uid, usersList]);
 
     const getUserList = async () => {
-        let users = await firebase.database().ref('/users').once('value');
-        let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr.uid, status: usr.status || 'unavailable', img: usr.img || '' })) : [];
-        dispatch({ type: "ALL_USERS", payload: filteredUsers });
-        if (filteredUsers?.length && currentUser) {
-            history.push({
-                pathname: `${url}/${filteredUsers[0].uid}`,
-                state: filteredUsers[0],
-            });
+        if(currentUser) {
+            let users = await firebase.database().ref('/users').once('value');
+            let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
+            dispatch({ type: "ALL_USERS", payload: filteredUsers });
+            if (filteredUsers?.length && currentUser) {
+                history.push({
+                    pathname: `${url}/${filteredUsers[0].uid}`,
+                    state: filteredUsers[0],
+                });
+            }
         }
     };
 
