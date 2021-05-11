@@ -43,16 +43,3 @@
     color: #636879;
     background-color: #fff;
 }
-
-.selectTopic {
-    text-align: center;
-    background: #00ae9486;
-    padding: 10px 5px;
-    border-radius: 5px;
-    color: #fff;
-}
-
-.tagContainer { 
-    display: flex;
-    padding: 10px 2px;
-}

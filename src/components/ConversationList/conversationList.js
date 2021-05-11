@@ -56,10 +56,11 @@ const Conversations = () => {
                 let filtered = snap.val() ? Object.values(snap.val()) : [];
                 let joinedGroups = [];
                 filtered.forEach(group => {
-                    let groupsUsers = group.members ? Object.keys(group.members) : [];
-                    if (groupsUsers.includes(currentUser.uid)) {
-                        joinedGroups.push(group);
-                    }
+                    // let groupsUsers = group.members ? Object.keys(group.members) : [];
+                    // Filterd groups by specific user 
+                    // if (groupsUsers.includes(currentUser.uid)) {
+                    joinedGroups.push(group);
+                    // }
                 });
                 dispatch({ type: "ALL_GROUPS", payload: joinedGroups });
             });
