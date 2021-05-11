@@ -27,7 +27,7 @@ const Conversations = () => {
     const currentUser = useSelector(state => state.user.user);
     const [users, setUsers] = useState(null);
     const history = useHistory();
-    const { roomID } = useParams();
+    const { roomID, topic } = useParams();
 
     useEffect(() => {
         getUserList();
@@ -43,7 +43,8 @@ const Conversations = () => {
             let users = await firebase.database().ref('/users').once('value');
             let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
             dispatch({ type: "ALL_USERS", payload: filteredUsers });
-            if (filteredUsers?.length && !roomID) {
+            if (filteredUsers?.length && !roomID && !topic) {
+                console.log("CHALAAAA", roomID, topic);
                 history.push({
                     pathname: `${url}/${filteredUsers[0].uid}`,
                     state: filteredUsers[0],
