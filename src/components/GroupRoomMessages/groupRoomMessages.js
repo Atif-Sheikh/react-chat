@@ -33,7 +33,7 @@ const GroupRoomMessage = () => {
     const fetchGroupMessages = async () => {
         setLoader(true);
         if (currentUser) {
-            firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).on('value', (snap) => {
+            firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).orderByChild('time').on('value', (snap) => {
                 let dbMsgs = snap.val() ? Object.values(snap.val()).map(msg => ({
                     message: msg.msg,
                     sentTime: "15 mins ago",

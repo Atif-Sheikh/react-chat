@@ -48,12 +48,17 @@ const GroupRoom = () => {
         fetchGroupEntry();
     };
 
+    const handleLeaveGroup = async () => {
+        await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).remove();
+        fetchGroupEntry();
+    };
+
     // const user = firebase.auth().currentUser; //useSelector(state => state.user);
     // const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
     return (
         <EmptyContainer>
 
-            <CustomChatHeader user={{ name: roomID }} />
+            <CustomChatHeader showLeaveBtn={isJoined} handleLeaveGroup={handleLeaveGroup} user={{ name: roomID }} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 {
