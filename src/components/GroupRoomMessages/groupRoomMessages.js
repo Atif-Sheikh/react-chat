@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
     useParams,
-    useRouteMatch,
     useHistory,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
@@ -28,7 +28,6 @@ const GroupRoomMessage = () => {
     const [messages, setMessages] = useState(null);
     const currentUser = useSelector(state => state.user.user);
     const { roomID, topic } = useParams();
-    const { url } = useRouteMatch();
     const history = useHistory();
 
     useEffect(() => {
