@@ -10,13 +10,11 @@ import { useSelector } from 'react-redux';
 
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
-import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 import JoinButton from '../JoinButton/joinButton';
 
 import './groupRoom.css';
 
 const GroupRoom = () => {
-    const [currentMsg, setCurrentMsg] = useState('');
     const [isJoined, setIsJoined] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [groupTopics, setGroupTopics] = useState([]);

@@ -28,21 +28,23 @@ const GroupRoomMessage = () => {
 
     useEffect(() => {
         fetchGroupMessages();
-    }, [roomID, topic]);
+    }, [roomID, topic, currentUser]);
 
     const fetchGroupMessages = async () => {
         setLoader(true);
-        firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).on('value', (snap) => {
-            let dbMsgs = snap.val() ? Object.values(snap.val()).map(msg => ({
-                message: msg.msg,
-                sentTime: "15 mins ago",
-                sender: currentUser.uid,
-                direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
-                position: currentUser.uid === msg.senderId ? "last" : "single",
-                img: msg.img,
-            })) : [];
-            setMessages(dbMsgs);
-        });
+        if (currentUser) {
+            firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).on('value', (snap) => {
+                let dbMsgs = snap.val() ? Object.values(snap.val()).map(msg => ({
+                    message: msg.msg,
+                    sentTime: "15 mins ago",
+                    sender: currentUser.uid,
+                    direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
+                    position: currentUser.uid === msg.senderId ? "last" : "single",
+                    img: msg.img,
+                })) : [];
+                setMessages(dbMsgs);
+            });
+        }
         setLoader(false);
     };
 
