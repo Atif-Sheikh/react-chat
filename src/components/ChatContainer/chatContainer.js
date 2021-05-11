@@ -64,8 +64,8 @@ const ChatRoom = () => {
                     message: msg.msg,
                     sentTime: "15 mins ago",
                     sender: currentUser.uid,
-                    direction: chatID === msg.reciverId ? "incoming" : "outgoing",
-                    position: chatID === msg.reciverId ? "single" : "last",
+                    direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
+                    position: currentUser.uid === msg.senderId ? "last" : "single",
                     img: msg.img,
                 })) : [];
                 setAllMsgs(msgs);
@@ -115,10 +115,10 @@ const ChatRoom = () => {
             path = path.split('').sort().join('');
             await firebase.database().ref(`/chatMessages/${path}`).push({
                 msg: currentMsg,
-                senderId: chatID,
+                senderId: currentUser.uid,
                 name: user?.name,
                 img: user.img || iconUrl,
-                reciverId: currentUser.uid,
+                reciverId: chatID,
                 time: Date.now(),
             });
             setCurrentMsg('');
