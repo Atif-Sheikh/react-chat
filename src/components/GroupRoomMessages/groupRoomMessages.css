@@ -9,7 +9,7 @@
     overflow-anchor: auto;
     touch-action: none;
     position: relative;
-    height: 80%;
+    height: 75%;
     box-sizing: border-box;
     overflow: hidden;
     padding: 0 0.8em 0 0.8em;
@@ -56,4 +56,8 @@
 
 .backIcon svg {
     color: #b1b1b1;
+}
+
+.typingIndicaiton {
+    margin-left: 20px;
 }

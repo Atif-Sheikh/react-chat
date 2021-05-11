@@ -10,8 +10,10 @@ import { useSelector } from 'react-redux';
 import {
     Message,
     Avatar,
+    TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import { IoMdArrowBack } from 'react-icons/io';
+import debounce from "lodash/debounce";
 
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
@@ -26,13 +28,26 @@ const GroupRoomMessage = () => {
     const [currentMsg, setCurrentMsg] = useState('');
     const [loader, setLoader] = useState(false);
     const [messages, setMessages] = useState(null);
+    const [typingContent, setTypingContent] = useState('');
     const currentUser = useSelector(state => state.user.user);
     const { roomID, topic } = useParams();
     const history = useHistory();
 
     useEffect(() => {
         fetchGroupMessages();
+        addGroupTypingListener();
     }, [roomID, topic, currentUser]);
+
+    const addGroupTypingListener = () => {
+        firebase.database().ref(`/chatTypings/${roomID}/${topic}`).on('value', snap => {
+            if (snap.val()) {
+                let users = Object.keys(snap.val()).filter(name => name !== currentUser.name);
+                users.length > 1 && setTypingContent(`${users.join('')}`);
+            } else {
+                setTypingContent('');
+            }
+        });
+    };
 
     const fetchGroupMessages = async () => {
         let firebaseRef = null;
@@ -55,6 +70,18 @@ const GroupRoomMessage = () => {
         return firebaseRef;
     };
 
+    const handleChangeMessage = async ({ target: { value } }) => {
+        setCurrentMsg(value);
+        firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).set({
+            name: currentUser.name
+        });
+        handleTypingStop();
+    };
+
+    const handleTypingStop = debounce(function () {
+        firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).remove();
+    }, 1000);
+
     const sendGroupMessage = async (e) => {
         e.preventDefault();
         if (currentMsg?.trim()) {
@@ -70,7 +97,7 @@ const GroupRoomMessage = () => {
     };
 
     const goBackToTopics = () => {
-        history.push(`/dashboard/room/${roomID}`)
+        history.push(`/dashboard/room/${roomID}`);
     };
 
     return (
@@ -102,7 +129,8 @@ const GroupRoomMessage = () => {
                         })
                 }
             </div>
-            <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={({ target: { value } }) => setCurrentMsg(value)} onSend={sendGroupMessage} />
+            {typingContent && <TypingIndicator className="typingIndicaiton" content={`${typingContent} typing...`} />}
+            <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={handleChangeMessage} onSend={sendGroupMessage} />
         </EmptyContainer>
     );
 };
