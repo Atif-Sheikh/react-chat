@@ -27,8 +27,29 @@
     padding: 4px 10px;
     background: #C6EBE5;
     max-width: 105px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
+    margin-right: 10px;
+}
+
+.leaveGroup {
+    display: flex;
+    padding-top: 10px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 4px 10px;
+    background: #ec00629e;
+    max-width: 105px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.leaveGroup:hover {
+    background: #ec0062be;
 }
 
 .messageBtn:hover {
@@ -51,7 +72,7 @@
     font-size: 15px;
     padding: 4px 10px;
     max-width: 105px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
