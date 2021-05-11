@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
     useParams,
+    useRouteMatch,
+    useHistory,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
 import firebase from 'firebase/app';
@@ -9,6 +11,7 @@ import {
     Message,
     Avatar,
 } from "@chatscope/chat-ui-kit-react";
+import { IoMdArrowBack } from 'react-icons/io';
 
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
@@ -25,15 +28,18 @@ const GroupRoomMessage = () => {
     const [messages, setMessages] = useState(null);
     const currentUser = useSelector(state => state.user.user);
     const { roomID, topic } = useParams();
+    const { url } = useRouteMatch();
+    const history = useHistory();
 
     useEffect(() => {
         fetchGroupMessages();
     }, [roomID, topic, currentUser]);
 
     const fetchGroupMessages = async () => {
+        let firebaseRef = null;
         setLoader(true);
         if (currentUser) {
-            firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).orderByChild('time').on('value', (snap) => {
+            firebaseRef = firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).orderByChild('time').on('value', (snap) => {
                 let dbMsgs = snap.val() ? Object.values(snap.val()).map(msg => ({
                     message: msg.msg,
                     sentTime: "15 mins ago",
@@ -46,6 +52,8 @@ const GroupRoomMessage = () => {
             });
         }
         setLoader(false);
+
+        return firebaseRef;
     };
 
     const sendGroupMessage = async (e) => {
@@ -62,12 +70,17 @@ const GroupRoomMessage = () => {
         setCurrentMsg('');
     };
 
+    const goBackToTopics = () => {
+        history.push(`/dashboard/room/${roomID}`)
+    };
+
     return (
         <EmptyContainer>
 
             <CustomChatHeader user={{ name: roomID }} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
+                <div onClick={goBackToTopics} className="backIcon"><IoMdArrowBack size={20} /></div>
                 {
                     loader
                         ?
