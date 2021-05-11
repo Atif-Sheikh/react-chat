@@ -23,6 +23,7 @@ import UserProfile from '../../components/UserProfile/userProfile';
 import SearchField from '../../components/SearchField/searchField';
 import ChatSection from '../../components/ChatSelection/chatSelection';
 import GroupProfileSection from '../../components/GroupProfileSection/groupProfileSection';
+import GroupRoomMessages from '../../components/GroupRoomMessages/groupRoomMessages';
 
 import './dashboard.css';
 
@@ -93,7 +94,7 @@ const Dashboard = ({ history }) => {
                         <GroupRoom />
                     </Route>
                     <Route path={`${path}/room/:roomID/:topic`}>
-                        <EmptyContainer />
+                        <GroupRoomMessages />
                     </Route>
                 </Switch>
 
@@ -103,7 +104,7 @@ const Dashboard = ({ history }) => {
                             {/* // Todo: It will change to specific user  */}
                             <GroupProfileSection />
                         </Route>
-                        <Route exact path={`${path}/room/:roomID`}>
+                        <Route path={`${path}/room/:roomID`}>
                             <GroupProfileSection />
                         </Route>
                     </Switch>
