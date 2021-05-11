@@ -31,13 +31,14 @@ const GroupRoom = () => {
         setIsLoading(true);
         let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
         let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
-        let topics = dbData.val().topics;
+        let topics = dbData.val() ? dbData.val().topics : [];
         if (currentUser && memberIDs.includes(currentUser.uid)) {
             setIsJoined(true);
+            setGroupTopics(topics);
         } else {
+            setGroupTopics([]);
             setIsJoined(false);
         }
-        setGroupTopics(topics);
         setIsLoading(false);
     };
 
