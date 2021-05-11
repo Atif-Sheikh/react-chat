@@ -42,7 +42,7 @@ const GroupRoomMessage = () => {
         firebase.database().ref(`/chatTypings/${roomID}/${topic}`).on('value', snap => {
             if (snap.val()) {
                 let users = Object.keys(snap.val()).filter(name => name !== currentUser.name);
-                users.length > 1 && setTypingContent(`${users.join('')}`);
+                users.length > 0 && setTypingContent(`${users.join('')}`);
             } else {
                 setTypingContent('');
             }
