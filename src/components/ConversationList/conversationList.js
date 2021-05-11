@@ -44,7 +44,6 @@ const Conversations = () => {
             let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
             dispatch({ type: "ALL_USERS", payload: filteredUsers });
             if (filteredUsers?.length && !roomID && !topic) {
-                console.log("CHALAAAA", roomID, topic);
                 history.push({
                     pathname: `${url}/${filteredUsers[0].uid}`,
                     state: filteredUsers[0],
@@ -79,8 +78,8 @@ const Conversations = () => {
             }
 
             {
-                groupList?.map(group => (
-                    <NavLink activeClassName="activeRightNav" to={{ pathname: `${url}/room/${group.groupName}` }}>
+                groupList?.map((group, ind) => (
+                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `${url}/room/${group.groupName}` }}>
                         <Conversation name={group.groupName} lastSenderName="Emily" info="Yes i can do it for you">
                             <Avatar src={iconUrl} name="Emily" />
                         </Conversation>
