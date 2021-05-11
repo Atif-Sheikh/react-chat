@@ -38,8 +38,8 @@ const Dashboard = ({ history }) => {
     const { user } = data;
 
     useEffect(() => {
-        updateOnlineStatus();
         setUser();
+        updateOnlineStatus();
         return () => {
             updateOnlineStatus();
         }
