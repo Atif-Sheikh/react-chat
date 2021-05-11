@@ -42,10 +42,10 @@ const Conversations = () => {
             let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
             dispatch({ type: "ALL_USERS", payload: filteredUsers });
             if (filteredUsers?.length) {
-                history.push({
-                    pathname: `${url}/${filteredUsers[0].uid}`,
-                    state: filteredUsers[0],
-                });
+                // history.push({
+                //     pathname: `${url}/${filteredUsers[0].uid}`,
+                //     state: filteredUsers[0],
+                // });
             }
         }
     };
