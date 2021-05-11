@@ -80,7 +80,7 @@ const GroupRoomMessage = () => {
 
     const handleTypingStop = debounce(function () {
         firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).remove();
-    }, 1000);
+    }, 1500);
 
     const sendGroupMessage = async (e) => {
         e.preventDefault();
@@ -129,7 +129,9 @@ const GroupRoomMessage = () => {
                         })
                 }
             </div>
-            {typingContent && <TypingIndicator className="typingIndicaiton" content={`${typingContent} typing...`} />}
+            <div className="typingIndicaiton">
+                {typingContent && <TypingIndicator content={`${typingContent} typing...`} />}
+            </div>
             <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={handleChangeMessage} onSend={sendGroupMessage} />
         </EmptyContainer>
     );

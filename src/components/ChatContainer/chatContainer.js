@@ -3,12 +3,15 @@ import React, { useEffect, useState } from 'react';
 import {
     Message,
     Avatar,
+    TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import {
     useParams
 } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import firebase from "firebase/app";
 import { Divider } from '@chakra-ui/react';
+import debounce from "lodash/debounce";
 
 import Loader from '../Loader/loader';
 import CustomMessageInput from '../CustomMessageInput/customMessageInput';
@@ -22,8 +25,9 @@ const ChatRoom = () => {
     const [currentMsg, setCurrentMsg] = useState('');
     const [allMsgs, setAllMsgs] = useState([]);
     const [loader, setLoader] = useState(false);
+    const [typingContent, setTypingContent] = useState('');
     const { chatID } = useParams();
-    const currentUser = firebase.auth().currentUser; //useSelector(state => state.user);
+    const currentUser = useSelector(state => state.user.user);
 
     const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
@@ -33,6 +37,22 @@ const ChatRoom = () => {
             setUser(user.val());
         }
     };
+
+    const handleChangeMessage = async ({ target: { value } }) => {
+        let path = currentUser.uid + chatID;
+        path = path.split('').sort().join('');
+        setCurrentMsg(value);
+        firebase.database().ref(`/chatTypings/${path}/${currentUser.name}`).set({
+            name: currentUser.name
+        });
+        handleTypingStop();
+    };
+
+    const handleTypingStop = debounce(function () {
+        let path = currentUser.uid + chatID;
+        path = path.split('').sort().join('');
+        firebase.database().ref(`/chatTypings/${path}/${currentUser.name}`).remove();
+    }, 1500);
 
     const fetchMessages = async () => {
         try {
@@ -57,11 +77,26 @@ const ChatRoom = () => {
         }
     };
 
+    const addChatTypingListener = () => {
+        let path = currentUser.uid + chatID;
+        path = path.split('').sort().join('');
+        firebase.database().ref(`/chatTypings/${path}`).on('value', snap => {
+            if (snap.val()) {
+                let users = Object.keys(snap.val()).filter(name => name !== currentUser.name);
+                users.length > 0 && setTypingContent(`${users.join('')}`);
+            } else {
+                setTypingContent('');
+            }
+        });
+    };
+
     useEffect(() => {
         setAllMsgs([]);
         getUser();
+        addChatTypingListener();
         return () => {
             getUser();
+            addChatTypingListener()
         }
     }, [chatID]);
 
@@ -122,9 +157,11 @@ const ChatRoom = () => {
                         })
                 }
 
-
             </div>
-            <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={({ target: { value } }) => setCurrentMsg(value)} onSend={handleSendMsg} />
+            <div className="typingIndicaiton">
+                {typingContent && <TypingIndicator content={`${typingContent} typing...`} />}
+            </div>
+            <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={handleChangeMessage} onSend={handleSendMsg} />
         </EmptyContainer>
     )
 }
