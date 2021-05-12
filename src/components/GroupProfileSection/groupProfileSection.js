@@ -16,6 +16,8 @@ import FileThumbnail from '../FileThumbnail/fileThumbnail';
 import FileList from '../FileList/fileList';
 import './groupProfile.css';
 
+const groupIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
+
 const GroupProfileSection = () => {
     const [groupDetails, setGroupsDetails] = useState(null);
     const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
@@ -66,10 +68,10 @@ const GroupProfileSection = () => {
                     ?
                     <>
                         <Divider className="chatHeaderDivider" orientation="horizontal" />
-                        <Avatar name="Dan Abrahmov" size="lg" src={"https://e7.pngegg.com/pngimages/447/166/png-clipart-house-real-estate-property-bank-house-building-grass.png"} />
+                        <Avatar name="Dan Abrahmov" size="lg" src={groupIcon} />
                         <p className="groupName">
                             {groupDetails?.groupName}
-                    </p>
+                        </p>
                         <div className="membersCount">
                             {groupDetails?.members.length || 0} Members
                     </div>
