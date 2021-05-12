@@ -15,15 +15,14 @@ import {
 } from "react-router-dom";
 
 import Conversations from '../../components/ConversationList/conversationList';
-import EmptyContainer from '../../components/EmptyContainer.js/emptyContainer';
 import ChatRoom from '../../components/ChatContainer/chatContainer';
-import GroupRoom from '../../components/GroupRoom/groupRoom';
 import AddGroup from '../../components/AddGroup/addGroup';
 import UserProfile from '../../components/UserProfile/userProfile';
 import SearchField from '../../components/SearchField/searchField';
 import ChatSection from '../../components/ChatSelection/chatSelection';
 import GroupProfileSection from '../../components/GroupProfileSection/groupProfileSection';
 import GroupRoomMessages from '../../components/GroupRoomMessages/groupRoomMessages';
+import GroupRoomTopics from '../../components/GroupRoomTopics/groupRoomTopics';
 
 import './dashboard.css';
 
@@ -80,21 +79,28 @@ const Dashboard = ({ history }) => {
                     <UserProfile history={history} />
                     <SearchField />
                     <ChatSection handleOpenModal={() => setOpenGroup(true)} />
-                    <Conversations />
+                    <Switch>
+                        <Route exact path={path}>
+                            <Conversations />
+                        </Route>
+                        <Route exact path={`${path}/:chatID`}>
+                            <Conversations />
+                        </Route>
+                        <Route exact path={`${path}/room/:roomID`}>
+                            <GroupRoomTopics />
+                        </Route>
+                        <Route exact path={`${path}/room/:roomID/:topic`}>
+                            <GroupRoomTopics />
+                        </Route>
+                    </Switch>
                 </Sidebar>
 
                 <Switch>
-                    <Route exact path={path}>
-                        <EmptyContainer />
-                    </Route>
-                    <Route exact path={`${path}/:chatID`}>
-                        <ChatRoom />
-                    </Route>
-                    <Route exact path={`${path}/room/:roomID`}>
-                        <GroupRoom />
-                    </Route>
-                    <Route path={`${path}/room/:roomID/:topic`}>
+                    <Route exact path={`${path}/room/:roomID/:topic`}>
                         <GroupRoomMessages />
+                    </Route>
+                    <Route path={`${path}/:chatID`}>
+                        <ChatRoom />
                     </Route>
                 </Switch>
 
