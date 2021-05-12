@@ -13,6 +13,9 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import { HiShare } from 'react-icons/hi';
 import debounce from "lodash/debounce";
+import {
+    WhatsappShareButton,
+} from "react-share";
 
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
@@ -85,7 +88,7 @@ const GroupRoomMessage = () => {
 
     useEffect(() => {
         fetchGroupEntry();
-    }, [roomID]);
+    }, [roomID, currentUser]);
 
     const joinGroup = async () => {
         if (!currentUser) return false;
@@ -122,17 +125,18 @@ const GroupRoomMessage = () => {
         setCurrentMsg('');
     };
 
-    const shareGroup = () => {
-
-    };
-
     return (
         <EmptyContainer>
 
             <CustomChatHeader user={{ name: roomID }} topic={topic} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
-                <div onClick={shareGroup} className="backIcon"><HiShare size={20} /></div>
+                <WhatsappShareButton
+                    url={"www.google.com"}
+                    title={'title'}
+                >
+                    <div className="backIconTopics"><HiShare color="#9a9a9a" size={20} /></div>
+                </WhatsappShareButton>
                 {
                     loader
                         ?
