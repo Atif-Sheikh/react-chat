@@ -23,6 +23,7 @@ import ChatSection from '../../components/ChatSelection/chatSelection';
 import GroupProfileSection from '../../components/GroupProfileSection/groupProfileSection';
 import GroupRoomMessages from '../../components/GroupRoomMessages/groupRoomMessages';
 import GroupRoomTopics from '../../components/GroupRoomTopics/groupRoomTopics';
+import UserProfileSection from '../../components/UserProfileSection/userProfileSection';
 
 import './dashboard.css';
 
@@ -107,8 +108,7 @@ const Dashboard = ({ history }) => {
                 <Sidebar position="right">
                     <Switch>
                         <Route exact path={`${path}/:chatID`}>
-                            {/* // Todo: It will change to specific user  */}
-                            <GroupProfileSection />
+                            <UserProfileSection />
                         </Route>
                         <Route path={`${path}/room/:roomID`}>
                             <GroupProfileSection />
