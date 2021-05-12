@@ -111,6 +111,11 @@ const GroupRoomMessage = () => {
         setIsLoading(false);
     };
 
+    const handleLeaveGroup = async () => {
+        await firebase.database().ref(`groups/${roomID}/members/${currentUser?.uid}`).remove();
+        fetchGroupEntry();
+    };
+
     const sendGroupMessage = async (e) => {
         e.preventDefault();
         if (currentMsg?.trim()) {
@@ -128,7 +133,7 @@ const GroupRoomMessage = () => {
     return (
         <EmptyContainer>
 
-            <CustomChatHeader user={{ name: roomID }} topic={topic} />
+            <CustomChatHeader showLeaveBtn={isJoined} handleLeaveGroup={handleLeaveGroup} user={{ name: roomID }} topic={topic} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 <WhatsappShareButton
