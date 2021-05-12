@@ -46,6 +46,7 @@ const GroupRoom = () => {
         await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).set({
             memberName: currentUser.name || 'New User',
             uid: currentUser.uid,
+            img: currentUser?.img,
         });
         fetchGroupEntry();
     };

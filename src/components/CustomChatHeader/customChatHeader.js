@@ -2,7 +2,7 @@ import React from 'react';
 
 import './customChatHeader.css';
 
-const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '' }) => {
+const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '', handleParticipant = () => {} }) => {
     return (
         <div className="chatHeaderContainer">
             <h2 className="chatUsersName">
@@ -11,7 +11,7 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
             <div className="messageAndParticipants">
                 {showLeaveBtn && <div onClick={handleLeaveGroup} className="leaveGroup">Leave</div>}
                 <div className="messageBtn">Messages</div>
-                {showLeaveBtn && <div className="participants">Participants</div>}
+                {showLeaveBtn && <div onClick={() => handleParticipant(true)} className="participants">Participants</div>}
             </div>
         </div>
     )
