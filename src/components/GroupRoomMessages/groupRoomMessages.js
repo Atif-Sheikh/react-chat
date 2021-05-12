@@ -22,6 +22,7 @@ import CustomChatHeader from '../CustomChatHeader/customChatHeader';
 import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 import Loader from '../Loader/loader';
 import JoinButton from '../JoinButton/joinButton';
+import GroupParticipantsModal from '../GroupParticipants/groupParticipants';
 
 import './groupRoomMessages.css';
 
@@ -36,6 +37,7 @@ const GroupRoomMessage = () => {
     const { roomID, topic } = useParams();
     const [isJoined, setIsJoined] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [showParticipants, setShowParticipants] = useState(false);
 
     useEffect(() => {
         fetchGroupMessages();
@@ -95,6 +97,7 @@ const GroupRoomMessage = () => {
         await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).set({
             memberName: currentUser.name || 'New User',
             uid: currentUser.uid,
+            img: currentUser?.img,
         });
         fetchGroupEntry();
     };
@@ -109,6 +112,11 @@ const GroupRoomMessage = () => {
             setIsJoined(false);
         }
         setIsLoading(false);
+    };
+
+    const handleLeaveGroup = async () => {
+        await firebase.database().ref(`groups/${roomID}/members/${currentUser?.uid}`).remove();
+        fetchGroupEntry();
     };
 
     const sendGroupMessage = async (e) => {
@@ -128,7 +136,7 @@ const GroupRoomMessage = () => {
     return (
         <EmptyContainer>
 
-            <CustomChatHeader user={{ name: roomID }} topic={topic} />
+            <CustomChatHeader handleParticipant={setShowParticipants} showLeaveBtn={isJoined} handleLeaveGroup={handleLeaveGroup} user={{ name: roomID }} topic={topic} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 <WhatsappShareButton
@@ -173,6 +181,7 @@ const GroupRoomMessage = () => {
                         :
                         <JoinButton onPress={joinGroup} />
             }
+            { showParticipants && <GroupParticipantsModal roomID={roomID} isOpen={showParticipants} handleModalClose={() => setShowParticipants(false)} />}
         </EmptyContainer>
     );
 };

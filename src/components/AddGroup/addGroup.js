@@ -11,6 +11,7 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import firebase from 'firebase/app';
+import { useSelector } from 'react-redux';
 
 import InputField from '../inputField/inputField';
 import GroupTopicsInput from '../GroupTopicsInput/groupTopicsInput';
@@ -22,8 +23,8 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
     const [topics, setTopics] = useState([]);
     const [currentTopic, setCurrentTopic] = useState('');
     const toast = useToast();
-    const currentUser = firebase.auth().currentUser; //useSelector(state => state.user);
-
+    const currentUser = useSelector(state => state.user.user);
+    console.log(currentUser, ">>>")
     const addGroup = async () => {
         if (groupName.trim() && topics.length) {
             await firebase.database().ref(`/groups/${groupName}`).set({
@@ -35,6 +36,7 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
             await firebase.database().ref(`/groups/${groupName}/members/${currentUser.uid}`).set({
                 memberName: currentUser.displayName || 'New User',
                 uid: currentUser.uid,
+                img: currentUser?.img,
             });
             handleModalClose();
             toast({
