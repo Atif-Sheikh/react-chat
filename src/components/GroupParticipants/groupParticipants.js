@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
     Modal,
@@ -22,7 +23,7 @@ const GroupParticipantsModal = ({ isOpen, handleModalClose, roomID }) => {
 
     useEffect(() => {
         getParticipants();
-    }, []);
+    }, [roomID]);
 
     const getParticipants = async () => {
         let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
