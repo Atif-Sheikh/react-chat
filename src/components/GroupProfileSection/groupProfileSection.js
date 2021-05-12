@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import { Avatar } from "@chakra-ui/react";
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { Divider } from "@chakra-ui/react";
@@ -6,17 +7,37 @@ import { AiFillFolder, AiFillFile } from 'react-icons/ai';
 import { RiFolderShieldFill, RiMovieFill } from 'react-icons/ri';
 import { BsThreeDotsVertical, BsImageFill, BsFiles } from 'react-icons/bs';
 import { useSelector, useDispatch } from 'react-redux';
+import firebase from 'firebase/app';
+import {
+    useParams,
+} from "react-router-dom";
 
 import FileThumbnail from '../FileThumbnail/fileThumbnail';
 import FileList from '../FileList/fileList';
 import './groupProfile.css';
 
 const GroupProfileSection = () => {
+    const [groupDetails, setGroupsDetails] = useState(null);
     const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
     const dispatch = useDispatch();
+    const { roomID } = useParams();
 
     const handleSideDrawer = (bool) => {
         dispatch({ type: "RIGHT_PANEL", payload: bool });
+    };
+
+    useEffect(() => {
+        fetchGroupDetails();
+    }, [roomID]);
+
+    const fetchGroupDetails = async () => {
+        const group = await (await firebase.database().ref(`/groups/${roomID}`).once('value')).val();
+
+        if (group) {
+            let groupCopied = JSON.parse(JSON.stringify(group));
+            groupCopied.members = Object.values(groupCopied.members);
+            setGroupsDetails(groupCopied);
+        }
     };
 
     return (
@@ -47,10 +68,10 @@ const GroupProfileSection = () => {
                         <Divider className="chatHeaderDivider" orientation="horizontal" />
                         <Avatar name="Dan Abrahmov" size="lg" src={"https://e7.pngegg.com/pngimages/447/166/png-clipart-house-real-estate-property-bank-house-building-grass.png"} />
                         <p className="groupName">
-                            Real Estate
+                            {groupDetails?.groupName}
                     </p>
                         <div className="membersCount">
-                            10 Members
+                            {groupDetails?.members.length || 0} Members
                     </div>
                         <div className="filesCollage">
                             <FileThumbnail Icon={<AiFillFolder size={25} color="#00AE94" />} title="All files" count="231" color="#E3F6F4" textColor="#00AE94" />
