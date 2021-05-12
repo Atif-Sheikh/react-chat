@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import {
     useParams,
-    useHistory,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
 import firebase from 'firebase/app';
@@ -12,13 +11,17 @@ import {
     Avatar,
     TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
-import { IoMdArrowBack } from 'react-icons/io';
+import { HiShare } from 'react-icons/hi';
 import debounce from "lodash/debounce";
+import {
+    WhatsappShareButton,
+} from "react-share";
 
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
 import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 import Loader from '../Loader/loader';
+import JoinButton from '../JoinButton/joinButton';
 
 import './groupRoomMessages.css';
 
@@ -31,7 +34,8 @@ const GroupRoomMessage = () => {
     const [typingContent, setTypingContent] = useState('');
     const currentUser = useSelector(state => state.user.user);
     const { roomID, topic } = useParams();
-    const history = useHistory();
+    const [isJoined, setIsJoined] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchGroupMessages();
@@ -82,6 +86,31 @@ const GroupRoomMessage = () => {
         firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).remove();
     }, 1500);
 
+    useEffect(() => {
+        fetchGroupEntry();
+    }, [roomID, currentUser]);
+
+    const joinGroup = async () => {
+        if (!currentUser) return false;
+        await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).set({
+            memberName: currentUser.name || 'New User',
+            uid: currentUser.uid,
+        });
+        fetchGroupEntry();
+    };
+
+    const fetchGroupEntry = async () => {
+        setIsLoading(true);
+        let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
+        let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
+        if (currentUser && memberIDs.includes(currentUser.uid)) {
+            setIsJoined(true);
+        } else {
+            setIsJoined(false);
+        }
+        setIsLoading(false);
+    };
+
     const sendGroupMessage = async (e) => {
         e.preventDefault();
         if (currentMsg?.trim()) {
@@ -96,17 +125,18 @@ const GroupRoomMessage = () => {
         setCurrentMsg('');
     };
 
-    const goBackToTopics = () => {
-        history.push(`/dashboard/room/${roomID}`);
-    };
-
     return (
         <EmptyContainer>
 
             <CustomChatHeader user={{ name: roomID }} topic={topic} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
-                <div onClick={goBackToTopics} className="backIcon"><IoMdArrowBack size={20} /></div>
+                <WhatsappShareButton
+                    url={"www.google.com"}
+                    title={'title'}
+                >
+                    <div className="backIconTopics"><HiShare color="#9a9a9a" size={20} /></div>
+                </WhatsappShareButton>
                 {
                     loader
                         ?
@@ -130,9 +160,19 @@ const GroupRoomMessage = () => {
                 }
             </div>
             <div className="typingIndicaiton">
-                {typingContent && <TypingIndicator content={`${typingContent} typing...`} />}
+                {typingContent && isJoined && <TypingIndicator content={`${typingContent} typing...`} />}
             </div>
-            <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={handleChangeMessage} onSend={sendGroupMessage} />
+            {
+                isLoading
+                    ?
+                    null
+                    :
+                    isJoined
+                        ?
+                        <CustomMessageInput placeholder="Type message here" value={currentMsg} onChangeHandler={handleChangeMessage} onSend={sendGroupMessage} />
+                        :
+                        <JoinButton onPress={joinGroup} />
+            }
         </EmptyContainer>
     );
 };

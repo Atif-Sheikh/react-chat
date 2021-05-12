@@ -1,8 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import {
-    ConversationList,
-} from "@chatscope/chat-ui-kit-react";
 import firebase from "firebase/app";
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -17,6 +14,7 @@ import {
 } from "react-router-dom";
 
 import ChatItem from '../Conversation/conversation';
+import ListContainer from '../ListContainer/listContainer';
 
 const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
 const Conversations = () => {
@@ -70,7 +68,7 @@ const Conversations = () => {
     };
 
     return (
-        <ConversationList>
+        <ListContainer>
             {
                 users?.map((usr, ind) => (
                     <ChatItem key={ind} usr={usr} />
@@ -86,7 +84,7 @@ const Conversations = () => {
                     </NavLink>
                 ))
             }
-        </ConversationList>
+        </ListContainer>
     )
 }
 
