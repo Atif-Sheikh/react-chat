@@ -140,7 +140,7 @@ const GroupRoomMessage = () => {
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 <WhatsappShareButton
-                    url={"www.google.com"}
+                    url={window.location.href}
                     title={'title'}
                 >
                     <div className="backIconTopics"><HiShare color="#9a9a9a" size={20} /></div>
