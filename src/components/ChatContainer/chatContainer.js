@@ -78,16 +78,18 @@ const ChatRoom = () => {
     };
 
     const addChatTypingListener = () => {
-        let path = currentUser.uid + chatID;
-        path = path.split('').sort().join('');
-        firebase.database().ref(`/chatTypings/${path}`).on('value', snap => {
-            if (snap.val()) {
-                let users = Object.keys(snap.val()).filter(name => name !== currentUser.name);
-                users.length > 0 && setTypingContent(`${users.join('')}`);
-            } else {
-                setTypingContent('');
-            }
-        });
+        if(currentUser){
+            let path = currentUser.uid + chatID;
+            path = path.split('').sort().join('');
+            firebase.database().ref(`/chatTypings/${path}`).on('value', snap => {
+                if (snap.val()) {
+                    let users = Object.keys(snap.val()).filter(name => name !== currentUser.name);
+                    users.length > 0 && setTypingContent(`${users.join('')}`);
+                } else {
+                    setTypingContent('');
+                }
+            });
+        }
     };
 
     useEffect(() => {
@@ -106,7 +108,7 @@ const ChatRoom = () => {
         return () => {
             fetchMessages();
         }
-    }, [user]);
+    }, [user, currentUser]);
 
     const handleSendMsg = async (e) => {
         e.preventDefault();

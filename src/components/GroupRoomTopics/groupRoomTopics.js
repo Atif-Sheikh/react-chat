@@ -1,8 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import {
-    ConversationList,
-} from "@chatscope/chat-ui-kit-react";
 import firebase from "firebase/app";
 import {
     Conversation,
@@ -14,6 +11,8 @@ import {
     useHistory,
 } from "react-router-dom";
 import { IoMdArrowBack } from 'react-icons/io';
+
+import ListContainer from '../ListContainer/listContainer';
 
 import './groupTopics.css';
 
@@ -39,7 +38,7 @@ const GroupRoomTopics = () => {
     };
 
     return (
-        <ConversationList>
+        <ListContainer>
             <div onClick={goBackToTopics} className="backIconTopics"><IoMdArrowBack size={20} /></div>
             {
                 topics?.map((topic, ind) => (
@@ -50,7 +49,7 @@ const GroupRoomTopics = () => {
                     </NavLink>
                 ))
             }
-        </ConversationList>
+        </ListContainer>
     )
 }
 
