@@ -11,9 +11,9 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import {
     NavLink,
-    useRouteMatch,
     useParams,
     useHistory,
+    useRouteMatch,
 } from "react-router-dom";
 
 import ChatItem from '../Conversation/conversation';
@@ -21,13 +21,13 @@ import ChatItem from '../Conversation/conversation';
 const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
 const Conversations = () => {
     const dispatch = useDispatch();
-    const { url } = useRouteMatch();
     const usersList = useSelector(state => state.user.allUsers);
     const groupList = useSelector(state => state.user.userGroups);
     const currentUser = useSelector(state => state.user.user);
     const [users, setUsers] = useState(null);
     const history = useHistory();
-    const { roomID, topic } = useParams();
+    const { roomID, topic, chatID } = useParams();
+    const { url } = useRouteMatch();
 
     useEffect(() => {
         getUserList();
@@ -43,7 +43,7 @@ const Conversations = () => {
             let users = await firebase.database().ref('/users').once('value');
             let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
             dispatch({ type: "ALL_USERS", payload: filteredUsers });
-            if (filteredUsers?.length && !roomID && !topic) {
+            if (filteredUsers?.length && !roomID && !topic && !chatID) {
                 history.push({
                     pathname: `${url}/${filteredUsers[0].uid}`,
                     state: filteredUsers[0],
@@ -79,7 +79,7 @@ const Conversations = () => {
 
             {
                 groupList?.map((group, ind) => (
-                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `${url}/room/${group.groupName}` }}>
+                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${group.groupName}` }}>
                         <Conversation name={group.groupName} lastSenderName="Emily" info="Yes i can do it for you">
                             <Avatar src={iconUrl} name="Emily" />
                         </Conversation>

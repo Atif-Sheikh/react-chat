@@ -103,7 +103,7 @@ const GroupRoomMessage = () => {
     return (
         <EmptyContainer>
 
-            <CustomChatHeader user={{ name: roomID }} />
+            <CustomChatHeader user={{ name: roomID }} topic={topic} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 <div onClick={goBackToTopics} className="backIcon"><IoMdArrowBack size={20} /></div>
