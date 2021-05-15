@@ -37,7 +37,7 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                     null
             }
             <h2 className="chatUsersName">
-                {user?.name || "N/A"} {topic && ` > ${topic}`}
+                {topic || user?.name || "N/A"}
             </h2>
             <div className="messageAndParticipants">
                 {showLeaveBtn && <div onClick={handleLeaveGroup} className="leaveGroup">Leave</div>}
