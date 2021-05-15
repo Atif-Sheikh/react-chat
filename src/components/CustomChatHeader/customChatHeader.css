@@ -9,6 +9,17 @@
     justify-content: space-between;
 }
 
+.chatHeaderContainer .chatBackIcon {
+    margin-right: 5px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #424242;
+}
+
+.chatHeaderContainer .chatBackIcon:hover {
+    color: #535353;
+}
+
 .chatUsersName {
     flex: 3;
     color: #1B294D;

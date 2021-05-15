@@ -27,6 +27,20 @@
     transition: color, background-color, max-width 1s linear;
 }
 
+.leftOpen .cs-main-container--responsive>.cs-sidebar.cs-sidebar--left {
+  display: flex !important;
+}
+
+.leftOpen .cs-main-container>.cs-sidebar.cs-sidebar--left {
+  order: 0;
+  height: 100%;
+  max-width: 100%;
+  flex-basis: 100%;
+  z-index: 2;
+  border-right: none;
+}
+
+
 @keyframes grow0 {
     from {
       width: 10%;
