@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import './customChatHeader.css';
 
 const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '', handleParticipant = () => { } }) => {
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
     const dispatch = useDispatch();
 
     const handleWindowSizeChange = () => {
@@ -17,7 +17,7 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
         return () => {
             window.removeEventListener('resize', handleWindowSizeChange);
         }
-    }, []);
+    }, [topic]);
 
     const handleBack = () => {
         dispatch({ type: "HIDE_CENTER_CONTENT", payload: true });
