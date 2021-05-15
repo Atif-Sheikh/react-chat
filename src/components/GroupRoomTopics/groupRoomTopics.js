@@ -11,6 +11,7 @@ import {
     useHistory,
 } from "react-router-dom";
 import { IoMdArrowBack } from 'react-icons/io';
+import { useDispatch } from 'react-redux';
 
 import ListContainer from '../ListContainer/listContainer';
 
@@ -21,6 +22,7 @@ const GroupRoomTopics = () => {
     const [topics, setTopics] = useState(null);
     const history = useHistory();
     const { roomID } = useParams();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         getGroupTopic();
@@ -28,7 +30,7 @@ const GroupRoomTopics = () => {
 
     const getGroupTopic = async () => {
         let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
-        let topics = dbData.val() ? dbData.val().topics : []  
+        let topics = dbData.val() ? dbData.val().topics : []
 
         setTopics(topics);
     };
@@ -37,13 +39,18 @@ const GroupRoomTopics = () => {
         history.push(`/dashboard`);
     };
 
+    const handleConversationClick = () => {
+        dispatch({ type: "HIDE_CENTER_CONTENT", payload: false });
+    };
+
+
     return (
         <ListContainer>
             <div onClick={goBackToTopics} className="backIconTopics"><IoMdArrowBack size={20} /></div>
             {
                 topics?.map((topic, ind) => (
                     <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${roomID}/${topic}` }}>
-                        <Conversation name={topic} lastSenderName="Emily" info="Yes i can do it for you">
+                        <Conversation onClick={handleConversationClick} name={topic} lastSenderName="Emily" info="Yes i can do it for you">
                             <Avatar src={iconUrl} name="Emily" />
                         </Conversation>
                     </NavLink>
