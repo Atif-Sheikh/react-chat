@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import './customChatHeader.css';
 
 const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '', handleParticipant = () => { } }) => {
-    const [isMobile, setIsMobile] = useState(window.innerWidth);
+    const [isMobile, setIsMobile] = useState(false);
     const dispatch = useDispatch();
 
     const handleWindowSizeChange = () => {
