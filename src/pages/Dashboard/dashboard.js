@@ -6,14 +6,15 @@ import {
     MainContainer,
     Sidebar,
 } from "@chatscope/chat-ui-kit-react";
-import firebase from "firebase/app";
 import { useDispatch } from 'react-redux';
+import firebase from "firebase/app";
 import {
     Switch,
     Route,
     useRouteMatch,
 } from "react-router-dom";
 
+import { getToken } from '../../firebase';
 import Conversations from '../../components/ConversationList/conversationList';
 import ChatRoom from '../../components/ChatContainer/chatContainer';
 import AddGroup from '../../components/AddGroup/addGroup';
@@ -51,6 +52,21 @@ const Dashboard = ({ history }) => {
             updateOnlineStatus();
         }
     }, []);
+
+    useEffect(() => {
+        saveTokenToDB();
+    }, [user]);
+
+    const saveTokenToDB = async () => {
+        try {
+            const token = await getToken();
+            if (user && token) {
+                firebase.database().ref(`/users/${user.uid}`).update({ deviceToken: token });
+            }
+        } catch (err) {
+            console.log(err, "ERROR");
+        }
+    };
 
     const handleWindowSizeChange = () => {
         setIsMobile(Boolean(window.innerWidth < 550));
