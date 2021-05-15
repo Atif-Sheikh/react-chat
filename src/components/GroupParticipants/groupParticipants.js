@@ -41,8 +41,8 @@ const GroupParticipantsModal = ({ isOpen, handleModalClose, roomID }) => {
                 <ModalBody>
 
                     {
-                        participants?.map(participant => (
-                            <div className="memberItem">
+                        participants?.map((participant, ind) => (
+                            <div key={ind.toString()} className="memberItem">
                                 <Flex>
                                     <Avatar src={participant?.img ? participant?.img : dummyIcon} />
                                     <Box ml="3">

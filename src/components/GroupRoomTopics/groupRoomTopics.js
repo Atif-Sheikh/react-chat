@@ -46,7 +46,12 @@ const GroupRoomTopics = () => {
 
     return (
         <ListContainer>
-            <div onClick={goBackToTopics} className="backIconTopics"><IoMdArrowBack size={20} /></div>
+            <div onClick={goBackToTopics} className="backIconTopics">
+                <div>
+                    <IoMdArrowBack size={20} />
+                </div>
+                <div>{roomID}</div>
+            </div>
             {
                 topics?.map((topic, ind) => (
                     <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${roomID}/${topic}` }}>

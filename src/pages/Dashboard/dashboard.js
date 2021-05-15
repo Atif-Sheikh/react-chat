@@ -33,6 +33,7 @@ const Dashboard = ({ history }) => {
     const data = useSelector(state => state.user);
     const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
     const hideCenterContent = useSelector(state => state.dashboard.hideCenterContent);
+    const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
     const dispatch = useDispatch();
 
     // if (!data?.user) return null;
@@ -41,10 +42,19 @@ const Dashboard = ({ history }) => {
     useEffect(() => {
         setUser();
         updateOnlineStatus();
+        window.addEventListener('resize', handleWindowSizeChange);
+
+        isMobile && dispatch({ type: "HIDE_CENTER_CONTENT", payload: true });
+
         return () => {
+            window.removeEventListener('resize', handleWindowSizeChange);
             updateOnlineStatus();
         }
     }, []);
+
+    const handleWindowSizeChange = () => {
+        setIsMobile(Boolean(window.innerWidth < 550));
+    };
 
     const setUser = async () => {
         try {

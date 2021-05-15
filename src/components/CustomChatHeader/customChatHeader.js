@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { IoMdArrowBack } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
+import { HiShare } from 'react-icons/hi';
+import {
+    WhatsappShareButton,
+} from "react-share";
 
 import './customChatHeader.css';
 
@@ -37,8 +41,19 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
             </h2>
             <div className="messageAndParticipants">
                 {showLeaveBtn && <div onClick={handleLeaveGroup} className="leaveGroup">Leave</div>}
-                <div className="messageBtn">Messages</div>
                 {showLeaveBtn && <div onClick={() => handleParticipant(true)} className="participants">Participants</div>}
+                {
+                    showLeaveBtn
+                        ?
+                        <WhatsappShareButton
+                            url={window.location.href}
+                            title={'title'}
+                        >
+                            <div className="backIconTopics"><HiShare color="#9a9a9a" size={20} /></div>
+                        </WhatsappShareButton>
+                        :
+                        null
+                }
             </div>
         </div>
     )
