@@ -24,8 +24,21 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
     const [currentTopic, setCurrentTopic] = useState('');
     const toast = useToast();
     const currentUser = useSelector(state => state.user.user);
-    console.log(currentUser, ">>>")
+
     const addGroup = async () => {
+        let allGroups = await firebase.database().ref(`/groups`).once('value');
+        let groupNames = allGroups.val() ? Object.keys(allGroups.val()).map(name => name.toLowerCase()) : [];
+        if (groupNames.includes(groupName.trim().toLowerCase())) {
+            toast({
+                position: "top",
+                title: "Invalid group name",
+                description: "Group name already exist.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
         if (groupName.trim() && topics.length) {
             await firebase.database().ref(`/groups/${groupName}`).set({
                 groupName: groupName.trim(),
