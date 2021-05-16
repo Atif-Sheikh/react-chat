@@ -1,5 +1,8 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const cors = require('cors');
+
+const corsHandler = cors({ origin: true });
 
 admin.initializeApp(functions.config().firebase);
 
@@ -11,7 +14,8 @@ admin.initializeApp(functions.config().firebase);
 // });
 
 exports.sendChatNotification = functions.https.onRequest((req, res) => {
-    if(req.body.deviceToken){
+    corsHandler(req, res, () => { });
+    if (req.body.deviceToken) {
         let payload = {
             data: {
                 priority: 'high'
@@ -25,5 +29,7 @@ exports.sendChatNotification = functions.https.onRequest((req, res) => {
         };
         res.send('success');
         return admin.messaging().sendToDevice(req.body.deviceToken, payload);
+    } else {
+        res.end();
     }
 });

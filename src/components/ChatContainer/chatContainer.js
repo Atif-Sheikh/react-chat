@@ -17,6 +17,7 @@ import Loader from '../Loader/loader';
 import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
+import { sendNotification } from '../../Utils/notification';
 
 import './chatContainer.css';
 
@@ -124,6 +125,9 @@ const ChatRoom = () => {
                 time: Date.now(),
             });
             setCurrentMsg('');
+            if(user?.deviceToken){
+                sendNotification({ title: currentUser.name, body: currentMsg, deviceToken: user.deviceToken });
+            }
         }
     };
 
