@@ -4,13 +4,13 @@ importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
 
 // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
-    apiKey: "AIzaSyDbqF2-5PGHJU2Deqg_kHfuhhQnTVus-EE",
-    authDomain: "todo-app-database-bd16f.firebaseapp.com",
-    databaseURL: "https://todo-app-database-bd16f.firebaseio.com",
-    projectId: "todo-app-database-bd16f",
-    storageBucket: "todo-app-database-bd16f.appspot.com",
-    messagingSenderId: "312069326930",
-    appId: "1:312069326930:web:c31bc1c806bbd5b721b78b"
+    apiKey: "AIzaSyCJZTg836icDkNtCM6IbDIuddVAODXXTkc",
+    authDomain: "fiverr-staging.firebaseapp.com",
+    databaseURL: "https://fiverr-staging-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "fiverr-staging",
+    storageBucket: "fiverr-staging.appspot.com",
+    messagingSenderId: "1006147227397",
+    appId: "1:1006147227397:web:895c0a78649e5b3347f16c"
 };
 
 firebase.initializeApp(firebaseConfig);

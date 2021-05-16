@@ -21,6 +21,7 @@ import JoinButton from '../JoinButton/joinButton';
 import GroupParticipantsModal from '../GroupParticipants/groupParticipants';
 
 import './groupRoomMessages.css';
+import { getToken } from '../../firebase';
 
 const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
@@ -87,6 +88,19 @@ const GroupRoomMessage = () => {
     useEffect(() => {
         fetchGroupEntry();
     }, [roomID, currentUser]);
+
+    useEffect(() => {
+        if (isJoined) {
+            setTokenToGroup();
+        }
+    }, [isJoined]);
+
+    const setTokenToGroup = async () => {
+        let token = await getToken();
+        await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).update({
+            deviceToken: token,
+        });
+    };
 
     const joinGroup = async () => {
         if (!currentUser) return false;
