@@ -7,3 +7,22 @@
 .memberItem .css-k008qs {
     align-items: center;
 }
+
+.memberItem .userCard {
+    position: relative;
+}
+
+.memberItem .userImage {
+    border-radius: 10px;
+    height: 180px;
+}
+
+.memberItem .userName {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+    font-weight: 600;
+}
