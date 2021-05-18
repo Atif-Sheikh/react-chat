@@ -106,7 +106,7 @@ const GroupProfileSection = () => {
                                     <AccordionIcon />
                                 </AccordionButton>
                                 <AccordionPanel pb={4}>
-                                    <SimpleGrid columns={2} spacing={5}>
+                                    <SimpleGrid className="simpleGridContainer" columns={2} spacing={5}>
                                         {
                                             groupDetails?.members.map((member, ind) => (
                                                 <div key={ind.toString()} className="userCard">
