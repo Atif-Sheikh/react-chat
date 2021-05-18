@@ -2,6 +2,8 @@
 
 .memberItem {
     margin: 15px 0;
+    max-height: 400px;
+    overflow: scroll;
 }
 
 .memberItem .css-k008qs {
