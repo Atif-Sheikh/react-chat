@@ -77,7 +77,7 @@ const Conversations = () => {
 
             {
                 groupList?.map((group, ind) => (
-                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${group.groupName}` }}>
+                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${group.groupId}`, state: { groupName: group.groupName } }}>
                         <Conversation name={group.groupName} lastSenderName="Emily" info="Yes i can do it for you">
                             <Avatar src={iconUrl} name="Emily" />
                         </Conversation>

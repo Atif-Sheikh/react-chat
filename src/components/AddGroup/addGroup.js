@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import firebase from 'firebase/app';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import InputField from '../inputField/inputField';
 import GroupTopicsInput from '../GroupTopicsInput/groupTopicsInput';
@@ -26,27 +27,16 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
     const currentUser = useSelector(state => state.user.user);
 
     const addGroup = async () => {
-        let allGroups = await firebase.database().ref(`/groups`).once('value');
-        let groupNames = allGroups.val() ? Object.keys(allGroups.val()).map(name => name.toLowerCase()) : [];
-        if (groupNames.includes(groupName.trim().toLowerCase())) {
-            toast({
-                position: "top",
-                title: "Invalid group name",
-                description: "Group name already exist.",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            });
-            return;
-        }
         if (groupName.trim() && topics.length) {
-            await firebase.database().ref(`/groups/${groupName}`).set({
+            let groupId = uuidv4();
+            await firebase.database().ref(`/groups/${groupId}`).set({
                 groupName: groupName.trim(),
                 topics,
                 creatorID: currentUser.uid,
                 creatorName: currentUser.displayName || 'New User',
+                groupId: groupId,
             });
-            await firebase.database().ref(`/groups/${groupName}/members/${currentUser.uid}`).set({
+            await firebase.database().ref(`/groups/${groupId}/members/${currentUser.uid}`).set({
                 memberName: currentUser.displayName || 'New User',
                 uid: currentUser.uid,
                 img: currentUser?.img,
