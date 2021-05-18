@@ -7,10 +7,7 @@ import {
     ModalHeader,
     ModalBody,
     ModalCloseButton,
-    Flex,
-    Box,
-    Avatar,
-    Text,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import firebase from 'firebase/app';
 
@@ -40,21 +37,16 @@ const GroupParticipantsModal = ({ isOpen, handleModalClose, roomID }) => {
                 <ModalCloseButton />
                 <ModalBody>
 
-                    {
-                        participants?.map((participant, ind) => (
-                            <div key={ind.toString()} className="memberItem">
-                                <Flex>
-                                    <Avatar src={participant?.img ? participant?.img : dummyIcon} />
-                                    <Box ml="3">
-                                        <Text fontWeight="bold">
-                                            {participant?.memberName}
-                                        </Text>
-                                        {/* <Text fontSize="sm">UI Engineer</Text> */}
-                                    </Box>
-                                </Flex>
-                            </div>
-                        ))
-                    }
+                    <SimpleGrid className="memberItem" columns={2} spacing={5}>
+                        {
+                            participants?.map((member, ind) => (
+                                <div key={ind.toString()} className="userCard">
+                                    <img className="userImage" src={member.img ? member.img : dummyIcon} alt={member.memberName} />
+                                    <p className="userName">{member.memberName}</p>
+                                </div>
+                            ))
+                        }
+                    </SimpleGrid>
 
                 </ModalBody>
             </ModalContent>

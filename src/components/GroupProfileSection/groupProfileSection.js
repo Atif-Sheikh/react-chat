@@ -1,6 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Avatar } from "@chakra-ui/react";
+import {
+    Avatar, Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+    SimpleGrid,
+} from "@chakra-ui/react";
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { Divider } from "@chakra-ui/react";
 import { AiFillFolder, AiFillFile } from 'react-icons/ai';
@@ -16,6 +23,7 @@ import FileThumbnail from '../FileThumbnail/fileThumbnail';
 import FileList from '../FileList/fileList';
 import './groupProfile.css';
 
+const dummyIcon = "https://bit.ly/sage-adebayo";
 const groupIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
 
 const GroupProfileSection = () => {
@@ -82,13 +90,35 @@ const GroupProfileSection = () => {
                         <div className="fileTypeSection">
                             <div className="fileType">
                                 File type
-                        </div>
+                            </div>
                             <BsThreeDotsVertical className="verticalDots" />
                         </div>
                         <FileList fileBackground="#E3E5FA" Icon={<AiFillFile color="#6573E3" />} title="Documents" description="126 files, 193MB" />
                         <FileList fileBackground="#F4EDD5" Icon={<BsImageFill color="#CBB983" />} title="Photos" description="53 files, 321MB" />
                         <FileList fileBackground="#E9F8FA" Icon={<RiMovieFill color="#51B8C2" />} title="Movies" description="3 files, 210MB" />
                         <FileList fileBackground="#FFE4DE" Icon={<BsFiles color="#C46E5B" />} title="Other" description="49 files, 194MB" />
+                        <Accordion allowToggle>
+                            <AccordionItem>
+                                <AccordionButton>
+                                    <div className="groupMembers">
+                                        Group members
+                                    </div>
+                                    <AccordionIcon />
+                                </AccordionButton>
+                                <AccordionPanel pb={4}>
+                                    <SimpleGrid columns={2} spacing={5}>
+                                        {
+                                            groupDetails?.members.map((member, ind) => (
+                                                <div key={ind.toString()} className="userCard">
+                                                    <img className="userImage" src={member.img ? member.img : dummyIcon} alt={member.memberName} />
+                                                    <p className="userName">{member.memberName}</p>
+                                                </div>
+                                            ))
+                                        }
+                                    </SimpleGrid>
+                                </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>
                     </>
                     :
                     null

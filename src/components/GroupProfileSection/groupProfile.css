@@ -105,3 +105,49 @@
     color: #828992;
     cursor: pointer;
 }
+
+.profileContainer .chakra-accordion__button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    border: none;
+    outline: none;
+}
+
+.profileContainer .chakra-accordion__item {
+    outline: none;
+    border: none;
+}
+
+.profileContainer .chakra-accordion__button svg {
+    color: #b9b9b9;
+}
+
+.profileContainer .css-0 {
+    width: 100%;
+}
+
+.profileContainer .css-17mg6aq {
+    border: none;
+}
+
+.profileContainer .userCard {
+    position: relative;
+}
+
+.profileContainer .userImage {
+    border-radius: 10px;
+    height: 110px;
+}
+
+.profileContainer .userName {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+    font-weight: 600;
+}

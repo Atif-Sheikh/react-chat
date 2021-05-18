@@ -9,6 +9,7 @@ import {
     NavLink,
     useParams,
     useHistory,
+    useLocation,
 } from "react-router-dom";
 import { IoMdArrowBack } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
@@ -22,6 +23,7 @@ const GroupRoomTopics = () => {
     const [topics, setTopics] = useState(null);
     const history = useHistory();
     const { roomID } = useParams();
+    const { state } = useLocation();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -50,11 +52,11 @@ const GroupRoomTopics = () => {
                 <div>
                     <IoMdArrowBack size={20} />
                 </div>
-                <div>{roomID}</div>
+                <div>{state.groupName || ''}</div>
             </div>
             {
                 topics?.map((topic, ind) => (
-                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${roomID}/${topic}` }}>
+                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${roomID}/${topic}`, state: { groupName: state.groupName } }}>
                         <Conversation onClick={handleConversationClick} name={topic} lastSenderName="Emily" info="Yes i can do it for you">
                             <Avatar src={iconUrl} name="Emily" />
                         </Conversation>
