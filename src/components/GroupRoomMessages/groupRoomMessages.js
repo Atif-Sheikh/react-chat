@@ -32,6 +32,7 @@ const GroupRoomMessage = () => {
     const [loader, setLoader] = useState(false);
     const [messages, setMessages] = useState(null);
     const [typingContent, setTypingContent] = useState('');
+    const [discussionClosed, setDiscussionClosed] = useState(false);
     const currentUser = useSelector(state => state.user.user);
     const { roomID, topic } = useParams();
     const history = useHistory();
@@ -43,6 +44,7 @@ const GroupRoomMessage = () => {
     useEffect(() => {
         fetchGroupMessages();
         addGroupTypingListener();
+        fetchCloseDiscussion();
     }, [roomID, topic, currentUser]);
 
     const addGroupTypingListener = () => {
@@ -147,6 +149,20 @@ const GroupRoomMessage = () => {
         setCurrentMsg('');
     };
 
+    const fetchCloseDiscussion = async () => {
+        let closed = await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).once('value');
+        if(closed.val().closed){
+            setDiscussionClosed(true);
+        }else {
+            setDiscussionClosed(false);
+        }
+    };
+
+    const handleCloseDiscussion = async () => {
+        await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
+        fetchCloseDiscussion();
+    };
+
     const routeToUserProfile = async (senderId) => {
         history.push({
             pathname: `/dashboard/room/${roomID}/${topic}/${senderId}`,
@@ -157,7 +173,7 @@ const GroupRoomMessage = () => {
     return (
         <EmptyContainer>
 
-            <CustomChatHeader handleParticipant={setShowParticipants} showLeaveBtn={isJoined} handleLeaveGroup={handleLeaveGroup} user={{ name: roomID }} topic={topic} />
+            <CustomChatHeader discussionClosed={discussionClosed} onClickClose={handleCloseDiscussion} showCloseIcon={!discussionClosed} handleParticipant={setShowParticipants} showLeaveBtn={isJoined} handleLeaveGroup={handleLeaveGroup} user={{ name: roomID }} topic={topic} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 {

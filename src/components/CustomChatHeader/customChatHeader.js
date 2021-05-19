@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { IoMdArrowBack } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
 import { HiShare } from 'react-icons/hi';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import {
     WhatsappShareButton,
 } from "react-share";
 
 import './customChatHeader.css';
 
-const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '', handleParticipant = () => { } }) => {
+const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '', handleParticipant = () => { }, showCloseIcon = false, onClickClose = () => {}, discussionClosed }) => {
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
     const dispatch = useDispatch();
 
@@ -54,6 +55,8 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                         :
                         null
                 }
+                {showCloseIcon && showLeaveBtn && <div onClick={onClickClose} className="backIconTopics"><AiFillCloseCircle color="#9a9a9a" size={22} /></div>}
+                {discussionClosed && <div className="participants">Solved</div>}
             </div>
         </div>
     )
