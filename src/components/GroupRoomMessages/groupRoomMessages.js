@@ -186,8 +186,8 @@ const GroupRoomMessage = () => {
                         messages?.map((msg, ind) => {
                             if (msg.direction === 'incoming') {
                                 return (
-                                    <Message className="receiver" key={ind.toString()} model={msg}>
-                                        <Avatar onClick={() => routeToUserProfile(msg.sender)} src={msg.img} name={msg.name} />
+                                    <Message className="receiver" model={msg}>
+                                            <Avatar onClick={() => routeToUserProfile(msg.sender)} src={msg.img} name={msg.name} />
                                     </Message>
                                 )
                             }

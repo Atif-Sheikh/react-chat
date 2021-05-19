@@ -6,6 +6,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import {
     WhatsappShareButton,
 } from "react-share";
+import { Tooltip } from "@chakra-ui/react";
 
 import './customChatHeader.css';
 
@@ -46,16 +47,18 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                 {
                     showLeaveBtn
                         ?
-                        <WhatsappShareButton
-                            url={window.location.href}
-                            title={'title'}
-                        >
-                            <div className="backIconTopics"><HiShare color="#9a9a9a" size={20} /></div>
-                        </WhatsappShareButton>
+                        <Tooltip label="Share">
+                            <WhatsappShareButton
+                                url={window.location.href}
+                                title={'title'}
+                                >
+                                <div className="backIconTopics"><HiShare color="#9a9a9a" size={20} /></div>
+                            </WhatsappShareButton>
+                        </Tooltip>
                         :
                         null
                 }
-                {showCloseIcon && showLeaveBtn && <div onClick={onClickClose} className="backIconTopics"><AiFillCloseCircle color="#9a9a9a" size={22} /></div>}
+                {showCloseIcon && showLeaveBtn && <Tooltip label="Mark as solved"><div onClick={onClickClose} className="backIconTopics"><AiFillCloseCircle color="#9a9a9a" size={22} /></div></Tooltip>}
                 {discussionClosed && <div className="participants">Solved</div>}
             </div>
         </div>
