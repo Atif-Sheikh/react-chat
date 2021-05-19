@@ -111,13 +111,13 @@ const Dashboard = ({ history }) => {
                         <Route exact path={path}>
                             <Conversations />
                         </Route>
+                        <Route path={`${path}/room/:roomID`}>
+                            <GroupRoomTopics />
+                        </Route>
                         <Route exact path={`${path}/:chatID`}>
                             <Conversations />
                         </Route>
-                        <Route exact path={`${path}/room/:roomID`}>
-                            <GroupRoomTopics />
-                        </Route>
-                        <Route exact path={`${path}/room/:roomID/:topic`}>
+                        <Route path={`${path}/room/:roomID/:topic`}>
                             <GroupRoomTopics />
                         </Route>
                     </Switch>
@@ -129,7 +129,7 @@ const Dashboard = ({ history }) => {
                         null
                         :
                         <Switch>
-                            <Route exact path={`${path}/room/:roomID/:topic`}>
+                            <Route path={`${path}/room/:roomID/:topic`}>
                                 <GroupRoomMessages />
                             </Route>
                             <Route path={`${path}/:chatID`}>
@@ -141,6 +141,9 @@ const Dashboard = ({ history }) => {
                 <Sidebar position="right">
                     <Switch>
                         <Route exact path={`${path}/:chatID`}>
+                            <UserProfileSection />
+                        </Route>
+                        <Route path={`${path}/room/:roomID/:topic/:profileId`}>
                             <UserProfileSection />
                         </Route>
                         <Route path={`${path}/room/:roomID`}>

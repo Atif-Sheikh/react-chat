@@ -44,6 +44,10 @@
     background-color: #fff;
 }
 
+.chatListContainer .receiver .cs-avatar {
+    cursor: pointer;
+}
+
 .backIcon {
     width: 30px;
     height: 30px;
