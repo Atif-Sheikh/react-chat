@@ -21,19 +21,22 @@ const UserProfileSection = () => {
     const [user, setUser] = useState(null);
     const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
     const dispatch = useDispatch();
-    const { chatID } = useParams();
+    const { chatID, profileId } = useParams();
 
     const handleSideDrawer = (bool) => {
         dispatch({ type: "RIGHT_PANEL", payload: bool });
     };
 
     useEffect(() => {
-        fetchGroupDetails();
+        !profileId && fetchUserDetailsById(chatID);
     }, [chatID]);
 
-    const fetchGroupDetails = async () => {
-        const dbUser = await (await firebase.database().ref(`/users/${chatID}`).once('value')).val();
+    useEffect(() => {
+        !chatID && fetchUserDetailsById(profileId);
+    }, [profileId]);
 
+    const fetchUserDetailsById = async (id) => {
+        const dbUser = await (await firebase.database().ref(`/users/${id}`).once('value')).val();
         dbUser && setUser(dbUser);
     };
 

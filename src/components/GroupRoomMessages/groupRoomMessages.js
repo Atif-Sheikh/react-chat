@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import {
     useParams,
+    useHistory,
+    useLocation,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
 import firebase from 'firebase/app';
@@ -19,9 +21,9 @@ import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 import Loader from '../Loader/loader';
 import JoinButton from '../JoinButton/joinButton';
 import GroupParticipantsModal from '../GroupParticipants/groupParticipants';
+import { getToken } from '../../firebase';
 
 import './groupRoomMessages.css';
-import { getToken } from '../../firebase';
 
 const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
@@ -32,9 +34,11 @@ const GroupRoomMessage = () => {
     const [typingContent, setTypingContent] = useState('');
     const currentUser = useSelector(state => state.user.user);
     const { roomID, topic } = useParams();
+    const history = useHistory();
     const [isJoined, setIsJoined] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
+    const { state } = useLocation();
 
     useEffect(() => {
         fetchGroupMessages();
@@ -60,7 +64,7 @@ const GroupRoomMessage = () => {
                 let dbMsgs = snap.val() ? Object.values(snap.val()).map(msg => ({
                     message: msg.msg,
                     sentTime: "15 mins ago",
-                    sender: currentUser.uid,
+                    sender: msg.senderId,
                     direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
                     position: currentUser.uid === msg.senderId ? "last" : "single",
                     img: msg.img,
@@ -143,6 +147,13 @@ const GroupRoomMessage = () => {
         setCurrentMsg('');
     };
 
+    const routeToUserProfile = async (senderId) => {
+        history.push({
+            pathname: `/dashboard/room/${roomID}/${topic}/${senderId}`,
+            state: { groupName: state.groupName || 'N/A' },
+        });
+    };
+
     return (
         <EmptyContainer>
 
@@ -160,7 +171,7 @@ const GroupRoomMessage = () => {
                             if (msg.direction === 'incoming') {
                                 return (
                                     <Message className="receiver" key={ind.toString()} model={msg}>
-                                        <Avatar src={msg.img} name={msg.name} />
+                                        <Avatar onClick={() => routeToUserProfile(msg.sender)} src={msg.img} name={msg.name} />
                                     </Message>
                                 )
                             }
