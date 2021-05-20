@@ -40,6 +40,19 @@
   border-right: none;
 }
 
+.rightMobileDrawerContainer>.cs-main-container>.cs-sidebar.cs-sidebar--right {
+  display: block !important;
+  flex-basis: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .rightMobileDrawer {
+    display: block !important;
+  }
+}
+
 
 @keyframes grow0 {
     from {

@@ -14,6 +14,7 @@ import {
     TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import debounce from "lodash/debounce";
+import { useDispatch } from 'react-redux';
 
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
@@ -39,7 +40,10 @@ const GroupRoomMessage = () => {
     const [isJoined, setIsJoined] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
+    const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
+
     const { state } = useLocation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         fetchGroupMessages();
@@ -56,6 +60,18 @@ const GroupRoomMessage = () => {
                 setTypingContent('');
             }
         });
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowSizeChange);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowSizeChange);
+        }
+    }, []);
+
+    const handleWindowSizeChange = () => {
+        setIsMobile(Boolean(window.innerWidth < 550));
     };
 
     const fetchGroupMessages = async () => {
@@ -151,9 +167,9 @@ const GroupRoomMessage = () => {
 
     const fetchCloseDiscussion = async () => {
         let closed = await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).once('value');
-        if(closed.val().closed){
+        if (closed.val().closed) {
             setDiscussionClosed(true);
-        }else {
+        } else {
             setDiscussionClosed(false);
         }
     };
@@ -164,6 +180,11 @@ const GroupRoomMessage = () => {
     };
 
     const routeToUserProfile = async (senderId) => {
+        if (isMobile) {
+            dispatch({ type: "SHOW_RIGHT_DRAWER_MOBILE", payload: true });
+            dispatch({ type: "RIGHT_PANEL", payload: true });
+        }
+
         history.push({
             pathname: `/dashboard/room/${roomID}/${topic}/${senderId}`,
             state: { groupName: state.groupName || 'N/A' },

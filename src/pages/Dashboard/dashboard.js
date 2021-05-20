@@ -34,6 +34,7 @@ const Dashboard = ({ history }) => {
     const data = useSelector(state => state.user);
     const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
     const hideCenterContent = useSelector(state => state.dashboard.hideCenterContent);
+    const showRightDrawerMobile = useSelector(state => state.dashboard.showRightDrawerMobile);
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
     const dispatch = useDispatch();
 
@@ -101,30 +102,37 @@ const Dashboard = ({ history }) => {
         <div style={{
             height: "100vh",
             position: "relative"
-        }} className={`${isRightPanelOpen ? 'rightOpen' : 'rightClose'} ${hideCenterContent ? 'leftOpen' : 'leftClose'}`}>
+        }} className={showRightDrawerMobile ? 'rightMobileDrawerContainer' : `${isRightPanelOpen ? 'rightOpen' : 'rightClose'} ${hideCenterContent ? 'leftOpen' : 'leftClose'}`}>
             <MainContainer responsive>
-                <Sidebar position="left" scrollable={false}>
-                    <UserProfile history={history} />
-                    <SearchField />
-                    <ChatSection handleOpenModal={() => setOpenGroup(true)} />
-                    <Switch>
-                        <Route exact path={path}>
-                            <Conversations />
-                        </Route>
-                        <Route path={`${path}/room/:roomID`}>
-                            <GroupRoomTopics />
-                        </Route>
-                        <Route exact path={`${path}/:chatID`}>
-                            <Conversations />
-                        </Route>
-                        <Route path={`${path}/room/:roomID/:topic`}>
-                            <GroupRoomTopics />
-                        </Route>
-                    </Switch>
-                </Sidebar>
+                {
+                    showRightDrawerMobile ?
+                        null
+                        :
+                        <Sidebar position="left" scrollable={true}>
+                            <UserProfile history={history} />
+                            <SearchField />
+                            <ChatSection handleOpenModal={() => setOpenGroup(true)} />
+                            <Switch>
+                                <Route exact path={path}>
+                                    <Conversations />
+                                </Route>
+                                <Route path={`${path}/room/:roomID`}>
+                                    <GroupRoomTopics />
+                                </Route>
+                                <Route exact path={`${path}/:chatID`}>
+                                    <Conversations />
+                                </Route>
+                                <Route path={`${path}/room/:roomID/:topic`}>
+                                    <GroupRoomTopics />
+                                </Route>
+                            </Switch>
+                        </Sidebar>
+                }
 
                 {
                     hideCenterContent
+                        ||
+                        showRightDrawerMobile
                         ?
                         null
                         :
@@ -138,7 +146,7 @@ const Dashboard = ({ history }) => {
                         </Switch>
                 }
 
-                <Sidebar position="right">
+                <Sidebar scrollable={true} className={showRightDrawerMobile ? 'rightMobileDrawer' : ''} position="right">
                     <Switch>
                         <Route exact path={`${path}/:chatID`}>
                             <UserProfileSection />

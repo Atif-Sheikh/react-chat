@@ -2,29 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import firebase from "firebase/app";
 import {
-    Conversation,
-    Avatar,
-} from "@chatscope/chat-ui-kit-react";
-import {
-    NavLink,
     useParams,
     useHistory,
     useLocation,
 } from "react-router-dom";
 import { IoMdArrowBack } from 'react-icons/io';
-import { useDispatch } from 'react-redux';
 
 import ListContainer from '../ListContainer/listContainer';
+import GroupRoomTopicItem from '../GroupRoomTopicItem/groupRoomTopicItem';
 
 import './groupTopics.css';
 
-const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
 const GroupRoomTopics = () => {
     const [topics, setTopics] = useState(null);
     const history = useHistory();
     const { roomID } = useParams();
     const { state } = useLocation();
-    const dispatch = useDispatch();
 
     useEffect(() => {
         getGroupTopic();
@@ -41,11 +34,6 @@ const GroupRoomTopics = () => {
         history.push(`/dashboard`);
     };
 
-    const handleConversationClick = () => {
-        dispatch({ type: "HIDE_CENTER_CONTENT", payload: false });
-    };
-
-
     return (
         <ListContainer>
             <div onClick={goBackToTopics} className="backIconTopics">
@@ -56,11 +44,7 @@ const GroupRoomTopics = () => {
             </div>
             {
                 topics?.map((topic, ind) => (
-                    <NavLink key={ind.toString()} activeClassName="activeRightNav" to={{ pathname: `/dashboard/room/${roomID}/${topic}`, state: { groupName: state.groupName } }}>
-                        <Conversation onClick={handleConversationClick} name={topic} lastSenderName="Emily" info="Yes i can do it for you">
-                            <Avatar src={iconUrl} name="Emily" />
-                        </Conversation>
-                    </NavLink>
+                    <GroupRoomTopicItem key={ind.toString()} topic={topic} ind={ind} groupName={state.groupName} />
                 ))
             }
         </ListContainer>

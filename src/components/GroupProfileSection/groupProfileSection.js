@@ -34,6 +34,8 @@ const GroupProfileSection = () => {
 
     const handleSideDrawer = (bool) => {
         dispatch({ type: "RIGHT_PANEL", payload: bool });
+
+        dispatch({ type: "SHOW_RIGHT_DRAWER_MOBILE", payload: false });
     };
 
     useEffect(() => {

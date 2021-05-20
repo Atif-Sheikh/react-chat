@@ -6,9 +6,11 @@ import { RiSendPlaneFill } from 'react-icons/ri';
 import './costomMessageInput.css';
 
 const CustomMessageInput = ({ placeholder, onChangeHandler, onSend, value }) => {
+    const isMobile = Boolean(window.innerWidth < 550);
+
     return (
         <form onSubmit={onSend}>
-            <div className="messageContainer">
+            <div style={isMobile ? { marginBottom: 50 } : {}} className="messageContainer">
                 <input className="messageInput" placeholder={placeholder} value={value} onChange={onChangeHandler} />
                 <div className="messageInputIcons">
                     <ImSmile2 className="messageInputIcon" />

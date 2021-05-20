@@ -3,6 +3,8 @@ const initState = {
     rightPanelOpen: false,
 
     hideCenterContent: false,
+
+    showRightDrawerMobile: false,
 };
 
 //Define Actions
@@ -19,6 +21,12 @@ const actionReducer = (state = initState, action) => {
             return {
                 ...state,
                 hideCenterContent: action.payload,
+            }
+
+        case 'SHOW_RIGHT_DRAWER_MOBILE':
+            return {
+                ...state,
+                showRightDrawerMobile: action.payload,
             }
 
         default:
