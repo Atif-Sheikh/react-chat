@@ -1,0 +1,26 @@
+
+
+.groupTopicNav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f8fc;
+    border-radius: 8px;
+    width: 100%;
+    align-self: center;
+    margin-top: 10px;
+}
+
+.groupTopicNav:hover {
+    background-color: #e7e7e7;
+    border-radius: 8px;
+}
+
+.groupTopicNav .solvedIndication {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: #00a300b0;
+    position: absolute;
+    right: 10px;
+}
