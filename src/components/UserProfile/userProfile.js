@@ -4,8 +4,6 @@ import React from 'react';
 // import { Avatar, AvatarBadge } from "@chakra-ui/react";
 // import { BsChevronDown } from 'react-icons/bs';
 import { useSelector, useDispatch } from 'react-redux';
-import { BiChevronLeft } from 'react-icons/bi';
-import { Divider } from "@chakra-ui/react";
 import { AiTwotoneSetting } from 'react-icons/ai';
 import firebase from 'firebase/app';
 
@@ -31,15 +29,6 @@ const UserProfile = ({ history }) => {
 
     return (
         <div className="profileContainer">
-            <div className="leftChevContainer">
-                <div className="chevRightIcon">
-                    <BiChevronLeft />
-                </div>
-                <div className="chatHeading">
-                    Chat
-                </div>
-            </div>
-            <Divider className="chatHeaderDivider" orientation="horizontal" />
             <div>
                 <AiTwotoneSetting onClick={handleLogout} className="profileSettingsIcon" />
                 {/* Todo: Maybe use in future */}

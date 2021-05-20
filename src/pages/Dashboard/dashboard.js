@@ -108,7 +108,7 @@ const Dashboard = ({ history }) => {
                     showRightDrawerMobile ?
                         null
                         :
-                        <Sidebar position="left" scrollable={false}>
+                        <Sidebar position="left" scrollable={true}>
                             <UserProfile history={history} />
                             <SearchField />
                             <ChatSection handleOpenModal={() => setOpenGroup(true)} />
@@ -146,7 +146,7 @@ const Dashboard = ({ history }) => {
                         </Switch>
                 }
 
-                <Sidebar className={showRightDrawerMobile ? 'rightMobileDrawer' : ''} position="right">
+                <Sidebar scrollable={true} className={showRightDrawerMobile ? 'rightMobileDrawer' : ''} position="right">
                     <Switch>
                         <Route exact path={`${path}/:chatID`}>
                             <UserProfileSection />

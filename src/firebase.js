@@ -26,8 +26,8 @@ if (!firebase.apps.length) {
   firebase.app(); // if already initialized, use that one
 }
 
-const messaging = firebase.messaging();
+const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
 
 export const getToken = () => {
-  return messaging.getToken({ vapidKey: "BH-d1dBRtZ9G2T7pw95HcY7IxahazJRF7c9q99lqyfpEEdear-PIjj4asNiRwp-oebLeiamYahl-jP4dfeq2RHY" });
+  return messaging?.getToken({ vapidKey: "BH-d1dBRtZ9G2T7pw95HcY7IxahazJRF7c9q99lqyfpEEdear-PIjj4asNiRwp-oebLeiamYahl-jP4dfeq2RHY" });
 };
