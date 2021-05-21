@@ -22,10 +22,24 @@ const UserProfileSection = () => {
     const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
     const dispatch = useDispatch();
     const { chatID, profileId } = useParams();
+    const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
 
     const handleSideDrawer = (bool) => {
         dispatch({ type: "RIGHT_PANEL", payload: bool });
         dispatch({ type: "SHOW_RIGHT_DRAWER_MOBILE", payload: false });
+    };
+
+    useEffect(() => {
+        setUser();
+        window.addEventListener('resize', handleWindowSizeChange);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowSizeChange);
+        }
+    }, []);
+
+    const handleWindowSizeChange = () => {
+        setIsMobile(Boolean(window.innerWidth < 550));
     };
 
     useEffect(() => {
@@ -46,11 +60,15 @@ const UserProfileSection = () => {
             <div className="leftChevContainer">
                 <div className="chevRightIcon" onClick={() => handleSideDrawer(!isRightPanelOpen)}>
                     {
-                        isRightPanelOpen
+                        isMobile && !isRightPanelOpen
                             ?
-                            <BiChevronRight />
+                            null
                             :
-                            <BiChevronLeft />
+                            isRightPanelOpen
+                                ?
+                                <BiChevronRight />
+                                :
+                                <BiChevronLeft />
                     }
                 </div>
                 {
