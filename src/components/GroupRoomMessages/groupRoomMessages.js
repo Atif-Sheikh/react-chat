@@ -112,7 +112,7 @@ const GroupRoomMessage = () => {
     }, [roomID, currentUser]);
 
     useEffect(() => {
-        if (isJoined) {
+        if (isJoined && !isMobile) {
             setTokenToGroup();
         }
     }, [isJoined]);
