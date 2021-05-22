@@ -5,15 +5,25 @@
 }
 
 .chatListContainer {
-    overscroll-behavior-y: none;
     overflow-anchor: auto;
-    touch-action: none;
     position: relative;
     height: 75%;
     box-sizing: border-box;
     overflow: hidden;
     padding: 0 0.8em 0 0.8em;
     word-wrap: break-word;
+}
+
+@media only screen and (max-width: 600px) and (orientation:landscape) {
+    .chatListContainer {
+        overflow-anchor: auto;
+        position: relative;
+        height: 60vh;
+        box-sizing: border-box;
+        overflow: hidden;
+        padding: 0 0.8em 0 0.8em;
+        word-wrap: break-word;
+    }
 }
 
 .chatContainer .cs-conversation-header {
