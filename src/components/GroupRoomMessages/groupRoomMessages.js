@@ -167,7 +167,7 @@ const GroupRoomMessage = () => {
 
     const fetchCloseDiscussion = async () => {
         let closed = await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).once('value');
-        if (closed.val().closed) {
+        if (closed.val()?.closed) {
             setDiscussionClosed(true);
         } else {
             setDiscussionClosed(false);
