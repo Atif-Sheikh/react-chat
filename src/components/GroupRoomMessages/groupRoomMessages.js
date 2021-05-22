@@ -112,7 +112,7 @@ const GroupRoomMessage = () => {
     }, [roomID, currentUser]);
 
     useEffect(() => {
-        if (isJoined) {
+        if (isJoined && !isMobile) {
             setTokenToGroup();
         }
     }, [isJoined]);
@@ -167,7 +167,7 @@ const GroupRoomMessage = () => {
 
     const fetchCloseDiscussion = async () => {
         let closed = await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).once('value');
-        if (closed.val().closed) {
+        if (closed.val()?.closed) {
             setDiscussionClosed(true);
         } else {
             setDiscussionClosed(false);
@@ -175,8 +175,7 @@ const GroupRoomMessage = () => {
     };
 
     const handleCloseDiscussion = async () => {
-        await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
-        fetchCloseDiscussion();
+        setShowParticipants(true);
     };
 
     const routeToUserProfile = async (senderId) => {
@@ -233,7 +232,7 @@ const GroupRoomMessage = () => {
                         :
                         <JoinButton onPress={joinGroup} />
             }
-            { showParticipants && <GroupParticipantsModal roomID={roomID} isOpen={showParticipants} handleModalClose={() => setShowParticipants(false)} />}
+            { showParticipants && <GroupParticipantsModal fetchCloseDiscussion={fetchCloseDiscussion} topic={topic} roomID={roomID} isOpen={showParticipants} handleModalClose={() => setShowParticipants(false)} />}
         </EmptyContainer>
     );
 };
