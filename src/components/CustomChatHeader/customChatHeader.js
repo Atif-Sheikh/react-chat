@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { IoMdArrowBack } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
 import { HiShare } from 'react-icons/hi';
@@ -7,7 +7,7 @@ import { BsFillInfoCircleFill, BsCheckAll } from 'react-icons/bs';
 import {
     WhatsappShareButton,
 } from "react-share";
-import { Tooltip } from "@chakra-ui/react";
+import { Tooltip, Popover, PopoverTrigger, Button, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverHeader, PopoverBody } from "@chakra-ui/react";
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 
 import './customChatHeader.css';
@@ -74,11 +74,25 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                         :
                         null
                 }
-                {showCloseIcon && showLeaveBtn && <Tooltip label="Mark as solved"><div onClick={onClickClose} className="backIcon"><AiFillCloseCircle color="#9a9a9a" size={22} /></div></Tooltip>}
+                {showCloseIcon && showLeaveBtn &&
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button onClick={onClickClose}>
+                                <AiFillCloseCircle color="#9a9a9a" size={22} />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Confirmation!</PopoverHeader>
+                            <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+                }
                 {discussionClosed && <div className="participants"><BsCheckAll size={22} color="#00a300b0" /></div>}
             </div>
         </div>
     )
 }
 
-export default CustomChatHeader;
+export default memo(CustomChatHeader);

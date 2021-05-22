@@ -1,54 +1,40 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Modal,
     ModalOverlay,
     ModalContent,
     ModalHeader,
-    ModalBody,
     ModalCloseButton,
-    SimpleGrid,
+    ModalFooter,
+    Button,
 } from "@chakra-ui/react";
 import firebase from 'firebase/app';
 
 import './groupParticipant.css';
 
-const dummyIcon = "https://bit.ly/sage-adebayo";
+const GroupParticipantsModal = ({ isOpen, handleModalClose, roomID, topic, fetchCloseDiscussion }) => {
 
-const GroupParticipantsModal = ({ isOpen, handleModalClose, roomID }) => {
-    const [participants, setparticipants] = useState(null);
-
-    useEffect(() => {
-        getParticipants();
-    }, [roomID]);
-
-    const getParticipants = async () => {
-        let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
-        let members = dbData.val() ? Object.values(dbData.val().members) : [];
-
-        setparticipants(members);
+    const closeRoomDiscussion = async () => {
+        await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
+        fetchCloseDiscussion();
+        handleModalClose();
     };
 
     return (
         <Modal isOpen={isOpen} onClose={handleModalClose} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Participant</ModalHeader>
+                <ModalHeader>Are you sure?</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
-
-                    <SimpleGrid className="memberItem" columns={2} spacing={5}>
-                        {
-                            participants?.map((member, ind) => (
-                                <div key={ind.toString()} className="userCard">
-                                    <img className="userImage" src={member.img ? member.img : dummyIcon} alt={member.memberName} />
-                                    <p className="userName">{member.memberName}</p>
-                                </div>
-                            ))
-                        }
-                    </SimpleGrid>
-
-                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={closeRoomDiscussion} colorScheme="blue" mr={3}>
+                        Yes
+                    </Button>
+                    <Button onClick={handleModalClose}>
+                        No
+                    </Button>
+                </ModalFooter>
             </ModalContent>
         </Modal>
     )
