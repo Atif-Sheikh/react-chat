@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { IoMdArrowBack } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
 import { HiShare } from 'react-icons/hi';
-import { AiFillCloseCircle } from 'react-icons/ai';
+import { AiFillCloseCircle, AiOutlineLogout } from 'react-icons/ai';
+import { BsFillInfoCircleFill, BsCheckAll } from 'react-icons/bs';
 import {
     WhatsappShareButton,
 } from "react-share";
@@ -42,8 +43,8 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                 {topic || user?.name || "N/A"}
             </h2>
             <div className="messageAndParticipants">
-                {showLeaveBtn && <div onClick={handleLeaveGroup} className="leaveGroup">Leave</div>}
-                {showLeaveBtn && <div onClick={() => handleParticipant(true)} className="participants">Participants</div>}
+                {showLeaveBtn && <Tooltip label="Leave group"><div onClick={handleLeaveGroup} className="leaveGroup"><AiOutlineLogout size={18} color="#9a9a9a" /></div></Tooltip>}
+                {showLeaveBtn && <Tooltip label="Group info"><div onClick={() => handleParticipant(true)} className="participants"><BsFillInfoCircleFill size={18} color="#9a9a9a" /></div></Tooltip>}
                 {
                     showLeaveBtn
                         ?
@@ -58,8 +59,8 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                         :
                         null
                 }
-                {showCloseIcon && showLeaveBtn && <Tooltip label="Mark as solved"><div onClick={onClickClose} className="backIconTopics"><AiFillCloseCircle color="#9a9a9a" size={22} /></div></Tooltip>}
-                {discussionClosed && <div className="participants">Solved</div>}
+                {showCloseIcon && showLeaveBtn && <Tooltip label="Mark as solved"><div onClick={onClickClose} className="backIcon"><AiFillCloseCircle color="#9a9a9a" size={22} /></div></Tooltip>}
+                {discussionClosed && <div className="participants"><BsCheckAll size={22} color="#00a300b0" /></div>}
             </div>
         </div>
     )

@@ -52,15 +52,10 @@
     font-weight: 500;
     font-size: 15px;
     padding: 4px 10px;
-    background: #ec00629e;
     max-width: 105px;
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
-}
-
-.leaveGroup:hover {
-    background: #ec0062be;
 }
 
 .messageBtn:hover {
@@ -85,8 +80,4 @@
     max-width: 105px;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.messageAndParticipants .participants:hover {
-    background-color: rgb(125, 207, 255);
 }
