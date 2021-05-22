@@ -119,9 +119,11 @@ const GroupRoomMessage = () => {
 
     const setTokenToGroup = async () => {
         let token = await getToken();
-        await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).update({
-            deviceToken: token,
-        });
+        if(token && roomID && currentUser?.uid) {
+            await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).update({
+                deviceToken: token,
+            });
+        }
     };
 
     const joinGroup = async () => {
@@ -153,7 +155,7 @@ const GroupRoomMessage = () => {
 
     const sendGroupMessage = async (e) => {
         e.preventDefault();
-        if (currentMsg?.trim()) {
+        if (currentMsg?.trim() && currentUser?.uid) {
             await firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).push({
                 msg: currentMsg,
                 senderId: currentUser.uid,
