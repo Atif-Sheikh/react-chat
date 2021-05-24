@@ -30,7 +30,6 @@ const ChatSelection = ({ handleOpenModal }) => {
 
     return (
         <div className="selectionContainer">
-            { !isOpen && <div className="lastChats">Last chats</div>}
             <div className={isOpen ? "customSearchFieldOpened" : "customSearchField"}>
                 <input onFocus={() => setIsOpen(true)} onBlur={() => setIsOpen(false)} placeholder="Search" type="text" />
                 <AiOutlineSearch className="searchIcon" />
