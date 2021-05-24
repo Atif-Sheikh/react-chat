@@ -19,7 +19,6 @@ import Conversations from '../../components/ConversationList/conversationList';
 import ChatRoom from '../../components/ChatContainer/chatContainer';
 import AddGroup from '../../components/AddGroup/addGroup';
 import UserProfile from '../../components/UserProfile/userProfile';
-import SearchField from '../../components/SearchField/searchField';
 import ChatSection from '../../components/ChatSelection/chatSelection';
 import GroupProfileSection from '../../components/GroupProfileSection/groupProfileSection';
 import GroupRoomMessages from '../../components/GroupRoomMessages/groupRoomMessages';
@@ -110,7 +109,6 @@ const Dashboard = ({ history }) => {
                         :
                         <Sidebar position="left" scrollable={true}>
                             <UserProfile history={history} />
-                            <SearchField />
                             <ChatSection handleOpenModal={() => setOpenGroup(true)} />
                             <Switch>
                                 <Route exact path={path}>
