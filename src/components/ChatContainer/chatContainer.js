@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import firebase from "firebase/app";
 import { Divider } from '@chakra-ui/react';
 import debounce from "lodash/debounce";
+import { useDispatch } from 'react-redux';
 
 import Loader from '../Loader/loader';
 import CustomMessageInput from '../CustomMessageInput/customMessageInput';
@@ -29,6 +30,8 @@ const ChatRoom = () => {
     const [typingContent, setTypingContent] = useState('');
     const { chatID } = useParams();
     const currentUser = useSelector(state => state.user.user);
+    const dispatch = useDispatch();
+    const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
 
     const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
@@ -79,7 +82,7 @@ const ChatRoom = () => {
     };
 
     const addChatTypingListener = () => {
-        if(currentUser){
+        if (currentUser) {
             let path = currentUser.uid + chatID;
             path = path.split('').sort().join('');
             firebase.database().ref(`/chatTypings/${path}`).on('value', snap => {
@@ -111,6 +114,18 @@ const ChatRoom = () => {
         }
     }, [user, currentUser]);
 
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowSizeChange);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowSizeChange);
+        }
+    }, []);
+
+    const handleWindowSizeChange = () => {
+        setIsMobile(Boolean(window.innerWidth < 550));
+    };
+
     const handleSendMsg = async (e) => {
         e.preventDefault();
         if (currentMsg && currentUser) {
@@ -125,10 +140,17 @@ const ChatRoom = () => {
                 time: Date.now(),
             });
             setCurrentMsg('');
-            if(user?.deviceToken){
+            if (user?.deviceToken) {
                 sendNotification({ title: currentUser.name, body: currentMsg, deviceToken: user.deviceToken });
             }
         }
+    };
+
+    const routeToUserProfile = () => {
+        if (isMobile) {
+            dispatch({ type: "SHOW_RIGHT_DRAWER_MOBILE", payload: true });
+        }
+        dispatch({ type: "RIGHT_PANEL", payload: true });
     };
 
     return (
@@ -152,7 +174,7 @@ const ChatRoom = () => {
                             if (msg.direction === 'incoming') {
                                 return (
                                     <Message className="receiver" key={ind.toString()} model={msg}>
-                                        <Avatar src={msg.img} name="Zoe" />
+                                        <Avatar onClick={routeToUserProfile} src={msg.img} name="Zoe" />
                                     </Message>
                                 )
                             }
