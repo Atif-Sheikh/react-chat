@@ -144,19 +144,25 @@ const Dashboard = ({ history }) => {
                         </Switch>
                 }
 
-                <Sidebar scrollable={true} className={showRightDrawerMobile ? 'rightMobileDrawer' : ''} position="right">
-                    <Switch>
-                        <Route exact path={`${path}/:chatID`}>
-                            <UserProfileSection />
-                        </Route>
-                        <Route path={`${path}/room/:roomID/:topic/:profileId`}>
-                            <UserProfileSection />
-                        </Route>
-                        <Route path={`${path}/room/:roomID`}>
-                            <GroupProfileSection />
-                        </Route>
-                    </Switch>
-                </Sidebar>
+                {
+                    isRightPanelOpen
+                        ?
+                        <Sidebar scrollable={true} className={showRightDrawerMobile ? 'rightMobileDrawer' : ''} position="right">
+                            <Switch>
+                                <Route exact path={`${path}/:chatID`}>
+                                    <UserProfileSection />
+                                </Route>
+                                <Route path={`${path}/room/:roomID/:topic/:profileId`}>
+                                    <UserProfileSection />
+                                </Route>
+                                <Route path={`${path}/room/:roomID`}>
+                                    <GroupProfileSection />
+                                </Route>
+                            </Switch>
+                        </Sidebar>
+                        :
+                        null
+                }
             </MainContainer>
             { openGroup && <AddGroup isOpen={openGroup} handleModalClose={() => setOpenGroup(false)} />}
         </div >
