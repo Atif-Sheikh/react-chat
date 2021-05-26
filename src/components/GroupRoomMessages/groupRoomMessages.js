@@ -21,7 +21,6 @@ import CustomChatHeader from '../CustomChatHeader/customChatHeader';
 import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 import Loader from '../Loader/loader';
 import JoinButton from '../JoinButton/joinButton';
-import GroupParticipantsModal from '../GroupParticipants/groupParticipants';
 import { getToken } from '../../firebase';
 
 import './groupRoomMessages.css';
@@ -192,10 +191,16 @@ const GroupRoomMessage = () => {
         });
     };
 
+    const closeRoomDiscussion = async () => {
+        await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
+        fetchCloseDiscussion();
+        setShowParticipants(false);
+    };
+
     return (
         <EmptyContainer>
 
-            <CustomChatHeader discussionClosed={discussionClosed} onClickClose={handleCloseDiscussion} showCloseIcon={!discussionClosed} handleParticipant={setShowParticipants} showLeaveBtn={isJoined} handleLeaveGroup={handleLeaveGroup} user={{ name: roomID }} topic={topic} />
+            <CustomChatHeader setShowParticipants={setShowParticipants} showParticipants={showParticipants} closeRoomDiscussion={closeRoomDiscussion} discussionClosed={discussionClosed} onClickClose={handleCloseDiscussion} showCloseIcon={!discussionClosed} handleParticipant={setShowParticipants} showLeaveBtn={isJoined} handleLeaveGroup={handleLeaveGroup} user={{ name: roomID }} topic={topic} />
             <Divider className="chatListDivider" orientation="horizontal" />
             <div className="chatListContainer">
                 {
@@ -234,7 +239,7 @@ const GroupRoomMessage = () => {
                         :
                         <JoinButton onPress={joinGroup} />
             }
-            { showParticipants && <GroupParticipantsModal fetchCloseDiscussion={fetchCloseDiscussion} topic={topic} roomID={roomID} isOpen={showParticipants} handleModalClose={() => setShowParticipants(false)} />}
+            {/* { showParticipants && <GroupParticipantsModal fetchCloseDiscussion={fetchCloseDiscussion} topic={topic} roomID={roomID} isOpen={showParticipants} handleModalClose={() => setShowParticipants(false)} />} */}
         </EmptyContainer>
     );
 };
