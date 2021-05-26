@@ -7,20 +7,20 @@
 .chatListContainer {
     overflow-anchor: auto;
     position: relative;
-    height: 75%;
+    height: 70%;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: scroll;
     padding: 0 0.8em 0 0.8em;
     word-wrap: break-word;
 }
 
-@media only screen and (max-width: 600px) and (orientation:landscape) {
+@media only screen and (max-width: 600px) {
     .chatListContainer {
         overflow-anchor: auto;
         position: relative;
-        height: 60vh;
+        height: 70vh;
         box-sizing: border-box;
-        overflow: hidden;
+        overflow: scroll;
         padding: 0 0.8em 0 0.8em;
         word-wrap: break-word;
     }
