@@ -7,12 +7,12 @@ import { BsFillInfoCircleFill, BsCheckAll } from 'react-icons/bs';
 import {
     WhatsappShareButton,
 } from "react-share";
-import { Tooltip, Popover, PopoverTrigger, Button, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverHeader, PopoverBody } from "@chakra-ui/react";
+import { Tooltip, Popover, PopoverTrigger, Button, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverHeader, PopoverBody, PopoverFooter } from "@chakra-ui/react";
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 
 import './customChatHeader.css';
 
-const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '', showCloseIcon = false, onClickClose = () => { }, discussionClosed }) => {
+const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () => { }, topic = '', showCloseIcon = false, onClickClose = () => { }, discussionClosed, closeRoomDiscussion = () => {}, showParticipants = false, setShowParticipants = () => {} }) => {
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
     const dispatch = useDispatch();
     const { state } = useLocation();
@@ -75,17 +75,25 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                         null
                 }
                 {showCloseIcon && showLeaveBtn &&
-                    <Popover>
+                    <Popover isOpen={showParticipants}>
                         <PopoverTrigger>
-                            <Button onClick={onClickClose}>
+                            <Button onClick={() => setShowParticipants(true)}>
                                 <AiFillCloseCircle color="#9a9a9a" size={22} />
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent>
                             <PopoverArrow />
-                            <PopoverCloseButton />
+                            <PopoverCloseButton onClick={() => setShowParticipants(false)} />
                             <PopoverHeader>Confirmation!</PopoverHeader>
-                            <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+                            <PopoverBody>Are you sure?</PopoverBody>
+                            <PopoverFooter>
+                            <Button onClick={closeRoomDiscussion} colorScheme="blue" mr={3}>
+                                Yes
+                            </Button>
+                            <Button onClick={() => setShowParticipants(false)}>
+                                No
+                            </Button>
+                            </PopoverFooter>
                         </PopoverContent>
                     </Popover>
                 }
