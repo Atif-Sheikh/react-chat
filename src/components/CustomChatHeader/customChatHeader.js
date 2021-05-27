@@ -87,10 +87,10 @@ const CustomChatHeader = ({ user, showLeaveBtn = false, handleLeaveGroup = () =>
                             <PopoverHeader>Confirmation!</PopoverHeader>
                             <PopoverBody>Are you sure?</PopoverBody>
                             <PopoverFooter>
-                            <Button onClick={closeRoomDiscussion} colorScheme="blue" mr={3}>
+                            <Button onClick={closeRoomDiscussion} style={{ backgroundColor: '#00ae9486', color: '#fff' }} mr={3}>
                                 Yes
                             </Button>
-                            <Button onClick={() => setShowParticipants(false)}>
+                            <Button style={{ color: '#fff' }} onClick={() => setShowParticipants(false)}>
                                 No
                             </Button>
                             </PopoverFooter>
