@@ -34,7 +34,7 @@ const Dashboard = ({ history }) => {
     const isRightPanelOpen = useSelector(state => state.dashboard.rightPanelOpen);
     const hideCenterContent = useSelector(state => state.dashboard.hideCenterContent);
     const showRightDrawerMobile = useSelector(state => state.dashboard.showRightDrawerMobile);
-    const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
+    // const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
     const dispatch = useDispatch();
 
     // if (!data?.user) return null;
@@ -45,7 +45,7 @@ const Dashboard = ({ history }) => {
         updateOnlineStatus();
         window.addEventListener('resize', handleWindowSizeChange);
 
-        isMobile && dispatch({ type: "HIDE_CENTER_CONTENT", payload: true });
+        // isMobile && dispatch({ type: "HIDE_CENTER_CONTENT", payload: true });
 
         return () => {
             window.removeEventListener('resize', handleWindowSizeChange);
@@ -69,7 +69,7 @@ const Dashboard = ({ history }) => {
     };
 
     const handleWindowSizeChange = () => {
-        setIsMobile(Boolean(window.innerWidth < 550));
+        // setIsMobile(Boolean(window.innerWidth < 550));
     };
 
     const setUser = async () => {
