@@ -2,7 +2,7 @@
 
 .messageContainer {
     display: flex;
-    width: 100%;
+    width: 96%;
     margin: 0 auto;
     background: #fff;
     padding: 6px 10px;
@@ -11,6 +11,7 @@
     position: absolute;
     bottom: 20px;
     margin: 0 auto;
+    left: 2%;
 }
 
 .messageContainer .messageInput {
