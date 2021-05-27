@@ -40,11 +40,11 @@ const GroupRoomTopics = () => {
                 <div>
                     <IoMdArrowBack size={20} />
                 </div>
-                <div>{state.groupName || ''}</div>
+                <div>{state?.groupName || ''}</div>
             </div>
             {
                 topics?.map((topic, ind) => (
-                    <GroupRoomTopicItem key={ind.toString()} topic={topic} ind={ind} groupName={state.groupName} />
+                    <GroupRoomTopicItem key={ind.toString()} topic={topic} ind={ind} groupName={state?.groupName} />
                 ))
             }
         </ListContainer>
