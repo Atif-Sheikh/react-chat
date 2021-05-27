@@ -19,7 +19,7 @@
     .chatListContainer {
         overflow-anchor: auto;
         position: relative;
-        height: 80%;
+        height: 70%;
         box-sizing: border-box;
         padding: 0 0.8em 0 0.8em;
         word-wrap: break-word;
