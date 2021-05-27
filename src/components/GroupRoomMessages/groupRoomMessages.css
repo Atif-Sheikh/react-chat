@@ -9,9 +9,10 @@
     position: relative;
     height: 70%;
     box-sizing: border-box;
-    overflow: scroll;
     padding: 0 0.8em 0 0.8em;
     word-wrap: break-word;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 @media only screen and (max-width: 600px) {
@@ -20,9 +21,10 @@
         position: relative;
         height: 70%;
         box-sizing: border-box;
-        overflow: scroll;
         padding: 0 0.8em 0 0.8em;
         word-wrap: break-word;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 }
 

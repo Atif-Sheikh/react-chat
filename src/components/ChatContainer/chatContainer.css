@@ -5,15 +5,16 @@
 }
 
 .chatListContainer {
-    overscroll-behavior-y: none;
+    overscroll-behavior-y: scroll;
     overflow-anchor: auto;
-    touch-action: none;
+    /* touch-action: none; */
     position: relative;
     height: 80%;
     box-sizing: border-box;
-    overflow: hidden;
     padding: 0 0.8em 0 0.8em;
     word-wrap: break-word;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 .chatContainer .cs-conversation-header {
