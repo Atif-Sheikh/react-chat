@@ -1,25 +1,17 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import App from 'base-shell/lib'
 
-import Signup from './pages/Signup/signup';
-import Login from './pages/Login/login';
-import Dashboard from './pages/Dashboard/dashboard';
-
-import { PrivateRoute } from './Utils/protectedRoutes';
+import config from './config'
 
 import './firebase';
 import './App.css';
 
-function App() {
+function Appp() {
   return (
     <div className="App">
-      <Switch>
-        <Route path="/" exact component={Signup} />
-        <Route path="/login" exact component={Login} />
-        <PrivateRoute path="/dashboard" component={Dashboard} />
-      </Switch>
+      <App config={config} />
     </div>
   );
 }
 
-export default App;
+export default Appp;
