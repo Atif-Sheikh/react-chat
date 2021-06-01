@@ -8,12 +8,12 @@ import { RiFolderShieldFill, RiMovieFill } from 'react-icons/ri';
 import { BsThreeDotsVertical, BsImageFill, BsFiles } from 'react-icons/bs';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router-dom";
-import firebase from 'firebase/app';
 
 import FileThumbnail from '../FileThumbnail/fileThumbnail';
 import FileList from '../FileList/fileList';
 
 import './userProfileSection.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
@@ -51,7 +51,7 @@ const UserProfileSection = () => {
     }, [profileId]);
 
     const fetchUserDetailsById = async (id) => {
-        const dbUser = await (await firebase.database().ref(`/users/${id}`).once('value')).val();
+        const dbUser = await (await FirebaseService.getOnceFromDatabase(`/users/${id}`)).val();
         dbUser && setUser(dbUser);
     };
 

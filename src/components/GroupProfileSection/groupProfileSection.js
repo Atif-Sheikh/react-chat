@@ -14,7 +14,6 @@ import { Divider } from "@chakra-ui/react";
 // import { RiFolderShieldFill, RiMovieFill } from 'react-icons/ri';
 // import { BsThreeDotsVertical, BsImageFill, BsFiles } from 'react-icons/bs';
 import { useSelector, useDispatch } from 'react-redux';
-import firebase from 'firebase/app';
 import {
     useParams,
 } from "react-router-dom";
@@ -22,6 +21,7 @@ import {
 // import FileThumbnail from '../FileThumbnail/fileThumbnail';
 // import FileList from '../FileList/fileList';
 import './groupProfile.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const dummyIcon = "https://bit.ly/sage-adebayo";
 const groupIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
@@ -43,7 +43,7 @@ const GroupProfileSection = () => {
     }, [roomID]);
 
     const fetchGroupDetails = async () => {
-        const group = await (await firebase.database().ref(`/groups/${roomID}`).once('value')).val();
+        const group = await (await FirebaseService.getOnceFromDatabase(`/groups/${roomID}`)).val();
 
         if (group) {
             let groupCopied = JSON.parse(JSON.stringify(group));

@@ -10,7 +10,6 @@ import {
     Button,
     useToast,
 } from "@chakra-ui/react";
-import firebase from 'firebase/app';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -18,6 +17,7 @@ import InputField from '../inputField/inputField';
 import GroupTopicsInput from '../GroupTopicsInput/groupTopicsInput';
 
 import './addGroup.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const AddGroup = ({ isOpen, handleModalClose }) => {
     const [groupName, setGroupName] = useState('');
@@ -29,14 +29,14 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
     const addGroup = async () => {
         if (groupName.trim() && topics.length) {
             let groupId = uuidv4();
-            await firebase.database().ref(`/groups/${groupId}`).set({
+            await FirebaseService.setOnDatabase(`/groups/${groupId}`, {
                 groupName: groupName.trim(),
                 topics,
                 creatorID: currentUser.uid,
                 creatorName: currentUser.displayName || 'New User',
                 groupId: groupId,
             });
-            await firebase.database().ref(`/groups/${groupId}/members/${currentUser.uid}`).set({
+            await FirebaseService.setOnDatabase(`/groups/${groupId}/members/${currentUser.uid}`, {
                 memberName: currentUser.displayName || 'New User',
                 uid: currentUser.uid,
                 img: currentUser?.img,

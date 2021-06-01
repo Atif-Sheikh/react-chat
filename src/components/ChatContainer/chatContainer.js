@@ -21,6 +21,7 @@ import CustomChatHeader from '../CustomChatHeader/customChatHeader';
 import { sendNotification } from '../../Utils/notification';
 
 import './chatContainer.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const ChatRoom = () => {
     const [user, setUser] = useState(null);
@@ -36,8 +37,8 @@ const ChatRoom = () => {
     const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
     const getUser = async () => {
-        let user = await firebase.database().ref(`/users/${chatID}`).once("value");
-        if (user.val()) {
+        let user = await FirebaseService.getOnceFromDatabase(`/users/${chatID}`);
+        if (user?.val()) {
             setUser(user.val());
         }
     };
@@ -46,16 +47,14 @@ const ChatRoom = () => {
         let path = currentUser.uid + chatID;
         path = path.split('').sort().join('');
         setCurrentMsg(value);
-        firebase.database().ref(`/chatTypings/${path}/${currentUser.name}`).set({
-            name: currentUser.name
-        });
+        await FirebaseService.setOnDatabase(`/chatTypings/${path}/${currentUser.name}`, { name: currentUser.name });
         handleTypingStop();
     };
 
     const handleTypingStop = debounce(function () {
         let path = currentUser.uid + chatID;
         path = path.split('').sort().join('');
-        firebase.database().ref(`/chatTypings/${path}/${currentUser.name}`).remove();
+        FirebaseService.removeFromDatabase(`/chatTypings/${path}/${currentUser.name}`);
     }, 1500);
 
     const fetchMessages = async () => {
@@ -131,7 +130,7 @@ const ChatRoom = () => {
         if (currentMsg && currentUser) {
             let path = currentUser.uid + chatID;
             path = path.split('').sort().join('');
-            await firebase.database().ref(`/chatMessages/${path}`).push({
+            await FirebaseService.pushOnDatabase(`/chatMessages/${path}`, {
                 msg: currentMsg,
                 senderId: currentUser.uid,
                 name: user?.name,

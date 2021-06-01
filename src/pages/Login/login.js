@@ -25,6 +25,7 @@ import SocialBtn from '../../components/socialBtn/socialBtn';
 import { googleLogin, phoneLogin } from '../../Utils/authUtils';
 import PhoneNumberField from '../../components/phoneInput/phoneInput';
 import Loader from '../../components/Loader/loader';
+import FirebaseService from 'Utils/firebaseService';
 
 
 const Login = ({ history }) => {
@@ -53,7 +54,7 @@ const Login = ({ history }) => {
             };
 
             if (result.additionalUserInfo.isNewUser) {
-                firebase.database().ref(`/users/${result.user.uid}`).set({
+                await FirebaseService.setOnDatabase(`/users/${result.user.uid}`, {
                     name: result.user.displayName,
                     email: result.user.email,
                     uid: result.user.uid,
@@ -100,7 +101,7 @@ const Login = ({ history }) => {
         try {
             firebase.auth().onAuthStateChanged(async user => {
                 if (user?.uid) {
-                    let dbUser = await firebase.database().ref(`/users/${user?.uid}`).once("value");
+                    let dbUser = await FirebaseService.getOnceFromDatabase(`/users/${user?.uid}`);
                     setUserLoader(false);
                     dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
                     history.push('/dashboard');
@@ -144,7 +145,7 @@ const Login = ({ history }) => {
 
             if (result?.user) {
                 if (result.additionalUserInfo.isNewUser) {
-                    firebase.database().ref(`/users/${result.user.uid}`).set({
+                    await FirebaseService.setOnDatabase(`/users/${result.user.uid}`, {
                         name: result.user.displayName || "New User",
                         email: result.user.email || "N/A",
                         uid: result.user.uid,
@@ -174,7 +175,7 @@ const Login = ({ history }) => {
                 setIsLoading(true);
                 let loggedIn = await firebase.auth().signInWithEmailAndPassword(email, password);
                 if (loggedIn?.user) {
-                    let dbUser = await firebase.database().ref(`/users/${loggedIn.user.uid}`).once("value");
+                    let dbUser = await FirebaseService.getOnceFromDatabase(`/users/${loggedIn.user.uid}`);
                     dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
                     history.push('/dashboard');
                 }

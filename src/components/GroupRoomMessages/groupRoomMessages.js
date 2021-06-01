@@ -24,6 +24,7 @@ import JoinButton from '../JoinButton/joinButton';
 import { getToken } from '../../firebase';
 
 import './groupRoomMessages.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
@@ -96,14 +97,14 @@ const GroupRoomMessage = () => {
 
     const handleChangeMessage = async ({ target: { value } }) => {
         setCurrentMsg(value);
-        firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).set({
+        FirebaseService.setOnDatabase(`/chatTypings/${roomID}/${topic}/${currentUser.name}`, {
             name: currentUser.name
         });
         handleTypingStop();
     };
 
     const handleTypingStop = debounce(function () {
-        firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).remove();
+        FirebaseService.removeFromDatabase(`/chatTypings/${roomID}/${topic}/${currentUser.name}`);
     }, 1500);
 
     useEffect(() => {
@@ -119,7 +120,7 @@ const GroupRoomMessage = () => {
     const setTokenToGroup = async () => {
         let token = await getToken();
         if(token && roomID && currentUser?.uid) {
-            await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).update({
+            await FirebaseService.updateOnDatabase(`groups/${roomID}/members/${currentUser.uid}`, {
                 deviceToken: token,
             });
         }
@@ -127,7 +128,7 @@ const GroupRoomMessage = () => {
 
     const joinGroup = async () => {
         if (!currentUser) return false;
-        await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).set({
+        await FirebaseService.setOnDatabase(`groups/${roomID}/members/${currentUser.uid}`, {
             memberName: currentUser.name || 'New User',
             uid: currentUser.uid,
             img: currentUser?.img,
@@ -137,7 +138,7 @@ const GroupRoomMessage = () => {
 
     const fetchGroupEntry = async () => {
         setIsLoading(true);
-        let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
+        let dbData = await FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
         let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
         if (currentUser && memberIDs.includes(currentUser.uid)) {
             setIsJoined(true);
@@ -148,14 +149,14 @@ const GroupRoomMessage = () => {
     };
 
     const handleLeaveGroup = async () => {
-        await firebase.database().ref(`groups/${roomID}/members/${currentUser?.uid}`).remove();
+        await FirebaseService.removeFromDatabase(`groups/${roomID}/members/${currentUser?.uid}`);
         fetchGroupEntry();
     };
 
     const sendGroupMessage = async (e) => {
         e.preventDefault();
         if (currentMsg?.trim() && currentUser?.uid) {
-            await firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).push({
+            await FirebaseService.pushOnDatabase(`/groupMessages/${roomID}/${topic}/messages`, {
                 msg: currentMsg,
                 senderId: currentUser.uid,
                 name: currentUser?.name,
@@ -167,7 +168,7 @@ const GroupRoomMessage = () => {
     };
 
     const fetchCloseDiscussion = async () => {
-        let closed = await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).once('value');
+        let closed = await FirebaseService.getOnceFromDatabase(`/groupMessages/${roomID}/${topic}/`);
         if (closed.val()?.closed) {
             setDiscussionClosed(true);
         } else {
@@ -192,7 +193,7 @@ const GroupRoomMessage = () => {
     };
 
     const closeRoomDiscussion = async () => {
-        await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
+        await FirebaseService.updateOnDatabase(`/groupMessages/${roomID}/${topic}/`, { closed: true });
         fetchCloseDiscussion();
         setShowParticipants(false);
     };

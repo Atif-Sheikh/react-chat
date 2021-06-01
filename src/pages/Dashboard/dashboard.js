@@ -26,6 +26,7 @@ import GroupRoomTopics from '../../components/GroupRoomTopics/groupRoomTopics';
 import UserProfileSection from '../../components/UserProfileSection/userProfileSection';
 
 import './dashboard.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const Dashboard = ({ history }) => {
     const [openGroup, setOpenGroup] = useState(false);
@@ -61,7 +62,7 @@ const Dashboard = ({ history }) => {
         try {
             const token = await getToken();
             if (user && token) {
-                firebase.database().ref(`/users/${user.uid}`).update({ deviceToken: token });
+                FirebaseService.updateOnDatabase(`/users/${user.uid}`, { deviceToken: token });
             }
         } catch (err) {
             console.log(err, "ERROR");
@@ -76,7 +77,7 @@ const Dashboard = ({ history }) => {
         try {
             firebase.auth().onAuthStateChanged(async user => {
                 if (user?.uid) {
-                    let dbUser = await firebase.database().ref(`/users/${user.uid}`).once("value");
+                    let dbUser = await FirebaseService.getOnceFromDatabase(`/users/${user.uid}`);
                     dispatch({ type: "UPDATE_USER", payload: dbUser.val() });
                 }
             });
@@ -89,9 +90,9 @@ const Dashboard = ({ history }) => {
         if (user) {
             firebase.database().ref('.info/connected').on('value', snapshot => {
                 if (snapshot) {
-                    firebase.database().ref(`/users/${user.uid}`).update({ status: 'available' });
+                    FirebaseService.updateOnDatabase(`/users/${user.uid}`, { status: 'available' });
                 } else {
-                    firebase.database().ref(`/users/${user.uid}`).update({ status: 'unavailable' });
+                    FirebaseService.updateOnDatabase(`/users/${user.uid}`, { status: 'unavailable' });
                 }
             });
         }

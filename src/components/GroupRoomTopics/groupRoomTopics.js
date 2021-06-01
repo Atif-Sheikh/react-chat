@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import firebase from "firebase/app";
 import {
     useParams,
     useHistory,
@@ -12,6 +11,7 @@ import ListContainer from '../ListContainer/listContainer';
 import GroupRoomTopicItem from '../GroupRoomTopicItem/groupRoomTopicItem';
 
 import './groupTopics.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const GroupRoomTopics = () => {
     const [topics, setTopics] = useState(null);
@@ -24,7 +24,7 @@ const GroupRoomTopics = () => {
     }, [roomID]);
 
     const getGroupTopic = async () => {
-        let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
+        let dbData = await FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
         let topics = dbData.val() ? dbData.val().topics : []
 
         setTopics(topics);

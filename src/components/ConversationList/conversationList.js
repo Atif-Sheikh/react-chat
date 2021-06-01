@@ -15,6 +15,7 @@ import {
 
 import ChatItem from '../Conversation/conversation';
 import ListContainer from '../ListContainer/listContainer';
+import FirebaseService from 'Utils/firebaseService';
 
 const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
 const Conversations = () => {
@@ -38,7 +39,7 @@ const Conversations = () => {
 
     const getUserList = async () => {
         if (currentUser) {
-            let users = await firebase.database().ref('/users').once('value');
+            let users = await FirebaseService.getOnceFromDatabase('/users');
             let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
             dispatch({ type: "ALL_USERS", payload: filteredUsers });
             if (filteredUsers?.length && !roomID && !topic && !chatID) {
