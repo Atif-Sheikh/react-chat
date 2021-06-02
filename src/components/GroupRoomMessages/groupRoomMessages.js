@@ -21,7 +21,7 @@ import Loader from '../Loader/loader';
 import JoinButton from '../JoinButton/joinButton';
 import { getToken } from '../../firebase';
 
-import { getGroupMessages, changeMessage, typingStop, tokenToGroup, joinGroupAction, groupEntry } from '../../Actions'
+import { getGroupMessages, changeMessage, typingStop, tokenToGroup, joinGroupAction, groupEntry, leaveGroup, sendGroupMessageAction, closeDiscussion, roomDiscussion } from '../../Actions'
 
 import './groupRoomMessages.css';
 import FirebaseService from 'Utils/firebaseService';
@@ -146,14 +146,14 @@ const GroupRoomMessage = () => {
     };
 
     const handleLeaveGroup = async () => {
-        await FirebaseService.removeFromDatabase(`groups/${roomID}/members/${currentUser?.uid}`);
+        await leaveGroup(`groups/${roomID}/members/${currentUser?.uid}`);
         fetchGroupEntry();
     };
 
     const sendGroupMessage = async (e) => {
         e.preventDefault();
         if (currentMsg?.trim() && currentUser?.uid) {
-            await FirebaseService.pushOnDatabase(`/groupMessages/${roomID}/${topic}/messages`, {
+            await sendGroupMessageAction(`/groupMessages/${roomID}/${topic}/messages`, {
                 msg: currentMsg,
                 senderId: currentUser.uid,
                 name: currentUser?.name,
@@ -165,7 +165,7 @@ const GroupRoomMessage = () => {
     };
 
     const fetchCloseDiscussion = async () => {
-        let closed = await FirebaseService.getOnceFromDatabase(`/groupMessages/${roomID}/${topic}/`);
+        let closed = await closeDiscussion(`/groupMessages/${roomID}/${topic}/`);
         if (closed.val()?.closed) {
             setDiscussionClosed(true);
         } else {
@@ -190,7 +190,7 @@ const GroupRoomMessage = () => {
     };
 
     const closeRoomDiscussion = async () => {
-        await FirebaseService.updateOnDatabase(`/groupMessages/${roomID}/${topic}/`, { closed: true });
+        await roomDiscussion(`/groupMessages/${roomID}/${topic}/`, { closed: true });
         fetchCloseDiscussion();
         setShowParticipants(false);
     };

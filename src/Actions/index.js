@@ -51,3 +51,19 @@ export const joinGroupAction = (path, data) => {
 export const groupEntry = (path) => {
     return FirebaseService.getOnceFromDatabase(path);
 };
+
+export const leaveGroup = (path) => {
+    return firebase.database().ref(path).remove();
+};
+
+export const sendGroupMessageAction = (path, data) => {
+    return firebase.database().ref(path).push(data);
+}
+
+export const closeDiscussion = (path) => {
+    return FirebaseService.getOnceFromDatabase(path);
+}
+
+export const roomDiscussion = (path, data) => {
+    return firebase.database().ref(path).update(data);
+}
