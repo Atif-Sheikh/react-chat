@@ -9,14 +9,14 @@ import {
     ModalFooter,
     Button,
 } from "@chakra-ui/react";
-import firebase from 'firebase/app';
 
 import './groupParticipant.css';
+import { closeRoom } from 'Actions'
 
 const GroupParticipantsModal = ({ isOpen, handleModalClose, roomID, topic, fetchCloseDiscussion }) => {
 
     const closeRoomDiscussion = async () => {
-        await firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
+        await closeRoom(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
         fetchCloseDiscussion();
         handleModalClose();
     };

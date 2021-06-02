@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { Tooltip, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
-import firebase from 'firebase/app';
 import { useDispatch } from 'react-redux';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useHistory } from 'react-router-dom';
 
 import './chatSelection.css';
+import { logOut } from 'Actions'
 
 const ChatSelection = ({ handleOpenModal }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ const ChatSelection = ({ handleOpenModal }) => {
 
     const handleLogout = async () => {
         try {
-            await firebase.auth().signOut().then(() => {
+            await logOut().then(() => {
                 dispatch({ type: "LOGOUT", payload: null });
                 history.replace('/login');
             })

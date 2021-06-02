@@ -87,3 +87,27 @@ export const joinGroupRoom = (path, data) => {
 export const leaveGroupAction = (path) => {
     return FirebaseService.removeFromDatabase(path)
 };
+
+export const groupDetail = (path) => {
+    return FirebaseService.getOnceFromDatabase(path)
+};
+
+export const closeRoom = (path) => {
+    return firebase.database().ref(path)
+};
+
+export const userList = (path) => {
+    return FirebaseService.getOnceFromDatabase(path)
+};
+
+export const groupListAction = () => {
+    FirebaseService.listenOnDatabaseWithoutOrder('/groups', (data) => store.dispatch({ type: "ALL_GROUPS", payload: data }));
+};
+
+export const logOut = () => {
+    return firebase.auth().signOut();
+};
+
+export const setGroupData = (path, data) => {
+    return firebase.database().ref(path).set(data)
+};

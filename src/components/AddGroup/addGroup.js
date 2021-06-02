@@ -19,6 +19,8 @@ import GroupTopicsInput from '../GroupTopicsInput/groupTopicsInput';
 import './addGroup.css';
 import FirebaseService from 'Utils/firebaseService';
 
+import { setGroupData } from 'Actions';
+
 const AddGroup = ({ isOpen, handleModalClose }) => {
     const [groupName, setGroupName] = useState('');
     const [topics, setTopics] = useState([]);
@@ -29,14 +31,14 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
     const addGroup = async () => {
         if (groupName.trim() && topics.length) {
             let groupId = uuidv4();
-            await FirebaseService.setOnDatabase(`/groups/${groupId}`, {
+            await setGroupData(`/groups/${groupId}`, {
                 groupName: groupName.trim(),
                 topics,
                 creatorID: currentUser.uid,
                 creatorName: currentUser.displayName || 'New User',
                 groupId: groupId,
             });
-            await FirebaseService.setOnDatabase(`/groups/${groupId}/members/${currentUser.uid}`, {
+            await setGroupData(`/groups/${groupId}/members/${currentUser.uid}`, {
                 memberName: currentUser.displayName || 'New User',
                 uid: currentUser.uid,
                 img: currentUser?.img,
