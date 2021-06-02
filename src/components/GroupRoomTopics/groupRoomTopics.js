@@ -11,7 +11,8 @@ import ListContainer from '../ListContainer/listContainer';
 import GroupRoomTopicItem from '../GroupRoomTopicItem/groupRoomTopicItem';
 
 import './groupTopics.css';
-import FirebaseService from 'Utils/firebaseService';
+
+import { groupTopic } from 'Actions'
 
 const GroupRoomTopics = () => {
     const [topics, setTopics] = useState(null);
@@ -24,7 +25,7 @@ const GroupRoomTopics = () => {
     }, [roomID]);
 
     const getGroupTopic = async () => {
-        let dbData = await FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
+        let dbData = await groupTopic(`/groups/${roomID}`);
         let topics = dbData.val() ? dbData.val().topics : []
 
         setTopics(topics);

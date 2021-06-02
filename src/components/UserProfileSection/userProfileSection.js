@@ -12,8 +12,9 @@ import { useParams } from "react-router-dom";
 import FileThumbnail from '../FileThumbnail/fileThumbnail';
 import FileList from '../FileList/fileList';
 
+import { userDetailsById } from 'Actions';
+
 import './userProfileSection.css';
-import FirebaseService from 'Utils/firebaseService';
 
 const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
@@ -51,7 +52,7 @@ const UserProfileSection = () => {
     }, [profileId]);
 
     const fetchUserDetailsById = async (id) => {
-        const dbUser = await (await FirebaseService.getOnceFromDatabase(`/users/${id}`)).val();
+        const dbUser = await userDetailsById(`/users/${id}`);
         dbUser && setUser(dbUser);
     };
 

@@ -67,3 +67,23 @@ export const closeDiscussion = (path) => {
 export const roomDiscussion = (path, data) => {
     return firebase.database().ref(path).update(data);
 }
+
+export const userDetailsById = (path) => {
+    return FirebaseService.getOnceFromDatabase(path)
+}
+
+export const groupTopic = (path) => {
+    return FirebaseService.getOnceFromDatabase(path)
+}
+
+export const groupRoomEntry = (path) => {
+    return FirebaseService.getOnceFromDatabase(path)
+}
+
+export const joinGroupRoom = (path, data) => {
+    return firebase.database().ref(path).set(data)
+};
+
+export const leaveGroupAction = (path) => {
+    return FirebaseService.removeFromDatabase(path)
+};
