@@ -8,10 +8,9 @@ import {
 import {
     useParams
 } from "react-router-dom";
-import { useSelector } from 'react-redux';
 import { Divider } from '@chakra-ui/react';
 import debounce from "lodash/debounce";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Loader from '../Loader/loader';
 import CustomMessageInput from '../CustomMessageInput/customMessageInput';
@@ -21,6 +20,8 @@ import { sendNotification } from '../../Utils/notification';
 
 import './chatContainer.css';
 import FirebaseService from 'Utils/firebaseService';
+import {getMessages, sendTyping, removeTyping, sendMessage, getUser} from 'Actions';
+import { set } from 'lodash';
 
 const ChatRoom = () => {
     const [user, setUser] = useState(null);
@@ -33,15 +34,17 @@ const ChatRoom = () => {
     const messages = useSelector(state => state.chat.chatMessages);
     const dispatch = useDispatch();
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
+    const state = useSelector((state) => state.user.chatUser)
 
     const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
-    const getUser = async () => {
-        let user = await FirebaseService.getOnceFromDatabase(`/users/${chatID}`);
-        if (user?.val()) {
-            setUser(user.val());
+    useEffect(() => {
+        if (state) {
+            setUser(state);
+        }else{
+            setUser(null)
         }
-    };
+    }, [state])
 
     useEffect(() => {
         let msgs = messages ? Object.values(messages).map(msg => ({
@@ -60,14 +63,14 @@ const ChatRoom = () => {
         let path = currentUser.uid + chatID;
         path = path.split('').sort().join('');
         setCurrentMsg(value);
-        await FirebaseService.setOnDatabase(`/chatTypings/${path}/${currentUser.name}`, { name: currentUser.name });
+        await sendTyping(`/chatTypings/${path}/${currentUser.name}`, { name: currentUser.name });
         handleTypingStop();
     };
 
     const handleTypingStop = debounce(function () {
         let path = currentUser.uid + chatID;
         path = path.split('').sort().join('');
-        FirebaseService.removeFromDatabase(`/chatTypings/${path}/${currentUser.name}`);
+        removeTyping(`/chatTypings/${path}/${currentUser.name}`);
     }, 1500);
 
     const fetchMessages = async () => {
@@ -75,7 +78,7 @@ const ChatRoom = () => {
             if (!currentUser) return false;
             let path = currentUser.uid + chatID;
             path = path.split('').sort().join('');
-            FirebaseService.listenOnDatabase(`/chatMessages/${path}`, (data) => dispatch({ type: "CHAT_MESSAGES", payload: data }), 'time');
+            getMessages(`/chatMessages/${path}`)
         } catch (err) {
             setLoader(false);
             console.log(err);
@@ -84,10 +87,7 @@ const ChatRoom = () => {
 
     useEffect(() => {
         setAllMsgs([]);
-        getUser();
-        return () => {
-            getUser();
-        }
+        getUser(`/users/${chatID}`);
     }, [chatID]);
 
     useEffect(() => {
@@ -112,7 +112,7 @@ const ChatRoom = () => {
         if (currentMsg && currentUser) {
             let path = currentUser.uid + chatID;
             path = path.split('').sort().join('');
-            await FirebaseService.pushOnDatabase(`/chatMessages/${path}`, {
+            await sendMessage(`/chatMessages/${path}`, {
                 msg: currentMsg,
                 senderId: currentUser.uid,
                 name: user?.name,

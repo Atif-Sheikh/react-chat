@@ -22,6 +22,7 @@ export default class FirebaseService {
     }
     static listenOnDatabase(ref, callBack = () => {}, orderBy) {
         firebase.database().ref(ref).orderByChild(orderBy).on("value", (snapshot) => {
+            console.log(snapshot.val(), "::::")
             callBack(snapshot.val());
         });
     }

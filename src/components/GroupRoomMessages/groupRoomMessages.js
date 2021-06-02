@@ -6,14 +6,13 @@ import {
     useLocation,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 import {
     Message,
     Avatar,
     TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import debounce from "lodash/debounce";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import EmptyContainer from '../EmptyContainer.js/emptyContainer';
 import CustomChatHeader from '../CustomChatHeader/customChatHeader';
@@ -21,6 +20,8 @@ import CustomMessageInput from '../CustomMessageInput/customMessageInput';
 import Loader from '../Loader/loader';
 import JoinButton from '../JoinButton/joinButton';
 import { getToken } from '../../firebase';
+
+import { getGroupMessages, changeMessage, typingStop, tokenToGroup, joinGroupAction, groupEntry } from '../../Actions'
 
 import './groupRoomMessages.css';
 import FirebaseService from 'Utils/firebaseService';
@@ -41,6 +42,7 @@ const GroupRoomMessage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
+    const stats = useSelector((stats) => stats.chat.groupEntry)
 
     const { state } = useLocation();
     const dispatch = useDispatch();
@@ -65,14 +67,14 @@ const GroupRoomMessage = () => {
     const fetchGroupMessages = async () => {
         setLoader(true);
         if (currentUser) {
-            FirebaseService.listenOnDatabase(`/groupMessages/${roomID}/${topic}/messages`, (data) => dispatch({ type: 'GROUP_MESSAGES', payload: data }), 'time');
+            getGroupMessages(`/groupMessages/${roomID}/${topic}/messages`);
         }
         setLoader(false);
     };
 
     const handleChangeMessage = async ({ target: { value } }) => {
         setCurrentMsg(value);
-        FirebaseService.setOnDatabase(`/chatTypings/${roomID}/${topic}/${currentUser.name}`, {
+        changeMessage(`/chatTypings/${roomID}/${topic}/${currentUser.name}`, {
             name: currentUser.name
         });
         handleTypingStop();
@@ -91,7 +93,7 @@ const GroupRoomMessage = () => {
     }, [groupMessages]);
 
     const handleTypingStop = debounce(function () {
-        FirebaseService.removeFromDatabase(`/chatTypings/${roomID}/${topic}/${currentUser.name}`);
+        typingStop(`/chatTypings/${roomID}/${topic}/${currentUser.name}`);
     }, 1500);
 
     useEffect(() => {
@@ -104,10 +106,18 @@ const GroupRoomMessage = () => {
         }
     }, [isJoined]);
 
+    useEffect(() => {
+        if(stats){
+            setIsJoined(stats)
+        }else{
+            setIsJoined(false)
+        }
+    }, [stats])
+
     const setTokenToGroup = async () => {
         let token = await getToken();
         if(token && roomID && currentUser?.uid) {
-            await FirebaseService.updateOnDatabase(`groups/${roomID}/members/${currentUser.uid}`, {
+            await tokenToGroup(`groups/${roomID}/members/${currentUser.uid}`, {
                 deviceToken: token,
             });
         }
@@ -115,7 +125,7 @@ const GroupRoomMessage = () => {
 
     const joinGroup = async () => {
         if (!currentUser) return false;
-        await FirebaseService.setOnDatabase(`groups/${roomID}/members/${currentUser.uid}`, {
+        await joinGroupAction(`groups/${roomID}/members/${currentUser.uid}`, {
             memberName: currentUser.name || 'New User',
             uid: currentUser.uid,
             img: currentUser?.img,
@@ -125,7 +135,7 @@ const GroupRoomMessage = () => {
 
     const fetchGroupEntry = async () => {
         setIsLoading(true);
-        let dbData = await FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
+        let dbData = await groupEntry(`/groups/${roomID}`);
         let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
         if (currentUser && memberIDs.includes(currentUser.uid)) {
             setIsJoined(true);
