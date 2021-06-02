@@ -43,14 +43,12 @@ const Dashboard = ({ history }) => {
 
     useEffect(() => {
         setUser();
-        updateOnlineStatus();
         window.addEventListener('resize', handleWindowSizeChange);
 
         // isMobile && dispatch({ type: "HIDE_CENTER_CONTENT", payload: true });
 
         return () => {
             window.removeEventListener('resize', handleWindowSizeChange);
-            updateOnlineStatus();
         }
     }, []);
 
@@ -83,18 +81,6 @@ const Dashboard = ({ history }) => {
             });
         } catch (err) {
             console.log(err, "ERROR");
-        }
-    };
-
-    const updateOnlineStatus = () => {
-        if (user) {
-            firebase.database().ref('.info/connected').on('value', snapshot => {
-                if (snapshot) {
-                    FirebaseService.updateOnDatabase(`/users/${user.uid}`, { status: 'available' });
-                } else {
-                    FirebaseService.updateOnDatabase(`/users/${user.uid}`, { status: 'unavailable' });
-                }
-            });
         }
     };
 

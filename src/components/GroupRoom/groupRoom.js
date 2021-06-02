@@ -14,6 +14,7 @@ import CustomChatHeader from '../CustomChatHeader/customChatHeader';
 import JoinButton from '../JoinButton/joinButton';
 
 import './groupRoom.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const GroupRoom = () => {
     const [isJoined, setIsJoined] = useState(false);
@@ -29,7 +30,7 @@ const GroupRoom = () => {
 
     const fetchGroupEntry = async () => {
         setIsLoading(true);
-        let dbData = await firebase.database().ref(`/groups/${roomID}`).once('value');
+        let dbData = await FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
         let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
         let topics = dbData.val() ? dbData.val().topics : [];
         if (currentUser && memberIDs.includes(currentUser.uid)) {
@@ -43,7 +44,7 @@ const GroupRoom = () => {
     };
 
     const joinGroup = async () => {
-        await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).set({
+        await FirebaseService.setOnDatabase(`groups/${roomID}/members/${currentUser.uid}`).set({
             memberName: currentUser.name || 'New User',
             uid: currentUser.uid,
             img: currentUser?.img,
@@ -52,7 +53,7 @@ const GroupRoom = () => {
     };
 
     const handleLeaveGroup = async () => {
-        await firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).remove();
+        await FirebaseService.removeFromDatabase(`groups/${roomID}/members/${currentUser.uid}`);
         fetchGroupEntry();
     };
 

@@ -6,7 +6,6 @@ import {
     useLocation,
 } from "react-router-dom";
 import { Divider } from '@chakra-ui/react';
-import firebase from 'firebase/app';
 import { useSelector } from 'react-redux';
 import {
     Message,
@@ -32,9 +31,10 @@ const GroupRoomMessage = () => {
     const [currentMsg, setCurrentMsg] = useState('');
     const [loader, setLoader] = useState(false);
     const [messages, setMessages] = useState(null);
-    const [typingContent, setTypingContent] = useState('');
+    const [typingContent] = useState('');
     const [discussionClosed, setDiscussionClosed] = useState(false);
     const currentUser = useSelector(state => state.user.user);
+    const groupMessages = useSelector(state => state.chat.groupMessages);
     const { roomID, topic } = useParams();
     const history = useHistory();
     const [isJoined, setIsJoined] = useState(false);
@@ -47,20 +47,8 @@ const GroupRoomMessage = () => {
 
     useEffect(() => {
         fetchGroupMessages();
-        addGroupTypingListener();
         fetchCloseDiscussion();
     }, [roomID, topic, currentUser]);
-
-    const addGroupTypingListener = () => {
-        firebase.database().ref(`/chatTypings/${roomID}/${topic}`).on('value', snap => {
-            if (snap.val()) {
-                let users = Object.keys(snap.val()).filter(name => name !== currentUser.name);
-                users.length > 0 && setTypingContent(`${users.join('')}`);
-            } else {
-                setTypingContent('');
-            }
-        });
-    };
 
     useEffect(() => {
         window.addEventListener('resize', handleWindowSizeChange);
@@ -75,24 +63,11 @@ const GroupRoomMessage = () => {
     };
 
     const fetchGroupMessages = async () => {
-        let firebaseRef = null;
         setLoader(true);
         if (currentUser) {
-            firebaseRef = firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).orderByChild('time').on('value', (snap) => {
-                let dbMsgs = snap.val() ? Object.values(snap.val()).map(msg => ({
-                    message: msg.msg,
-                    sentTime: "15 mins ago",
-                    sender: msg.senderId,
-                    direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
-                    position: currentUser.uid === msg.senderId ? "last" : "single",
-                    img: msg.img,
-                })) : [];
-                setMessages(dbMsgs);
-            });
+            FirebaseService.listenOnDatabase(`/groupMessages/${roomID}/${topic}/messages`, (data) => dispatch({ type: 'GROUP_MESSAGES', payload: data }), 'time');
         }
         setLoader(false);
-
-        return firebaseRef;
     };
 
     const handleChangeMessage = async ({ target: { value } }) => {
@@ -102,6 +77,18 @@ const GroupRoomMessage = () => {
         });
         handleTypingStop();
     };
+
+    useEffect(() => {
+        let dbMsgs = groupMessages ? Object.values(groupMessages).map(msg => ({
+            message: msg.msg,
+            sentTime: "15 mins ago",
+            sender: msg.senderId,
+            direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
+            position: currentUser.uid === msg.senderId ? "last" : "single",
+            img: msg.img,
+        })) : [];
+        setMessages(dbMsgs);
+    }, [groupMessages]);
 
     const handleTypingStop = debounce(function () {
         FirebaseService.removeFromDatabase(`/chatTypings/${roomID}/${topic}/${currentUser.name}`);

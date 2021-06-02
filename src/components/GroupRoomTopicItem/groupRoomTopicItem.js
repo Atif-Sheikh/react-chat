@@ -9,9 +9,9 @@ import {
     NavLink,
     useParams,
 } from "react-router-dom";
-import firebase from "firebase/app";
 
 import './groupRoomTopicItem.css';
+import FirebaseService from 'Utils/firebaseService';
 
 const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
 
@@ -25,7 +25,7 @@ const GroupRoomTopicItem = ({ topic, groupName }) => {
     }, [roomID, topic]);
 
     const fetchIsSolved = async () => {
-        const data = await firebase.database().ref(`/groupMessages/${roomID}/${topic}`).once('value');
+        const data = await FirebaseService.getOnceFromDatabase(`/groupMessages/${roomID}/${topic}`);
         if (data.val()?.closed) {
             setSolved(true);
         } else {

@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import firebase from "firebase/app";
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Conversation,
@@ -21,8 +20,9 @@ const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdI
 const Conversations = () => {
     const dispatch = useDispatch();
     const usersList = useSelector(state => state.user.allUsers);
-    const groupList = useSelector(state => state.user.userGroups);
+    const [groupList, setGroupList] = useState([]);
     const currentUser = useSelector(state => state.user.user);
+    const reducerGroups = useSelector(state => state.user.userGroups);
     const [users, setUsers] = useState(null);
     const history = useHistory();
     const { roomID, topic, chatID } = useParams();
@@ -53,20 +53,18 @@ const Conversations = () => {
 
     const getGroupsList = async () => {
         if (currentUser) {
-            firebase.database().ref('/groups').on('value', (snap) => {
-                let filtered = snap.val() ? Object.values(snap.val()) : [];
-                let joinedGroups = [];
-                filtered.forEach(group => {
-                    // let groupsUsers = group.members ? Object.keys(group.members) : [];
-                    // Filterd groups by specific user 
-                    // if (groupsUsers.includes(currentUser.uid)) {
-                    joinedGroups.push(group);
-                    // }
-                });
-                dispatch({ type: "ALL_GROUPS", payload: joinedGroups });
-            });
+            FirebaseService.listenOnDatabaseWithoutOrder('/groups', (data) => dispatch({ type: "ALL_GROUPS", payload: data }));
         }
     };
+
+    useEffect(() => {
+        let filtered = reducerGroups ? Object.values(reducerGroups) : [];
+        let joinedGroups = [];
+        filtered.forEach(group => {
+            joinedGroups.push(group);
+        });
+        setGroupList(joinedGroups);
+    }, [reducerGroups]);
 
     return (
         <ListContainer>

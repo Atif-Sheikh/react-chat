@@ -9,7 +9,6 @@ import {
     useParams
 } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import firebase from "firebase/app";
 import { Divider } from '@chakra-ui/react';
 import debounce from "lodash/debounce";
 import { useDispatch } from 'react-redux';
@@ -28,9 +27,10 @@ const ChatRoom = () => {
     const [currentMsg, setCurrentMsg] = useState('');
     const [allMsgs, setAllMsgs] = useState([]);
     const [loader, setLoader] = useState(false);
-    const [typingContent, setTypingContent] = useState('');
+    const [typingContent] = useState('');
     const { chatID } = useParams();
     const currentUser = useSelector(state => state.user.user);
+    const messages = useSelector(state => state.chat.chatMessages);
     const dispatch = useDispatch();
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
 
@@ -42,6 +42,19 @@ const ChatRoom = () => {
             setUser(user.val());
         }
     };
+
+    useEffect(() => {
+        let msgs = messages ? Object.values(messages).map(msg => ({
+                message: msg.msg,
+                sentTime: "15 mins ago",
+                sender: currentUser.uid,
+                direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
+                position: currentUser.uid === msg.senderId ? "last" : "single",
+                img: msg.img,
+            })) : [];
+            setAllMsgs(msgs);
+            setLoader(false);
+    }, [messages]);
 
     const handleChangeMessage = async ({ target: { value } }) => {
         let path = currentUser.uid + chatID;
@@ -62,55 +75,24 @@ const ChatRoom = () => {
             if (!currentUser) return false;
             let path = currentUser.uid + chatID;
             path = path.split('').sort().join('');
-            firebase.database().ref(`/chatMessages/${path}`).orderByChild('time').on('value', (snap) => {
-                let msgs = snap.val() ? Object.values(snap.val()).map(msg => ({
-                    message: msg.msg,
-                    sentTime: "15 mins ago",
-                    sender: currentUser.uid,
-                    direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
-                    position: currentUser.uid === msg.senderId ? "last" : "single",
-                    img: msg.img,
-                })) : [];
-                setAllMsgs(msgs);
-                setLoader(false);
-            });
+            FirebaseService.listenOnDatabase(`/chatMessages/${path}`, (data) => dispatch({ type: "CHAT_MESSAGES", payload: data }), 'time');
         } catch (err) {
             setLoader(false);
             console.log(err);
         }
     };
 
-    const addChatTypingListener = () => {
-        if (currentUser) {
-            let path = currentUser.uid + chatID;
-            path = path.split('').sort().join('');
-            firebase.database().ref(`/chatTypings/${path}`).on('value', snap => {
-                if (snap.val()) {
-                    let users = Object.keys(snap.val()).filter(name => name !== currentUser.name);
-                    users.length > 0 && setTypingContent(`${users.join('')}`);
-                } else {
-                    setTypingContent('');
-                }
-            });
-        }
-    };
-
     useEffect(() => {
         setAllMsgs([]);
         getUser();
-        addChatTypingListener();
         return () => {
             getUser();
-            addChatTypingListener()
         }
     }, [chatID]);
 
     useEffect(() => {
         setLoader(true);
         fetchMessages();
-        return () => {
-            fetchMessages();
-        }
     }, [user, currentUser]);
 
     useEffect(() => {

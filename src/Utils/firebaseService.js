@@ -20,8 +20,15 @@ export default class FirebaseService {
     static removeFromDatabase(ref) {
         return firebase.database().ref(ref).remove();
     }
-    static listenOnDatabase(ref) {
-        return firebase.database().ref(ref).once("value", (snapshot) => snapshot.val())
+    static listenOnDatabase(ref, callBack = () => {}, orderBy) {
+        firebase.database().ref(ref).orderByChild(orderBy).on("value", (snapshot) => {
+            callBack(snapshot.val());
+        });
+    }
+    static listenOnDatabaseWithoutOrder(ref, callBack = () => {}) {
+        firebase.database().ref(ref).on("value", (snapshot) => {
+            callBack(snapshot.val());
+        });
     }
     static logoutuser() {
         return firebase.auth().signOut()
