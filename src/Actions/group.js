@@ -44,8 +44,8 @@ export const sendGroupMessageAction = (roomID, topic, currentUser, msg) => {
     return firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).push(data);
 }
 
-export const groupTopic = (path) => {
-    return FirebaseService.getOnceFromDatabase(path)
+export const groupTopic = (roomID) => {
+    return FirebaseService.getOnceFromDatabase(`/groups/${roomID}`)
 }
 
 export const groupRoomEntry = (roomID) => {

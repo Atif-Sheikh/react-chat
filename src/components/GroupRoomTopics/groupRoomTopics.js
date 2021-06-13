@@ -25,7 +25,7 @@ const GroupRoomTopics = () => {
     }, [roomID]);
 
     const getGroupTopic = async () => {
-        let dbData = await groupTopic(`/groups/${roomID}`);
+        let dbData = await groupTopic(roomID);
         let topics = dbData.val() ? dbData.val().topics : []
 
         setTopics(topics);
