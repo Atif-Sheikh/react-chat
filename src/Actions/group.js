@@ -2,32 +2,46 @@ import firebase from 'firebase/app';
 import FirebaseService from 'Utils/firebaseService';
 import { store } from '../index';
 import { v4 as uuidv4 } from 'uuid';
+import appConstants from '../config/appConstants';
 
 
-export const getGroupMessages = (path) => {
-    firebase.database().ref(path).orderByChild('time').on("value", (snapshot) => {
+export const getGroupMessages = (roomID, topic) => {
+    firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).orderByChild('time').on("value", (snapshot) => {
         store.dispatch({ type: "GROUP_MESSAGES", payload: snapshot.val() })
     });
 }
 
-export const tokenToGroup = (path, data) => {
-    return firebase.database().ref(path).update(data);
+export const tokenToGroup = (roomID, currentUser, token) => {
+    return firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).update({
+        deviceToken: token,
+    });
 };
 
-export const joinGroupAction = (path, data) => {
-    return firebase.database().ref(path).set(data)
+export const joinGroupAction = (roomID, currentUser) => {
+    return firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).set({
+        memberName: currentUser.name || 'New User',
+        uid: currentUser.uid,
+        img: currentUser?.img,
+    })
 };
 
-export const groupEntry = (path) => {
-    return FirebaseService.getOnceFromDatabase(path);
+export const groupEntry = (roomID) => {
+    return FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
 };
 
-export const leaveGroup = (path) => {
-    return firebase.database().ref(path).remove();
+export const leaveGroup = (roomID, currentUser) => {
+    return firebase.database().ref(`groups/${roomID}/members/${currentUser?.uid}`).remove();
 };
 
-export const sendGroupMessageAction = (path, data) => {
-    return firebase.database().ref(path).push(data);
+export const sendGroupMessageAction = (roomID, topic, currentUser, msg) => {
+    const data = {
+        msg,
+        senderId: currentUser.uid,
+        name: currentUser?.name,
+        img: currentUser.img || appConstants.defaultImage,
+        time: Date.now(),
+    }
+    return firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).push(data);
 }
 
 export const groupTopic = (path) => {

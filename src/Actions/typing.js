@@ -14,6 +14,6 @@ export const removeTyping = (currentUser, chatID) => {
 
 
 
-export const typingStop = (path) => {
-    return firebase.database().ref(path).remove();
+export const typingStop = (roomID, topic, currentUser) => {
+    return firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).remove();
 };

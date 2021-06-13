@@ -34,6 +34,8 @@ export const sendMessage = (currentUser, chatID, msg, user) => {
     return firebase.database().ref(`/chatMessages/${path}`).push(data);
 }
 
-export const changeMessage = (path, data) => {
-    return firebase.database().ref(path).set(data);
+export const changeMessage = (roomID, topic, currentUser) => {
+    return firebase.database().ref(`/chatTypings/${roomID}/${topic}/${currentUser.name}`).set({
+        name: currentUser.name
+    });
 }

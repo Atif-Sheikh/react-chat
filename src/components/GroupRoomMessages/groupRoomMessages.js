@@ -22,11 +22,11 @@ import JoinButton from '../JoinButton/joinButton';
 import { getToken } from '../../firebase';
 
 import { getGroupMessages, changeMessage, typingStop, tokenToGroup, joinGroupAction, groupEntry, leaveGroup, sendGroupMessageAction, closeDiscussion, roomDiscussion } from '../../Actions'
+import appConstants from '../../config/appConstants';
 
 import './groupRoomMessages.css';
-import FirebaseService from 'Utils/firebaseService';
 
-const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
+const iconUrl = appConstants.defaultImage;
 
 const GroupRoomMessage = () => {
     const [currentMsg, setCurrentMsg] = useState('');
@@ -67,16 +67,14 @@ const GroupRoomMessage = () => {
     const fetchGroupMessages = async () => {
         setLoader(true);
         if (currentUser) {
-            getGroupMessages(`/groupMessages/${roomID}/${topic}/messages`);
+            getGroupMessages(roomID, topic);
         }
         setLoader(false);
     };
 
     const handleChangeMessage = async ({ target: { value } }) => {
         setCurrentMsg(value);
-        changeMessage(`/chatTypings/${roomID}/${topic}/${currentUser.name}`, {
-            name: currentUser.name
-        });
+        changeMessage(roomID, topic, currentUser);
         handleTypingStop();
     };
 
@@ -93,7 +91,7 @@ const GroupRoomMessage = () => {
     }, [groupMessages]);
 
     const handleTypingStop = debounce(function () {
-        typingStop(`/chatTypings/${roomID}/${topic}/${currentUser.name}`);
+        typingStop(roomID, topic, currentUser);
     }, 1500);
 
     useEffect(() => {
@@ -107,35 +105,29 @@ const GroupRoomMessage = () => {
     }, [isJoined]);
 
     useEffect(() => {
-        if(stats){
+        if (stats) {
             setIsJoined(stats)
-        }else{
+        } else {
             setIsJoined(false)
         }
     }, [stats])
 
     const setTokenToGroup = async () => {
         let token = await getToken();
-        if(token && roomID && currentUser?.uid) {
-            await tokenToGroup(`groups/${roomID}/members/${currentUser.uid}`, {
-                deviceToken: token,
-            });
+        if (token && roomID && currentUser?.uid) {
+            await tokenToGroup(roomID, currentUser, token);
         }
     };
 
     const joinGroup = async () => {
         if (!currentUser) return false;
-        await joinGroupAction(`groups/${roomID}/members/${currentUser.uid}`, {
-            memberName: currentUser.name || 'New User',
-            uid: currentUser.uid,
-            img: currentUser?.img,
-        });
+        await joinGroupAction(roomID, currentUser);
         fetchGroupEntry();
     };
 
     const fetchGroupEntry = async () => {
         setIsLoading(true);
-        let dbData = await groupEntry(`/groups/${roomID}`);
+        let dbData = await groupEntry(roomID);
         let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
         if (currentUser && memberIDs.includes(currentUser.uid)) {
             setIsJoined(true);
@@ -146,26 +138,20 @@ const GroupRoomMessage = () => {
     };
 
     const handleLeaveGroup = async () => {
-        await leaveGroup(`groups/${roomID}/members/${currentUser?.uid}`);
+        await leaveGroup(roomID, currentUser);
         fetchGroupEntry();
     };
 
     const sendGroupMessage = async (e) => {
         e.preventDefault();
         if (currentMsg?.trim() && currentUser?.uid) {
-            await sendGroupMessageAction(`/groupMessages/${roomID}/${topic}/messages`, {
-                msg: currentMsg,
-                senderId: currentUser.uid,
-                name: currentUser?.name,
-                img: currentUser.img || iconUrl,
-                time: Date.now(),
-            });
+            await sendGroupMessageAction(roomID, topic, currentUser, currentMsg)
         }
         setCurrentMsg('');
     };
 
     const fetchCloseDiscussion = async () => {
-        let closed = await closeDiscussion(`/groupMessages/${roomID}/${topic}/`);
+        let closed = await closeDiscussion(roomID, topic);
         if (closed.val()?.closed) {
             setDiscussionClosed(true);
         } else {
@@ -190,7 +176,7 @@ const GroupRoomMessage = () => {
     };
 
     const closeRoomDiscussion = async () => {
-        await roomDiscussion(`/groupMessages/${roomID}/${topic}/`, { closed: true });
+        await roomDiscussion(roomID, topic);
         fetchCloseDiscussion();
         setShowParticipants(false);
     };

@@ -5,12 +5,12 @@ import FirebaseService from 'Utils/firebaseService';
 
 
 
-export const closeDiscussion = (path) => {
-    return FirebaseService.getOnceFromDatabase(path);
+export const closeDiscussion = (roomID, topic) => {
+    return FirebaseService.getOnceFromDatabase(`/groupMessages/${roomID}/${topic}/`);
 }
 
-export const roomDiscussion = (path, data) => {
-    return firebase.database().ref(path).update(data);
+export const roomDiscussion = (roomID, topic) => {
+    return firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
 }
 
 
