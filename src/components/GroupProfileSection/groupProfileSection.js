@@ -21,12 +21,12 @@ import {
 // import FileThumbnail from '../FileThumbnail/fileThumbnail';
 // import FileList from '../FileList/fileList';
 import './groupProfile.css';
-import FirebaseService from 'Utils/firebaseService';
 
-import { groupDetail } from 'Actions'
+import { groupDetail } from 'Actions';
+import appConstants from '../../config/appConstants';
 
 const dummyIcon = "https://bit.ly/sage-adebayo";
-const groupIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
+const groupIcon = appConstants.defaultGroupImage;
 
 const GroupProfileSection = () => {
     const [groupDetails, setGroupsDetails] = useState(null);
@@ -45,7 +45,7 @@ const GroupProfileSection = () => {
     }, [roomID]);
 
     const fetchGroupDetails = async () => {
-        const group = await groupDetail(`/groups/${roomID}`);
+        const group = await groupDetail(roomID);
 
         if (group) {
             let groupCopied = JSON.parse(JSON.stringify(group));

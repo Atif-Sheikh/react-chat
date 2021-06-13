@@ -46,8 +46,8 @@ export const leaveGroupAction = (path) => {
     return FirebaseService.removeFromDatabase(path)
 };
 
-export const groupDetail = (path) => {
-    return FirebaseService.getOnceFromDatabase(path)
+export const groupDetail = (roomID) => {
+    return FirebaseService.getOnceFromDatabase(`/groups/${roomID}`)
 };
 
 export const setGroupData = (path, data) => {
