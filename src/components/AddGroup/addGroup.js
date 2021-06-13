@@ -11,15 +11,14 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { useSelector } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
+
 
 import InputField from '../inputField/inputField';
 import GroupTopicsInput from '../GroupTopicsInput/groupTopicsInput';
 
 import './addGroup.css';
-import FirebaseService from 'Utils/firebaseService';
 
-import { setGroupData } from 'Actions';
+import { createGroup } from 'Actions';
 
 const AddGroup = ({ isOpen, handleModalClose }) => {
     const [groupName, setGroupName] = useState('');
@@ -30,28 +29,27 @@ const AddGroup = ({ isOpen, handleModalClose }) => {
 
     const addGroup = async () => {
         if (groupName.trim() && topics.length) {
-            let groupId = uuidv4();
-            await setGroupData(`/groups/${groupId}`, {
-                groupName: groupName.trim(),
-                topics,
-                creatorID: currentUser.uid,
-                creatorName: currentUser.displayName || 'New User',
-                groupId: groupId,
-            });
-            await setGroupData(`/groups/${groupId}/members/${currentUser.uid}`, {
-                memberName: currentUser.displayName || 'New User',
-                uid: currentUser.uid,
-                img: currentUser?.img,
-            });
-            handleModalClose();
-            toast({
-                position: "top",
-                title: "Group added",
-                description: `${groupName} has been created.`,
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-            });
+            try {
+                await createGroup(groupName, topics, currentUser)
+                handleModalClose();
+                toast({
+                    position: "top",
+                    title: "Group added",
+                    description: `${groupName} has been created.`,
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } catch (err) {
+                toast({
+                    position: "top",
+                    title: "Error while creating group",
+                    description: err?.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         } else {
             toast({
                 position: "top",
