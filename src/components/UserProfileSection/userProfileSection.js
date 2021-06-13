@@ -13,10 +13,11 @@ import FileThumbnail from '../FileThumbnail/fileThumbnail';
 import FileList from '../FileList/fileList';
 
 import { userDetailsById } from 'Actions';
+import appConstants from '../../config/appConstants';
 
 import './userProfileSection.css';
 
-const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
+const iconUrl = appConstants.defaultImage;
 
 const UserProfileSection = () => {
     const [user, setUser] = useState(null);
@@ -52,7 +53,7 @@ const UserProfileSection = () => {
     }, [profileId]);
 
     const fetchUserDetailsById = async (id) => {
-        const dbUser = await userDetailsById(`/users/${id}`);
+        const dbUser = await userDetailsById(id);
         dbUser && setUser(dbUser);
     };
 

@@ -9,8 +9,8 @@ export const getUser = async (chatID) => {
 }
 
 
-export const userDetailsById = (path) => {
-    return FirebaseService.getOnceFromDatabase(path)
+export const userDetailsById = (id) => {
+    return FirebaseService.getOnceFromDatabase(`/users/${id}`)
 }
 
 export const userList = () => {
