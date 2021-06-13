@@ -7,10 +7,11 @@ import {
     NavLink,
 } from "react-router-dom";
 import { useDispatch } from 'react-redux';
+import appConstants from '../../config/appConstants';
 
 import './conversation.css';
 
-const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
+const iconUrl = appConstants.defaultImage;
 
 const ChatItem = ({ usr: { name, lastMessage, lastSender, status, img, uid } }) => {
     const dispatch = useDispatch();

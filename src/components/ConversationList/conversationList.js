@@ -14,9 +14,11 @@ import {
 
 import ChatItem from '../Conversation/conversation';
 import ListContainer from '../ListContainer/listContainer';
-import { userList, groupListAction } from '../../Actions' 
+import { userList, groupListAction } from '../../Actions';
+import appConstants from '../../config/appConstants';
 
-const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
+
+const iconUrl = appConstants.defaultGroupImage;
 const Conversations = () => {
     const dispatch = useDispatch();
     const usersList = useSelector(state => state.user.allUsers);
@@ -39,7 +41,7 @@ const Conversations = () => {
 
     const getUserList = async () => {
         if (currentUser) {
-            let users = await userList('/users');
+            let users = await userList();
             let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
             dispatch({ type: "ALL_USERS", payload: filteredUsers });
             if (filteredUsers?.length && !roomID && !topic && !chatID) {

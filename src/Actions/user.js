@@ -13,8 +13,8 @@ export const userDetailsById = (path) => {
     return FirebaseService.getOnceFromDatabase(path)
 }
 
-export const userList = (path) => {
-    return FirebaseService.getOnceFromDatabase(path)
+export const userList = () => {
+    return FirebaseService.getOnceFromDatabase('/users')
 };
 
 

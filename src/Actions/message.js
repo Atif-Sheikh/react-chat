@@ -29,7 +29,7 @@ export const sendMessage = (currentUser, chatID, msg, user) => {
         time: Date.now(),
     }
     if(!data.img){
-        data.img = appConstants.iconUrl;
+        data.img = appConstants.defaultImage;
     }
     return firebase.database().ref(`/chatMessages/${path}`).push(data);
 }
