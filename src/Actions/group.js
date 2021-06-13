@@ -34,16 +34,21 @@ export const groupTopic = (path) => {
     return FirebaseService.getOnceFromDatabase(path)
 }
 
-export const groupRoomEntry = (path) => {
-    return FirebaseService.getOnceFromDatabase(path)
+export const groupRoomEntry = (roomID) => {
+    return FirebaseService.getOnceFromDatabase(`/groups/${roomID}`)
 }
 
-export const joinGroupRoom = (path, data) => {
-    return firebase.database().ref(path).set(data)
+export const joinGroupRoom = (roomID, currentUser) => {
+    const data = {
+        memberName: currentUser?.name || 'New User',
+        uid: currentUser?.uid,
+        img: currentUser?.img,
+    }
+    return firebase.database().ref(`groups/${roomID}/members/${currentUser.uid}`).set(data)
 };
 
-export const leaveGroupAction = (path) => {
-    return FirebaseService.removeFromDatabase(path)
+export const leaveGroupAction = (roomID, currentUser) => {
+    return FirebaseService.removeFromDatabase(`groups/${roomID}/members/${currentUser.uid}`)
 };
 
 export const groupDetail = (roomID) => {

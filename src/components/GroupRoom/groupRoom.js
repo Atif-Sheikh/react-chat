@@ -29,7 +29,7 @@ const GroupRoom = () => {
 
     const fetchGroupEntry = async () => {
         setIsLoading(true);
-        let dbData = await groupRoomEntry(`/groups/${roomID}`);
+        let dbData = await groupRoomEntry(roomID);
         let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
         let topics = dbData.val() ? dbData.val().topics : [];
         if (currentUser && memberIDs.includes(currentUser.uid)) {
@@ -43,16 +43,12 @@ const GroupRoom = () => {
     };
 
     const joinGroup = async () => {
-        await joinGroupRoom(`groups/${roomID}/members/${currentUser.uid}`).set({
-            memberName: currentUser.name || 'New User',
-            uid: currentUser.uid,
-            img: currentUser?.img,
-        });
+        await joinGroupRoom(roomID, currentUser);
         fetchGroupEntry();
     };
 
     const handleLeaveGroup = async () => {
-        await leaveGroupAction(`groups/${roomID}/members/${currentUser.uid}`);
+        await leaveGroupAction(roomID, currentUser.uid);
         fetchGroupEntry();
     };
 
