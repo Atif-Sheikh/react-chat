@@ -16,7 +16,7 @@ import { closeRoom } from 'Actions'
 const GroupParticipantsModal = ({ isOpen, handleModalClose, roomID, topic, fetchCloseDiscussion }) => {
 
     const closeRoomDiscussion = async () => {
-        await closeRoom(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
+        await closeRoom(roomID, topic);
         fetchCloseDiscussion();
         handleModalClose();
     };

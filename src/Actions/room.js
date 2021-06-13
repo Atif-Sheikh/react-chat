@@ -14,6 +14,6 @@ export const roomDiscussion = (path, data) => {
 }
 
 
-export const closeRoom = (path) => {
-    return firebase.database().ref(path)
+export const closeRoom = (roomID, topic) => {
+    return firebase.database().ref(`/groupMessages/${roomID}/${topic}/`).update({ closed: true });
 };
