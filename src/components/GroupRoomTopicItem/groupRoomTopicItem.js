@@ -11,9 +11,10 @@ import {
 } from "react-router-dom";
 
 import './groupRoomTopicItem.css';
-import FirebaseService from 'Utils/firebaseService';
+import { getGroupMessagesTopic } from '../../Actions';
+import appConstants from '../../config/appConstants';
 
-const iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRNTZ5wdImOinohfS8KAbiAvzj6ekn87c9Dg&usqp=CAU";
+const iconUrl = appConstants.defaultGroupImage;
 
 const GroupRoomTopicItem = ({ topic, groupName }) => {
     const [solved, setSolved] = useState(false);
@@ -25,7 +26,7 @@ const GroupRoomTopicItem = ({ topic, groupName }) => {
     }, [roomID, topic]);
 
     const fetchIsSolved = async () => {
-        const data = await FirebaseService.getOnceFromDatabase(`/groupMessages/${roomID}/${topic}`);
+        const data = await getGroupMessagesTopic(roomID, topic);
         if (data.val()?.closed) {
             setSolved(true);
         } else {

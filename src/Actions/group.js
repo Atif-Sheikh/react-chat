@@ -92,3 +92,7 @@ export const createGroup = async (groupName, topics, currentUser) => {
         img: currentUser?.img,
     });
 }
+
+export const getGroupMessagesTopic = (roomID, topic) => {
+    return FirebaseService.getOnceFromDatabase(`/groupMessages/${roomID}/${topic}`);
+}
