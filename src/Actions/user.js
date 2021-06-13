@@ -3,8 +3,8 @@ import FirebaseService from 'Utils/firebaseService';
 import {store} from '../index';
 
 
-export const getUser = async (path) => {
-    let user = await FirebaseService.getOnceFromDatabase(path)
+export const getUser = async (chatID) => {
+    let user = await FirebaseService.getOnceFromDatabase(`/users/${chatID}`)
     store.dispatch({type: "GET_USER", payload: user.val() })
 }
 

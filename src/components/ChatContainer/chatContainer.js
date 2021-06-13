@@ -19,9 +19,7 @@ import CustomChatHeader from '../CustomChatHeader/customChatHeader';
 import { sendNotification } from '../../Utils/notification';
 
 import './chatContainer.css';
-import FirebaseService from 'Utils/firebaseService';
 import {getMessages, sendTyping, removeTyping, sendMessage, getUser} from 'Actions';
-import { set } from 'lodash';
 
 const ChatRoom = () => {
     const [user, setUser] = useState(null);
@@ -36,7 +34,6 @@ const ChatRoom = () => {
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
     const state = useSelector((state) => state.user.chatUser)
 
-    const iconUrl = "https://chatscope.io/storybook/react/static/media/zoe.e31a4ff8.svg";
 
     useEffect(() => {
         if (state) {
@@ -60,25 +57,19 @@ const ChatRoom = () => {
     }, [messages]);
 
     const handleChangeMessage = async ({ target: { value } }) => {
-        let path = currentUser.uid + chatID;
-        path = path.split('').sort().join('');
         setCurrentMsg(value);
-        await sendTyping(`/chatTypings/${path}/${currentUser.name}`, { name: currentUser.name });
+        await sendTyping(currentUser, chatID);
         handleTypingStop();
     };
 
     const handleTypingStop = debounce(function () {
-        let path = currentUser.uid + chatID;
-        path = path.split('').sort().join('');
-        removeTyping(`/chatTypings/${path}/${currentUser.name}`);
+        removeTyping(currentUser, chatID);
     }, 1500);
 
     const fetchMessages = async () => {
         try {
             if (!currentUser) return false;
-            let path = currentUser.uid + chatID;
-            path = path.split('').sort().join('');
-            getMessages(`/chatMessages/${path}`)
+            getMessages(currentUser, chatID);
         } catch (err) {
             setLoader(false);
             console.log(err);
@@ -87,7 +78,7 @@ const ChatRoom = () => {
 
     useEffect(() => {
         setAllMsgs([]);
-        getUser(`/users/${chatID}`);
+        getUser(chatID);
     }, [chatID]);
 
     useEffect(() => {
@@ -110,16 +101,7 @@ const ChatRoom = () => {
     const handleSendMsg = async (e) => {
         e.preventDefault();
         if (currentMsg && currentUser) {
-            let path = currentUser.uid + chatID;
-            path = path.split('').sort().join('');
-            await sendMessage(`/chatMessages/${path}`, {
-                msg: currentMsg,
-                senderId: currentUser.uid,
-                name: user?.name,
-                img: user.img || iconUrl,
-                reciverId: chatID,
-                time: Date.now(),
-            });
+            await sendMessage(currentUser, chatID, currentMsg, user);
             setCurrentMsg('');
             if (user?.deviceToken) {
                 sendNotification({ title: currentUser.name, body: currentMsg, deviceToken: user.deviceToken });

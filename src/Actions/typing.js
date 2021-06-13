@@ -1,12 +1,15 @@
 import firebase from 'firebase/app';
+import { getPath } from './message';
 
 
-export const sendTyping = (path, data) => {
-    return firebase.database().ref(path).set(data);
-} 
+export const sendTyping = (currentUser, chatID) => {
+    const path = getPath(currentUser, chatID);
+    return firebase.database().ref(`/chatTypings/${path}/${currentUser.name}`).set({ name: currentUser.name });
+}
 
-export const removeTyping = path => {
-    return firebase.database().ref(path).remove();
+export const removeTyping = (currentUser, chatID) => {
+    const path = getPath(currentUser, chatID);
+    return firebase.database().ref(`/chatTypings/${path}/${currentUser.name}`).remove();
 };
 
 
