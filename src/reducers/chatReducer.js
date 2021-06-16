@@ -4,7 +4,7 @@ const initState = {
 
     groupMessages: [],
 
-    groupEntry: false
+    groupEntry: {}
 };
 
 //Define Actions
@@ -26,7 +26,7 @@ const chatReducer = (state = initState, action) => {
             case 'GROUP_ENTRY':
                 return {
                     ...state,
-                    groupEntry: action.payload,
+                    groupEntry: { ...state.groupEntry, ...action.payload},
                 }    
 
         default:

@@ -22,11 +22,8 @@ import JoinButton from '../JoinButton/joinButton';
 import { getToken } from '../../firebase';
 
 import { getGroupMessages, changeMessage, typingStop, tokenToGroup, joinGroupAction, groupEntry, leaveGroup, sendGroupMessageAction, closeDiscussion, roomDiscussion } from '../../Actions'
-import appConstants from '../../config/appConstants';
 
 import './groupRoomMessages.css';
-
-const iconUrl = appConstants.defaultImage;
 
 const GroupRoomMessage = () => {
     const [currentMsg, setCurrentMsg] = useState('');
@@ -42,7 +39,7 @@ const GroupRoomMessage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
     const [isMobile, setIsMobile] = useState(Boolean(window.innerWidth < 550));
-    const stats = useSelector((stats) => stats.chat.groupEntry)
+    const groupJoined = useSelector((stats) => stats.chat.groupEntry)
 
     const { state } = useLocation();
     const dispatch = useDispatch();
@@ -97,12 +94,8 @@ const GroupRoomMessage = () => {
     }, [isJoined]);
 
     useEffect(() => {
-        if (stats) {
-            setIsJoined(stats)
-        } else {
-            setIsJoined(false)
-        }
-    }, [stats])
+        setIsJoined(Object.keys(groupJoined).includes(roomID));        
+    }, [groupJoined])
 
     const setTokenToGroup = async () => {
         let token = await getToken();
@@ -119,13 +112,7 @@ const GroupRoomMessage = () => {
 
     const fetchGroupEntry = async () => {
         setIsLoading(true);
-        let dbData = await groupEntry(roomID);
-        let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
-        if (currentUser && memberIDs.includes(currentUser.uid)) {
-            setIsJoined(true);
-        } else {
-            setIsJoined(false);
-        }
+        groupEntry(roomID);
         setIsLoading(false);
     };
 

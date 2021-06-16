@@ -34,8 +34,12 @@ export const joinGroupAction = (roomID, currentUser) => {
     })
 };
 
-export const groupEntry = (roomID) => {
-    return FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
+export const groupEntry = async (roomID) => {
+    const currentUser = await firebase.auth().currentUser;
+    const dbData = await FirebaseService.getOnceFromDatabase(`/groups/${roomID}`);
+    let memberIDs = dbData.val() ? Object.keys(dbData.val().members) : [];
+    
+    store.dispatch({ type: "GROUP_ENTRY", payload: {[roomID]: Boolean(memberIDs.includes(currentUser?.uid))} });
 };
 
 export const leaveGroup = (roomID, currentUser) => {
