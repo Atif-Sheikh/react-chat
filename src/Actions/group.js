@@ -5,9 +5,18 @@ import { v4 as uuidv4 } from 'uuid';
 import appConstants from '../config/appConstants';
 
 
-export const getGroupMessages = (roomID, topic) => {
+export const getGroupMessages = async (roomID, topic) => {
+    const currentUser = await firebase.auth().currentUser;
     firebase.database().ref(`/groupMessages/${roomID}/${topic}/messages`).orderByChild('time').on("value", (snapshot) => {
-        store.dispatch({ type: "GROUP_MESSAGES", payload: snapshot.val() })
+        let dbMsgs = snapshot.val() ? Object.values(snapshot.val()).map(msg => ({
+            message: msg.msg,
+            sentTime: "15 mins ago",
+            sender: msg.senderId,
+            direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
+            position: currentUser.uid === msg.senderId ? "last" : "single",
+            img: msg.img,
+        })) : [];
+        store.dispatch({ type: "GROUP_MESSAGES", payload: dbMsgs })
     });
 }
 

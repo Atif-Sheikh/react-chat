@@ -79,15 +79,7 @@ const GroupRoomMessage = () => {
     };
 
     useEffect(() => {
-        let dbMsgs = groupMessages ? Object.values(groupMessages).map(msg => ({
-            message: msg.msg,
-            sentTime: "15 mins ago",
-            sender: msg.senderId,
-            direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
-            position: currentUser.uid === msg.senderId ? "last" : "single",
-            img: msg.img,
-        })) : [];
-        setMessages(dbMsgs);
+        groupMessages?.length && setMessages(groupMessages);
     }, [groupMessages]);
 
     const handleTypingStop = debounce(function () {
