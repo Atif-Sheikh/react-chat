@@ -13,7 +13,15 @@ export const getPath = (currentUser, chatID) => {
 export const getMessages = (currentUser, chatID) => {
     const path = getPath(currentUser, chatID);
     firebase.database().ref(`/chatMessages/${path}`).orderByChild('time').on("value", (snapshot) => {
-        store.dispatch({ type: "CHAT_MESSAGES", payload: snapshot.val() })
+        let msgs = snapshot.val() ? Object.values(snapshot.val()).map(msg => ({
+            message: msg.msg,
+            sentTime: "15 mins ago",
+            sender: currentUser.uid,
+            direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
+            position: currentUser.uid === msg.senderId ? "last" : "single",
+            img: msg.img,
+        })) : [];
+        store.dispatch({ type: "CHAT_MESSAGES", payload: msgs });
     });
 }
 

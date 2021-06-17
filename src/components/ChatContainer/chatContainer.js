@@ -44,15 +44,7 @@ const ChatRoom = () => {
     }, [state])
 
     useEffect(() => {
-        let msgs = messages ? Object.values(messages).map(msg => ({
-                message: msg.msg,
-                sentTime: "15 mins ago",
-                sender: currentUser.uid,
-                direction: currentUser.uid === msg.senderId ? "outgoing" : "incoming",
-                position: currentUser.uid === msg.senderId ? "last" : "single",
-                img: msg.img,
-            })) : [];
-            setAllMsgs(msgs);
+            messages && setAllMsgs(messages);
             setLoader(false);
     }, [messages]);
 
