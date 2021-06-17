@@ -13,8 +13,11 @@ export const userDetailsById = (id) => {
     return FirebaseService.getOnceFromDatabase(`/users/${id}`)
 }
 
-export const userList = () => {
-    return FirebaseService.getOnceFromDatabase('/users')
+export const userList = async () => {
+    const currentUser = await firebase.auth().currentUser;
+    const dbUsers = await FirebaseService.getOnceFromDatabase('/users');
+
+    return dbUsers.val() ? Object.values(dbUsers.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];            
 };
 
 

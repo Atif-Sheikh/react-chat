@@ -41,8 +41,7 @@ const Conversations = () => {
 
     const getUserList = async () => {
         if (currentUser) {
-            let users = await userList();
-            let filteredUsers = users.val() ? Object.values(users.val()).map(usr => ({ name: usr.name, uid: usr?.uid, status: usr.status || 'unavailable', img: usr.img || '' })).filter(usr => usr?.uid !== currentUser?.uid) : [];
+            let filteredUsers = await userList();
             dispatch({ type: "ALL_USERS", payload: filteredUsers });
             if (filteredUsers?.length && !roomID && !topic && !chatID) {
                 history.push({
@@ -60,12 +59,7 @@ const Conversations = () => {
     };
 
     useEffect(() => {
-        let filtered = reducerGroups ? Object.values(reducerGroups) : [];
-        let joinedGroups = [];
-        filtered.forEach(group => {
-            joinedGroups.push(group);
-        });
-        setGroupList(joinedGroups);
+        reducerGroups?.length && setGroupList(reducerGroups);
     }, [reducerGroups]);
 
     return (

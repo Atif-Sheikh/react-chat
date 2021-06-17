@@ -87,7 +87,14 @@ export const setGroupData = (path, data) => {
 };
 
 export const groupListAction = () => {
-    FirebaseService.listenOnDatabaseWithoutOrder('/groups', (data) => store.dispatch({ type: "ALL_GROUPS", payload: data }));
+    FirebaseService.listenOnDatabaseWithoutOrder('/groups', (data) => {
+        let filtered = data ? Object.values(data) : [];
+        let joinedGroups = [];
+        filtered.forEach(group => {
+            joinedGroups.push(group);
+        });
+        store.dispatch({ type: "ALL_GROUPS", payload: joinedGroups });
+    });
 };
 
 export const createGroup = async (groupName, topics, currentUser) => {
